@@ -1,30 +1,27 @@
 public class TextMessage implements MessageInterface{
 
     public void blockUser(User u);
-    private String user;
-    private String receiver;
-    private String[] receivers;
-    private String messageSent;
-    private String messageReceived;
+    private String message
+    private User sender;
+    private User receiver;
+    private User[] receivers;
 
-
-
-    public TextMessage(String user, String receiver, String[] receivers, String messageSent, String messageReceived) {
+    public TextMessage(String message, User sender, User receiver, User[] receivers) {
+        this.message = message;
         this.user = user;
         this.receiver = receiver;
         this.receivers = receivers;
-        this.messageSent = messageSent;
-        this.messageReceived = messageReceived;
-
-
     }
 
+    public String getMessage() {
+        return this.message;
+    }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
-    public String getReceiver(){
+    public User getReceiver(){
         return receiver;
     }
 
@@ -32,35 +29,18 @@ public class TextMessage implements MessageInterface{
         return receivers;
     }
 
-    public String getMessageSent(){
-        return messageSent;
-    }
-
-    public String getMessageReceived(){
-        return messageReceived;
-    }
-
-    public void setUser(String user){
+    public void setUser(User user){
         this.user = user;
     }
 
-    public void setReceiver(String receiver){
+    public void setReceiver(User receiver){
         this.receiver = receiver;
     }
 
-    public void setReceivers(String[] receivers){
+    public void setReceivers(User[] receivers){
         this.receivers = receivers;
     }
 
-    public void setMessageSent(String messageSent){
-        this.messageSent = messageSent;
-    }
-
-
-    public void setMessageReceived(String messageReceived){
-        this.messageReceived = messageReceived;
-    }
-    
 
 
 }
