@@ -1,8 +1,8 @@
 public UserInterface {
-    public void sendMessage();
+    public void sendMessage(User u);
     public void receiveMessage();
-    public void deleteMessage();
-    public void addFriend();
-    public void removeFriend();
-    public void blockUser();
+    public void deleteMessage(Message m);
+    public void addFriend(User u);
+    public void removeFriend(User u);
+    public void blockUser(User u);
 }
