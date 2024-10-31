@@ -3,8 +3,8 @@ import java.io.*;
 
 public interface MessageInterface {
     public String getMessageSent();
-    public String getMessageRecieved();
+    public String getMessageReceieved();
     public void setMessageSent(String messageSent);
-    public void setMessageRecieved(String messageRecieved);
-    
+    public void setMessageReceieved(String messageReceieved);
+
 }
