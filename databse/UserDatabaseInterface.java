@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public interface UserDatabaseInterface {
     void addUser(User user);
