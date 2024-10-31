@@ -1,3 +1,6 @@
+import java.util.*;
+import java.io.*;
+
 public class PhotoMessage extends TextMessage {
 
 
@@ -5,8 +8,8 @@ public class PhotoMessage extends TextMessage {
     private String photo;
 
 
-    public PhotoMessage(String user, String reciever, String[] recievers, String messageSent, String messageRecieved, String photo) {
-        super(user, reciever, recievers, messageSent, messageRecieved);
+    public PhotoMessage(String user, String receiver, String[] receivers, String messageSent, String messageReceived, String photo) {
+        super(user, receiver, receivers, messageSent, messageReceived);
         this.photo = photo;
 
 

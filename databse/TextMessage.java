@@ -1,3 +1,6 @@
+import java.util.*;
+import java.io.*;
+
 public class TextMessage implements MessageInterface{
 
     public void blockUser(User u);
@@ -40,7 +43,5 @@ public class TextMessage implements MessageInterface{
     public void setReceivers(User[] receivers){
         this.receivers = receivers;
     }
-
-
 
 }
