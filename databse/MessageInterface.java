@@ -6,4 +6,5 @@ public interface MessageInterface {
     public String getMessageRecieved();
     public void setMessageSent(String messageSent);
     public void setMessageRecieved(String messageRecieved);
+    
 }
