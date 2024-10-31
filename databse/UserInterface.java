@@ -3,7 +3,7 @@ public interface UserInterface {
     public void receiveMessage();
     public void deleteMessage(TextMessage m);
     public void deleteMessage(PhotoMessage m);
-    public void addFriend(User u);
-    public void removeFriend(User u);
-    public void blockUser(User u);
+    public boolean addFriend(User u);
+    public boolean removeFriend(User u);
+    public boolean blockUser(User u);
 }

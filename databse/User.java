@@ -1,3 +1,6 @@
+import java.util.*;
+import java.io.*;
+
 public class User implements UserInterface{
     private String username;
     private String password;
@@ -15,7 +18,7 @@ public class User implements UserInterface{
         return username;
     }
 
-    public String setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -23,7 +26,7 @@ public class User implements UserInterface{
         return password;
     }
 
-    public String setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -51,5 +54,16 @@ public class User implements UserInterface{
         this.blockedUsers = blockedUsers;
     }
 
-    public
+    public boolean addFriend(User u) {
+        friends.add(u);
+        return true;
+    }
+    public boolean removeFriend(User u) {
+        friends.remove(u);
+        return true;
+    }
+    public boolean blockUser(User u) {
+        friends.add(u);
+        return true;
+    }
 }

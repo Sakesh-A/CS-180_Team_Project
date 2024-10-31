@@ -3,7 +3,7 @@ import java.io.*;
 
 public class TextMessage implements MessageInterface{
 
-
+    public void blockUser(User u);
     private String user;
     private String receiver;
     private String[] receivers;
