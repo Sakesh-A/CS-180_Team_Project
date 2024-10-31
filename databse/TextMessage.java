@@ -1,20 +1,20 @@
 public class TextMessage implements MessageInterface{
 
-
+    public void blockUser(User u);
     private String user;
-    private String reciever;
-    private String[] recievers;
+    private String receiver;
+    private String[] receivers;
     private String messageSent;
-    private String messageRecieved;
+    private String messageReceived;
 
 
 
-    public TextMessage(String user, String reciever, String[] recievers, String messageSent, String messageRecieved) {
+    public TextMessage(String user, String receiver, String[] receivers, String messageSent, String messageReceived) {
         this.user = user;
-        this.reciever = reciever;
-        this.recievers = recievers;
+        this.receiver = receiver;
+        this.receivers = receivers;
         this.messageSent = messageSent;
-        this.messageRecieved = messageRecieved;
+        this.messageReceived = messageReceived;
 
 
     }
@@ -24,32 +24,32 @@ public class TextMessage implements MessageInterface{
         return user;
     }
 
-    public String getReciever(){
-        return reciever;
+    public String getReceiver(){
+        return receiver;
     }
 
-    public String[] getRecievers(){
-        return recievers;
+    public String[] getReceivers(){
+        return receivers;
     }
 
     public String getMessageSent(){
         return messageSent;
     }
 
-    public String getMessageRecieved(){
-        return messageRecieved;
+    public String getMessageReceived(){
+        return messageReceived;
     }
 
     public void setUser(String user){
         this.user = user;
     }
 
-    public void setReciever(String reciever){
-        this.reciever = reciever;
+    public void setReceiver(String receiver){
+        this.receiver = receiver;
     }
 
-    public void setRecievers(String[] recievers){
-        this.recievers = recievers;
+    public void setReceivers(String[] receivers){
+        this.receivers = receivers;
     }
 
     public void setMessageSent(String messageSent){
@@ -57,8 +57,8 @@ public class TextMessage implements MessageInterface{
     }
 
 
-    public void setMessageRecieved(String messageRecieved){
-        this.messageRecieved = messageRecieved;
+    public void setMessageReceived(String messageReceived){
+        this.messageReceived = messageReceived;
     }
     
 

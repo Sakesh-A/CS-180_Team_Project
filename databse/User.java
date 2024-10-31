@@ -51,5 +51,5 @@ public class User implements UserInterface{
         this.blockedUsers = blockedUsers;
     }
 
-    public
+
 }

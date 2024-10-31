@@ -2,7 +2,7 @@ import java.util.*;
 
 public class UserDatabase implements UserDatabaseInterface {
     // Fields
-    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<User> users;
 
     // Constructor
     public UserDatabase(ArrayList<User> users) {
@@ -23,4 +23,5 @@ public class UserDatabase implements UserDatabaseInterface {
     public void addUser(User user) {
         users.add(user);
     }
+
 } // End of class
