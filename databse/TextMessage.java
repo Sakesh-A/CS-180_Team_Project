@@ -60,7 +60,7 @@ public class TextMessage implements MessageInterface{
     public void setMessageRecieved(String messageRecieved){
         this.messageRecieved = messageRecieved;
     }
-
+    
 
 
 }
