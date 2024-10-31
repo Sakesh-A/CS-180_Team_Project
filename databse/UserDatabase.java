@@ -5,7 +5,7 @@ public class UserDatabase implements UserDatabaseInterface {
     private ArrayList<User> users = new ArrayList<>();
 
     // Constructor
-    public UserDatabase(ArrayList<Users> users) {
+    public UserDatabase(ArrayList<User> users) {
         this.users = users;
     }
 
