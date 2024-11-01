@@ -11,10 +11,23 @@ public class User implements UserInterface {
     private ArrayList<PhotoMessage> photos;
 
     public User(String username, String password, boolean privateOrPublic) {
-        this.username = username; // cannot be null, under 20 characters, no spaces,
-        // only capital/lowercase, letters, underscore, and numbers
-        this.password = password; // cannot be null, atleast 8 characters, no spaces,
-        // has to have at least one capital letter, one number, and one special character
+        if (username == null || username.length() > 20 || username.contains(" ") ||
+                !username.matches("[a-zA-Z0-9_]+")) {
+            throw BadException("Username cannot be null, must be under 20 characters, " +
+                    "cannot contain spaces, and can only contain letters, numbers, " +
+                    "and underscores.");
+        }
+        this.username = username;
+
+        if (password == null || password.length() < 8 || password.contains(" ") ||
+                !password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*") ||
+                !password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
+            throw BadException("Password cannot be null, must be at least 8 characters, " +
+                    "cannot contain spaces, must contain at least one capital letter, " +
+                    "one number, and one special character.");
+        }
+        this.password = password;
+
         this.privateOrPublic = privateOrPublic;
     }
 
@@ -23,6 +36,12 @@ public class User implements UserInterface {
     }
 
     public void setUsername(String username) {
+        if (username == null || username.length() > 20 || username.contains(" ") ||
+                !username.matches("[a-zA-Z0-9_]+")) {
+            throw BadException("Username cannot be null, must be under 20 characters, " +
+                    "cannot contain spaces, and can only contain letters, numbers, " +
+                    "and underscores.");
+        }
         this.username = username;
     }
 
@@ -31,6 +50,13 @@ public class User implements UserInterface {
     }
 
     public void setPassword(String password) {
+        if (password == null || password.length() < 8 || password.contains(" ") ||
+                !password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*") ||
+                !password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
+            throw BadException("Password cannot be null, must be at least 8 characters, " +
+                    "cannot contain spaces, must contain at least one capital letter, " +
+                    "one number, and one special character.");
+        }
         this.password = password;
     }
 
