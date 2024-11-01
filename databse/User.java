@@ -63,7 +63,7 @@ public class User implements UserInterface{
         return true;
     }
     public boolean blockUser(User u) {
-        friends.add(u);
+        blockedUsers.add(u);
         return true;
     }
 
@@ -80,6 +80,6 @@ public class User implements UserInterface{
     }
 
     public void deleteMessage(PhotoMessage m) {
-        
+
     }
 }
