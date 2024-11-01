@@ -18,13 +18,12 @@ public class TextMessage implements MessageInterface{
     private String message;
     private User sender;
     private User receiver;
-    private User[] receivers;
 
-    public TextMessage(String message, User sender, User receiver, User[] receivers) {
+    public TextMessage(String message, User sender, User receiver) {
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
-        this.receivers = receivers;
+    
     }
 
     public String getMessage() {
@@ -43,20 +42,12 @@ public class TextMessage implements MessageInterface{
         return receiver;
     }
 
-    public User[] getReceivers(){
-        return receivers;
-    }
-
     public void setSender(User sender){
         this.sender = sender;
     }
 
     public void setReceiver(User receiver){
         this.receiver = receiver;
-    }
-
-    public void setReceivers(User[] receivers){
-        this.receivers = receivers;
     }
 
 }

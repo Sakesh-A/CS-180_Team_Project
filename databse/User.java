@@ -86,14 +86,16 @@ public class User implements UserInterface {
         return true;
     }
 
-    public void sendMessage(User person, TextMessage message) {
+    public void sendMessage(User person, String message) {
+        this.messages.add(new TextMessage(message, this, person));
+        person.messages.add(new TextMessage(message, this, person));
     }
 
     public void sendPhotoMessage(User person, PhotoMessage photo) {
 
     }
 
-    public void deleteMessage(User person, TextMessage message); {
+    public void deleteMessage(User person, TextMessage message) {
 
     }
 

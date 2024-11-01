@@ -20,8 +20,8 @@ public class PhotoMessage extends TextMessage {
     private String photo;
 
 
-    public PhotoMessage(String message, User sender, User receiver, User[] receivers, String photo) {
-        super(message, sender, receiver, receivers);
+    public PhotoMessage(String message, User sender, User receiver, String photo) {
+        super(message, sender, receiver);
         this.photo = photo;
     }
 
