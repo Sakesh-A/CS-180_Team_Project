@@ -66,4 +66,20 @@ public class User implements UserInterface{
         friends.add(u);
         return true;
     }
+
+    public void sendMessage(User u) {
+
+    }
+
+    public void receiveMessage() {
+
+    }
+
+    public void deleteMessage(TextMessage m) {
+
+    }
+
+    public void deleteMessage(PhotoMessage m) {
+        
+    }
 }
