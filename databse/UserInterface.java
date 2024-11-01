@@ -16,7 +16,7 @@ public interface UserInterface {
     public boolean blockUser(User u);
     public void sendMessage(User person, TextMessage message);
     public void sendPhotoMessage(User person, PhotoMessage photo);
-    public void deleteMessage(User person, TextMessage message);
-    public void deletePhotoMessage(User person, PhotoMessage photo);
+    public void deleteMessage(TextMessage message);
+    public void deletePhotoMessage(PhotoMessage photo);
     public boolean equals(Object o);
 }
