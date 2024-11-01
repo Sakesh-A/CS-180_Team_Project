@@ -9,8 +9,10 @@ public class User implements UserInterface {
     private boolean privateOrPublic;
 
     public User(String username, String password, boolean privateOrPublic) {
-        this.username = username;
-        this.password = password;
+        this.username = username; // cannot be null, under 20 characters, no spaces,
+        // only capital/lowercase, letters, underscore, and numbers
+        this.password = password; // cannot be null, atleast 8 characters, no spaces,
+        // has to have at least one capital letter, one number, and one special character
         this.privateOrPublic = privateOrPublic;
     }
 
