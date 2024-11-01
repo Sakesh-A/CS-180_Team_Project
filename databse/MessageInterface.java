@@ -14,8 +14,11 @@ import java.io.*;
  */
 
 public interface MessageInterface {
-    public String getMessageSent();
-    public String getMessageReceived();
-    public void setMessageSent(String messageSent);
-    public void setMessageReceived(String messageReceived);
+    public String getMessage();
+    public User getReceiver();
+    public User getSender();
+    public void setMessage(String message);
+    public void setReceiver(User receiver);
+    public void setSender(User sender);
+
 }

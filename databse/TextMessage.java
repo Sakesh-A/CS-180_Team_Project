@@ -27,22 +27,13 @@ public class TextMessage implements MessageInterface{
         this.receivers = receivers;
     }
 
-    public String getMessageSent() {
+    public String getMessage() {
         return message;
     }
 
-    public String getMessageReceived() {
-        return message;
+    public void setMessage(String message) {
+        this.message = message;
     }
-
-    public void setMessageSent(String messageSent) {
-        this.message = messageSent;
-    }
-
-    public void setMessageReceived(String messageReceived) {
-        this.message = messageReceived;
-    }
-
 
     public User getSender() {
         return sender;
@@ -56,7 +47,7 @@ public class TextMessage implements MessageInterface{
         return receivers;
     }
 
-    public void setUser(User sender){
+    public void setSender(User sender){
         this.sender = sender;
     }
 
