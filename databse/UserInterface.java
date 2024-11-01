@@ -1,9 +1,10 @@
+import java.util.*;
+
 public interface UserInterface {
     public String getUsername();
     public void setUsername(String username);
     public void setPassword(String password);
     public String getPassword();
-    public void setPassword();
     public boolean isPrivateOrPublic();
     public void setPrivateOrPublic(boolean privateOrPublic);
     public ArrayList<User> getFriends();
