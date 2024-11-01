@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class User implements UserInterface{
+public class User implements UserInterface {
     private String username;
     private String password;
     private ArrayList<User> friends;
@@ -10,8 +10,10 @@ public class User implements UserInterface{
     private ArrayList<TextMessage> messages;
 
     public User(String username, String password, boolean privateOrPublic) {
-        this.username = username;
-        this.password = password;
+        this.username = username; // cannot be null, under 20 characters, no spaces,
+        // only capital/lowercase, letters, underscore, and numbers
+        this.password = password; // cannot be null, atleast 8 characters, no spaces,
+        // has to have at least one capital letter, one number, and one special character
         this.privateOrPublic = privateOrPublic;
     }
 
@@ -56,21 +58,15 @@ public class User implements UserInterface{
     }
 
     public boolean addFriend(User u) {
-
         for(User user : friends){
             if(user.equals(u)) {
-
-
                 return false;
             }
         }
-           friends.add(u);
-           return true;
+        friends.add(u);
+        return true;
     }
 
-
-
-    }
     public boolean removeFriend(User u) {
         boolean exists = false;
         for (User a : this.friends) {
@@ -84,6 +80,7 @@ public class User implements UserInterface{
         }
         return false;
     }
+
     public boolean blockUser(User u) {
         blockedUsers.add(u);
         return true;
@@ -106,7 +103,10 @@ public class User implements UserInterface{
     public boolean equals(Object o){
         if(o instanceof User){
             User u = (User) o;
-
+          if(u.password.equals(this.password) && u.username.equals(this.username)) {
+                 return true;
+          }
+          return false;
 
         }
         return false;
