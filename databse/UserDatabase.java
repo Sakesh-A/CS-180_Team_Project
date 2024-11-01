@@ -1,6 +1,18 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * Team Project -- UserDatabase
+ *
+ * Creates a database for User
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ *
+ * @version Nov 3, 2024
+ *
+ */
+
 public class UserDatabase implements UserDatabaseInterface {
     // Fields
     private ArrayList<User> users;

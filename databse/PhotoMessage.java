@@ -1,6 +1,18 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * Team Project -- PhotoMessage
+ *
+ * Creates a PhotoMessage object and includes gets/sets
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ *
+ * @version Nov 3, 2024
+ *
+ */
+
 public class PhotoMessage extends TextMessage {
 
 

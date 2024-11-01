@@ -1,6 +1,18 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * Team Project -- TextMessage
+ *
+ * Creates a TextMessage object and includes all needed methods including gets and sets
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ *
+ * @version Nov 3, 2024
+ *
+ */
+
 public class TextMessage implements MessageInterface{
 
     private String message;
