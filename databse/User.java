@@ -106,7 +106,10 @@ public class User implements UserInterface{
     public boolean equals(Object o){
         if(o instanceof User){
             User u = (User) o;
-
+          if(u.password.equals(this.password) && u.username.equals(this.username)) {
+                 return true;
+          }
+          return false;
 
         }
         return false;
