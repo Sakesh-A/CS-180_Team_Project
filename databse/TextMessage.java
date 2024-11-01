@@ -3,7 +3,7 @@ import java.io.*;
 
 public class TextMessage implements MessageInterface{
 
-    private String message
+    private String message;
     private User sender;
     private User receiver;
     private User[] receivers;
@@ -15,9 +15,22 @@ public class TextMessage implements MessageInterface{
         this.receivers = receivers;
     }
 
-    public String getMessage() {
-        return this.message;
+    public String getMessageSent() {
+        return message;
     }
+
+    public String getMessageReceived() {
+        return message;
+    }
+
+    public void setMessageSent(String messageSent) {
+        this.message = messageSent;
+    }
+
+    public void setMessageReceived(String messageReceived) {
+        this.message = messageReceived;
+    }
+
 
     public User getSender() {
         return sender;
@@ -27,7 +40,7 @@ public class TextMessage implements MessageInterface{
         return receiver;
     }
 
-    public String[] getReceivers(){
+    public User[] getReceivers(){
         return receivers;
     }
 
