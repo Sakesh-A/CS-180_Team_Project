@@ -59,8 +59,17 @@ public class User implements UserInterface{
         return true;
     }
     public boolean removeFriend(User u) {
-        friends.remove(u);
-        return true;
+        boolean exists = false;
+        for (User a : this.friends) {
+            if (a.equals(u)) {
+                exists = true;
+            }
+        }
+        if (exists) {
+            friends.remove(u);
+            return true;
+        }
+        return false;
     }
     public boolean blockUser(User u) {
         blockedUsers.add(u);
