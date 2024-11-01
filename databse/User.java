@@ -55,25 +55,36 @@ public class User implements UserInterface{
     }
 
     public boolean addFriend(User u) {
-        boolean exists = false;
+
         for(User user : friends){
-            if(user.equals(u)){
+            if(user.equals(u)) {
 
-                exists = true;
-                friends.add(u);
+
+                return false;
             }
-
         }
+           friends.add(u);
+           return true;
+    }
 
 
-        return exists;
+
     }
     public boolean removeFriend(User u) {
-        friends.remove(u);
-        return true;
+        boolean exists = false;
+        for (User a : this.friends) {
+            if (a.equals(u)) {
+                exists = true;
+            }
+        }
+        if (exists) {
+            friends.remove(u);
+            return true;
+        }
+        return false;
     }
     public boolean blockUser(User u) {
-        friends.add(u);
+        blockedUsers.add(u);
         return true;
     }
 
@@ -90,7 +101,7 @@ public class User implements UserInterface{
     }
 
     public void deleteMessage(PhotoMessage m) {
-        
+
     }
     public boolean equals(Object o){
         if(o instanceof User){
