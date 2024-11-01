@@ -8,6 +8,7 @@ public class User implements UserInterface {
     private ArrayList<User> blockedUsers;
     private boolean privateOrPublic;
     private ArrayList<TextMessage> messages;
+    private ArrayList<PhotoMessage> photos;
 
     public User(String username, String password, boolean privateOrPublic) {
         this.username = username; // cannot be null, under 20 characters, no spaces,
@@ -95,13 +96,24 @@ public class User implements UserInterface {
 
     }
 
-    public void deleteMessage(User person, TextMessage message) {
-
+    public void deleteMessage(TextMessage message) {
+        for (TextMessage t : messages) {
+            if (t.equals(message)) {
+                messages.remove(message);
+                break;
+            }
+        }
     }
 
-    public void deletePhotoMessage(User person, PhotoMessage photo) {
-
+    public void deletePhotoMessage(PhotoMessage photo) {
+        for (PhotoMessage p : photos) {
+            if (p.equals(photo)) {
+                photos.remove(photo);
+                break;
+            }
+        }
     }
+
     public boolean equals(Object o){
         if(o instanceof User){
             User u = (User) o;

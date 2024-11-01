@@ -1,9 +1,10 @@
+import java.util.*;
+
 public interface UserInterface {
     public String getUsername();
     public void setUsername(String username);
     public void setPassword(String password);
     public String getPassword();
-    public void setPassword();
     public boolean isPrivateOrPublic();
     public void setPrivateOrPublic(boolean privateOrPublic);
     public ArrayList<User> getFriends();
@@ -15,7 +16,7 @@ public interface UserInterface {
     public boolean blockUser(User u);
     public void sendMessage(User person, String message);
     public void sendPhotoMessage(User person, PhotoMessage photo);
-    public void deleteMessage(User person, TextMessage message);
-    public void deletePhotoMessage(User person, PhotoMessage photo);
+    public void deleteMessage(TextMessage message);
+    public void deletePhotoMessage(PhotoMessage photo);
     public boolean equals(Object o);
 }
