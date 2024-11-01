@@ -10,7 +10,7 @@ public class TextMessage implements MessageInterface{
 
     public TextMessage(String message, User sender, User receiver, User[] receivers) {
         this.message = message;
-        this.user = user;
+        this.sender = sender;
         this.receiver = receiver;
         this.receivers = receivers;
     }
@@ -19,8 +19,8 @@ public class TextMessage implements MessageInterface{
         return this.message;
     }
 
-    public User getUser() {
-        return user;
+    public User getSender() {
+        return sender;
     }
 
     public User getReceiver(){
@@ -31,8 +31,8 @@ public class TextMessage implements MessageInterface{
         return receivers;
     }
 
-    public void setUser(User user){
-        this.user = user;
+    public void setUser(User sender){
+        this.sender = sender;
     }
 
     public void setReceiver(User receiver){
