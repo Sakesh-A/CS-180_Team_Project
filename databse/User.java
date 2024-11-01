@@ -7,6 +7,7 @@ public class User implements UserInterface{
     private ArrayList<User> friends;
     private ArrayList<User> blockedUsers;
     private boolean privateOrPublic;
+    private ArrayList<TextMessage> messages;
 
     public User(String username, String password, boolean privateOrPublic) {
         this.username = username;
@@ -88,19 +89,18 @@ public class User implements UserInterface{
         return true;
     }
 
-    public void sendMessage(User u) {
+    public void sendMessage(User person, TextMessage message) {
+    }
+
+    public void sendPhotoMessage(User person, PhotoMessage photo) {
 
     }
 
-    public void receiveMessage() {
+    public void deleteMessage(User person, TextMessage message); {
 
     }
 
-    public void deleteMessage(TextMessage m) {
-
-    }
-
-    public void deleteMessage(PhotoMessage m) {
+    public void deletePhotoMessage(User person, PhotoMessage photo) {
 
     }
     public boolean equals(Object o){
