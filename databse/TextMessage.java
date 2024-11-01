@@ -3,31 +3,27 @@ import java.io.*;
 
 public class TextMessage implements MessageInterface{
 
-    public void blockUser(User u);
-    private String user;
-    private String receiver;
-    private String[] receivers;
-    private String messageSent;
-    private String messageReceived;
+    private String message
+    private User sender;
+    private User receiver;
+    private User[] receivers;
 
-
-
-    public TextMessage(String user, String receiver, String[] receivers, String messageSent, String messageReceived) {
-        this.user = user;
+    public TextMessage(String message, User sender, User receiver, User[] receivers) {
+        this.message = message;
+        this.sender = sender;
         this.receiver = receiver;
         this.receivers = receivers;
-        this.messageSent = messageSent;
-        this.messageReceived = messageReceived;
-
-
     }
 
-
-    public String getUser() {
-        return user;
+    public String getMessage() {
+        return this.message;
     }
 
-    public String getReceiver(){
+    public User getSender() {
+        return sender;
+    }
+
+    public User getReceiver(){
         return receiver;
     }
 
@@ -35,35 +31,16 @@ public class TextMessage implements MessageInterface{
         return receivers;
     }
 
-    public String getMessageSent(){
-        return messageSent;
+    public void setUser(User sender){
+        this.sender = sender;
     }
 
-    public String getMessageReceived(){
-        return messageReceived;
-    }
-
-    public void setUser(String user){
-        this.user = user;
-    }
-
-    public void setReceiver(String receiver){
+    public void setReceiver(User receiver){
         this.receiver = receiver;
     }
 
-    public void setReceivers(String[] receivers){
+    public void setReceivers(User[] receivers){
         this.receivers = receivers;
     }
-
-    public void setMessageSent(String messageSent){
-        this.messageSent = messageSent;
-    }
-
-
-    public void setMessageReceived(String messageReceived){
-        this.messageReceived = messageReceived;
-    }
-
-
 
 }

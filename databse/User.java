@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class User implements UserInterface{
+public class User implements UserInterface {
     private String username;
     private String password;
     private ArrayList<User> friends;
@@ -57,15 +57,56 @@ public class User implements UserInterface{
     }
 
     public boolean addFriend(User u) {
+        for(User user : friends){
+            if(user.equals(u)) {
+                return false;
+            }
+        }
         friends.add(u);
         return true;
     }
+
     public boolean removeFriend(User u) {
-        friends.remove(u);
+        boolean exists = false;
+        for (User a : this.friends) {
+            if (a.equals(u)) {
+                exists = true;
+            }
+        }
+        if (exists) {
+            friends.remove(u);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean blockUser(User u) {
+        blockedUsers.add(u);
         return true;
     }
-    public boolean blockUser(User u) {
-        friends.add(u);
-        return true;
+
+    public void sendMessage(User u) {
+
+    }
+
+    public void receiveMessage() {
+
+    }
+
+    public void deleteMessage(TextMessage m) {
+
+    }
+
+    public void deleteMessage(PhotoMessage m) {
+
+    }
+    public boolean equals(Object o){
+        if(o instanceof User){
+            User u = (User) o;
+
+
+        }
+        return false;
+
     }
 }

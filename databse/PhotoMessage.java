@@ -8,12 +8,11 @@ public class PhotoMessage extends TextMessage {
     private String photo;
 
 
-    public PhotoMessage(String user, String receiver, String[] receivers, String messageSent, String messageReceived, String photo) {
-        super(user, receiver, receivers, messageSent, messageReceived);
+    public PhotoMessage(String message, User sender, User receiver, User[] receivers, String photo) {
+        super(message, sender, receiver, receivers);
         this.photo = photo;
-
-
     }
+
 
     public String getPhoto() {
         return photo;
