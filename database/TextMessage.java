@@ -14,46 +14,55 @@ import java.io.*;
  */
 
 public class TextMessage implements MessageInterface{
+   private String[] messageArray = new String[3];
 
-    private String message;
-    private User sender;
-    private User receiver;
+//    private String message;
+//    private User sender;
+//    private User receiver;
     private int messageId;
 //    public static int id = 0;
 
     public TextMessage(String message, User sender, User receiver) {
-        this.message = message;
-        this.sender = sender;
-        this.receiver = receiver;
+        messageArray[0] = sender.getUsername();
+        messageArray[1] = receiver.getUsername();
+        messageArray[2] = message;
+
+        //        this.message = message;
+//        this.sender = sender;
+//        this.receiver = receiver;
 //        messageId = id;
     }
 //    public int getMessageId() {
 //        return messageId;
 //    }
 
-    public String getMessage() {
-        return message;
+//   public  String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
+//
+//    public User getSender() {
+//        return sender;
+//    }
+//
+//    public User getReceiver() {
+//        return receiver;
+//    }
+//
+//    public void setSender(User sender) {
+//        this.sender = sender;
+//    }
+//
+//    public void setReceiver(User receiver) {
+//        this.receiver = receiver;
+//    }
+    public String[] getMessageArray() {
+        return messageArray;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public User getSender() {
-        return sender;
-    }
-
-    public User getReceiver() {
-        return receiver;
-    }
-
-    public void setSender(User sender) {
-        this.sender = sender;
-    }
-
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
-    }
 
     public boolean equals(Object o) {
         if(!(o instanceof User)) {
