@@ -14,13 +14,15 @@ import java.io.*;
  */
 
 public interface MessageInterface {
-//    public static int id = 0; //Everytime you send a message, id++, gives each message a unique id for identification purposes
-    public String getMessage();
-    public User getReceiver();
-    public User getSender();
-    public void setMessage(String message);
-    public void setReceiver(User receiver);
-    public void setSender(User sender);
+    public String[] getMessageArray();
     public boolean equals(Object o);
+    public String toString();
+//    public static int id = 0; //Everytime you send a message, id++, gives each message a unique id for identification purposes
+//    public String getMessage();
+//    public User getReceiver();
+//    public User getSender();
+//    public void setMessage(String message);
+//    public void setReceiver(User receiver);
+//    public void setSender(User sender);
 
 }
