@@ -10,9 +10,17 @@ public class User implements UserInterface {
     private ArrayList<TextMessage> messages;
     private ArrayList<PhotoMessage> photos;
 
-    public User(String username, String password, boolean privateOrPublic) {
-        this.username = username; // cannot be null, under 20 characters, no spaces,
-        // only capital/lowercase, letters, underscore, and numbers
+    public User(String username, String password, boolean privateOrPublic) throws BadException {
+
+        for (char c : username.toCharArray()) {
+            if (!(Character.isLetterOrDigit(c) || c == '_')) {
+                throw new BadException("Usernames can only contain letters, numbers, or underscores.");
+            }
+        }
+        if (username == null || username.length() > 20 || username.contains(" ")) {
+            throw new BadException("Username cannot contain more than 20 characters, have a space, or be empty.");
+        }
+        this.username = username;
         this.password = password; // cannot be null, atleast 8 characters, no spaces,
         // has to have at least one capital letter, one number, and one special character
         this.privateOrPublic = privateOrPublic;
@@ -101,7 +109,7 @@ public class User implements UserInterface {
         TextMessage m = new TextMessage(message, this, person);
         this.messages.add(m);
         person.messages.add(m);
-        TextMessage.id++;
+//        TextMessage.id++;
         return true;
     }
     public boolean hasBlocked(User u) {
@@ -128,7 +136,7 @@ public class User implements UserInterface {
         PhotoMessage m = new PhotoMessage(message, this, person, photo);
         this.photos.add(m);
         person.photos.add(m);
-        TextMessage.id++;
+//        TextMessage.id++;
         return true;
     }
 

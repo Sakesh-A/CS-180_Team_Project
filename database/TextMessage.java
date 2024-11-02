@@ -19,17 +19,17 @@ public class TextMessage implements MessageInterface{
     private User sender;
     private User receiver;
     private int messageId;
-    public static int id = 0;
+//    public static int id = 0;
 
     public TextMessage(String message, User sender, User receiver) {
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
-        messageId = id;
+//        messageId = id;
     }
-    public int getMessageId() {
-        return messageId;
-    }
+//    public int getMessageId() {
+//        return messageId;
+//    }
 
     public String getMessage() {
         return message;
@@ -54,13 +54,15 @@ public class TextMessage implements MessageInterface{
     public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
-/*
+
     public boolean equals(Object o) {
         if(!(o instanceof User)) {
             return false;
         }
         TextMessage m = (TextMessage) o;
-        return m.messageId == this.messageId;
-    } */
+
+        return this.message.equals(m.message);
+//        return m.messageId == this.messageId;
+    }
 
 }
