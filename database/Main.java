@@ -13,7 +13,7 @@ public class Main {
         System.out.println("Enter your password:");
         String pass = sc.nextLine();
 
-        if (!db.isPasswordValid(pass)) {
+        while (!db.isPasswordValid(pass)) {
             System.out.println("invalid, try again");
             pass = sc.nextLine();
         }

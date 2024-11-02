@@ -19,7 +19,7 @@ public class UserDatabase implements UserDatabaseInterface {
 
     // Constructor
     public UserDatabase() {
-        users = new ArrayList<User>();
+        this.users = new ArrayList<User>();
     }
 
     // Getter methods
@@ -47,7 +47,7 @@ public class UserDatabase implements UserDatabaseInterface {
 
         users.add(newUser);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("UsersList.txt", true))) {
             writer.write(username + "," + password + "," + allowMessagesFromAnyone + "\n");
         } catch (IOException e) {
             System.err.println("Error saving user to file: " + e.getMessage());
@@ -69,7 +69,7 @@ public class UserDatabase implements UserDatabaseInterface {
 
     // isPasswordValid method (private method for saveUser)
     public boolean isPasswordValid(String password) {
-        if (password.length() < 8 || password.length() > 12) {
+        if (password.length() < 8) {
             return false;
         }
 
@@ -87,13 +87,9 @@ public class UserDatabase implements UserDatabaseInterface {
             if (!Character.isLetterOrDigit(c)) {
                 hasSpecialCharacter = true;
             }
-
-            if (hasUpperCase && hasDigit && hasSpecialCharacter) {
-                return true;
-            }
         }
 
-        return false;
+        return (hasUpperCase && hasDigit && hasSpecialCharacter) ;
     }
 
 //test code

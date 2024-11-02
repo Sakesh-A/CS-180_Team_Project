@@ -18,7 +18,7 @@ public class UserDatabase implements UserDatabaseInterface {
     private ArrayList<User> users;
 
     // Constructor
-    public UserDatabase(ArrayList<User> users) {
+    public UserDatabase() {
         this.users = users;
     }
 
@@ -68,7 +68,7 @@ public class UserDatabase implements UserDatabaseInterface {
     }
 
     // isPasswordValid method (private method for saveUser)
-    private static boolean isPasswordValid(String password) {
+    private boolean isPasswordValid(String password) {
         if (password.length() < 8 || password.length() > 12) {
             return false;
         }
@@ -96,32 +96,4 @@ public class UserDatabase implements UserDatabaseInterface {
         return false;
     }
 
-//test code
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.println("enter your username:");
-        String user = sc.nextLine();
-
-        System.out.println("Enter your password:");
-        String pass = sc.nextLine();
-
-        if (!isPasswordValid(pass)) {
-            System.out.println("invalid, try again");
-            pass = sc.nextLine();
-        }
-
-        System.out.println("would you like to recieve messages from anybody?");
-        String choice = sc.nextLine();
-
-        boolean yOrN = false;
-
-        if (choice.equals("y")) {
-            yOrN = true;
-        } else {
-            yOrN = false;
-        }
-
-
-    }
 } // End of class
