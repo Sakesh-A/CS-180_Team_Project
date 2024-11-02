@@ -87,15 +87,40 @@ public class User implements UserInterface {
         return true;
     }
 
-    public void sendMessage(User person, String message) {
+    public boolean sendMessage(User person, String message) {
+        if (person.hasBlocked(this) || (person.privateOrPublic && !person.hasFriended(this))) {
+            return false;
+        }
         this.messages.add(new TextMessage(message, this, person));
         person.messages.add(new TextMessage(message, this, person));
         TextMessage.id++;
+        return true;
+    }
+    public boolean hasBlocked(User u) {
+        for (int i = 0; i < blockedUsers.size(); i++) {
+            if (blockedUsers.get(i).equals(u)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasFriended(User u) {
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).equals(u)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void sendPhotoMessage(User person, String message, String photo) {
+    public boolean sendPhotoMessage(User person, String message, String photo) {
+        if (person.hasBlocked(this) || (person.privateOrPublic && !person.hasFriended(this))) {
+            return false;
+        }
         this.messages.add(new PhotoMessage(message, this, person, photo));
         person.messages.add(new PhotoMessage(message, this, person, photo));
+        TextMessage.id++;
+        return true;
     }
 
     public void deleteMessage(TextMessage message) {
