@@ -38,12 +38,20 @@ public class UserDatabase implements UserDatabaseInterface {
     // addUser method
     public boolean addUser(User user) {
         users.add(user);
+        String file = String.format("%s.txt", user.getUsername());
+        userFiles.add(file);
         return usersToFile();
     }
 
     // addUser method
     public boolean removeUser(User user) {
         users.remove(user);
+        for(String file : userFiles) {
+            String temp = file.substring(0, file.lastIndexOf("."));
+            if(user.getUsername().equals(temp)) {
+                userFiles.remove(file);
+            }
+        }
         return usersToFile();
     }
 
