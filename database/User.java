@@ -137,8 +137,28 @@ public class User implements UserInterface {
     }
 
     public boolean blockUser(User u) {
+        boolean exists = false;
+        try (BufferedReader bfr = new BufferedReader(new FileReader("UsersList.txt"))) {
+            String line;
+            while ((line = bfr.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts[0].equals(u.getUsername())) {
+                    exists = true;
+                }
+            }
+        } catch(IOException e) {
+            return false;
+        }
+        if (!exists) {return false;}
+        for(User user : blockedUsers){
+            if(user.equals(u)) {
+                return false;
+            }
+        }
         blockedUsers.add(u);
         return true;
+
+
     }
 
     public boolean sendMessage(User person, String message) {
