@@ -16,6 +16,10 @@ public class User implements UserInterface {
         this.password = password; // cannot be null, atleast 8 characters, no spaces,
         // has to have at least one capital letter, one number, and one special character
         this.privateOrPublic = privateOrPublic;
+        this.friends = new ArrayList<User>();
+        this.blockedUsers = new ArrayList<User>();
+        this.messages = new ArrayList<TextMessage>();
+        this.photos = new ArrayList<PhotoMessage>();
     }
 
     public String getUsername() {
@@ -67,6 +71,9 @@ public class User implements UserInterface {
         friends.add(u);
         return true;
     }
+    public ArrayList<TextMessage> getMessages() {
+        return messages;
+    }
 
     public boolean removeFriend(User u) {
         boolean exists = false;
@@ -91,8 +98,9 @@ public class User implements UserInterface {
         if (person.hasBlocked(this) || (person.privateOrPublic && !person.hasFriended(this))) {
             return false;
         }
-        this.messages.add(new TextMessage(message, this, person));
-        person.messages.add(new TextMessage(message, this, person));
+        TextMessage m = new TextMessage(message, this, person);
+        this.messages.add(m);
+        person.messages.add(m);
         TextMessage.id++;
         return true;
     }
@@ -117,16 +125,23 @@ public class User implements UserInterface {
         if (person.hasBlocked(this) || (person.privateOrPublic && !person.hasFriended(this))) {
             return false;
         }
-        this.messages.add(new PhotoMessage(message, this, person, photo));
-        person.messages.add(new PhotoMessage(message, this, person, photo));
+        PhotoMessage m = new PhotoMessage(message, this, person, photo);
+        this.photos.add(m);
+        person.photos.add(m);
         TextMessage.id++;
         return true;
     }
 
     public void deleteMessage(TextMessage message) {
-        for (int i = 0; i < messages.size(); i++) {
-            if (messages.get(i).equals(message)) {
-                messages.remove(i);
+        for (int i = 0; i < this.messages.size(); i++) {
+            if (this.messages.get(i).equals(message)) {
+                this.messages.remove(i);
+                break;
+            }
+        }
+        for (int i = 0; i < message.getReceiver().messages.size(); i++) {
+            if (message.getReceiver().messages.get(i).equals(message)) {
+                message.getReceiver().messages.remove(i);
                 break;
             }
         }
@@ -136,6 +151,12 @@ public class User implements UserInterface {
         for (int i = 0; i < photos.size(); i++) {
             if (photos.get(i).equals(photo)) {
                 photos.remove(i);
+                break;
+            }
+        }
+        for (int i = 0; i < photo.getReceiver().photos.size(); i++) {
+            if (photo.getReceiver().photos.get(i).equals(photo)) {
+                photo.getReceiver().photos.remove(i);
                 break;
             }
         }

@@ -27,6 +27,9 @@ public class TextMessage implements MessageInterface{
         this.receiver = receiver;
         messageId = id;
     }
+    public int getMessageId() {
+        return messageId;
+    }
 
     public String getMessage() {
         return message;
@@ -51,13 +54,13 @@ public class TextMessage implements MessageInterface{
     public void setReceiver(User receiver) {
         this.receiver = receiver;
     }
-
+/*
     public boolean equals(Object o) {
         if(!(o instanceof User)) {
             return false;
         }
         TextMessage m = (TextMessage) o;
         return m.messageId == this.messageId;
-    }
+    } */
 
 }
