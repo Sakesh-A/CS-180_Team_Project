@@ -22,8 +22,8 @@ public class User implements UserInterface {
         if (username == null || username.length() > 20 || username.contains(" ")) {
             throw new BadException("Username cannot contain more than 20 characters, have a space, or be empty.");
         }
-        this.username = username;
 
+        this.username = username;
 
         if (password.length() < 8) {
             throw new BadException("You need at least eight characters");
@@ -44,10 +44,10 @@ public class User implements UserInterface {
                 hasSpecialCharacter = true;
             }
         }
-
         if (!hasUpperCase || !hasDigit || !hasSpecialCharacter) {
             throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, and one ");
         }
+
         this.password = password;
         this.isPublic = isPublic;
         this.friends = new ArrayList<User>();

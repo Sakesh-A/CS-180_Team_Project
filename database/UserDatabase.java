@@ -16,10 +16,13 @@ import java.io.*;
 public class UserDatabase implements UserDatabaseInterface {
     // Fields
     private ArrayList<User> users;
+    final private String filename = "UsersList.txt";
+    private ArrayList<String> userFiles;
 
     // Constructor
     public UserDatabase() {
         this.users = new ArrayList<User>();
+        this.userFiles = new ArrayList<String>();
     }
 
     // Getter methods
@@ -33,31 +36,26 @@ public class UserDatabase implements UserDatabaseInterface {
     }
 
     // addUser method
-    public void addUser(User user) {
+    public boolean addUser(User user) {
         users.add(user);
+        return usersToFile();
+    }
+
+    // addUser method
+    public boolean removeUser(User user) {
+        users.remove(user);
+        return usersToFile();
     }
 
     // saveUser method
-    public boolean saveUser(User newUser) {
-        users.add(newUser);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("UsersList.txt", true))) {
-            writer.write(username + "," + password + "," + allowMessagesFromAnyone + "\n");
+    public boolean usersToFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("filename", false))) {
+            for (User user : users) {
+                writer.write(user.toString());
+            }
         } catch (IOException e) {
-            System.err.println("Error saving user to file: " + e.getMessage());
+            System.err.println("Error writing users to file: " + e.getMessage());
         }
-
         return true;
     }
-
-    // validateLogin method
-    public boolean validateLogin(String username, String password) {
-        for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
- 
 } // End of class
