@@ -14,7 +14,7 @@ public interface UserInterface {
     public boolean addFriend(User u);
     public boolean removeFriend(User u);
     public boolean blockUser(User u);
-    public void sendMessage(User person, String message);
+    public void sendMessage(User person, TextMessage message);
     public void sendPhotoMessage(User person, PhotoMessage photo);
     public void deleteMessage(TextMessage message);
     public void deletePhotoMessage(PhotoMessage photo);
