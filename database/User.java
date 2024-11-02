@@ -106,18 +106,21 @@ public class User implements UserInterface {
                     exists = true;
                 }
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
-        if (!exists) {return false;}
-        for(User user : friends){
-            if(user.equals(u)) {
+        if (!exists) {
+            return false;
+        }
+        for (User user : friends) {
+            if (user.equals(u)) {
                 return false;
             }
         }
         friends.add(u);
         return true;
     }
+
     public ArrayList<TextMessage> getMessages() {
         return messages;
     }
@@ -146,12 +149,14 @@ public class User implements UserInterface {
                     exists = true;
                 }
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             return false;
         }
-        if (!exists) {return false;}
-        for(User user : blockedUsers){
-            if(user.equals(u)) {
+        if (!exists) {
+            return false;
+        }
+        for (User user : blockedUsers) {
+            if (user.equals(u)) {
                 return false;
             }
         }
@@ -162,7 +167,7 @@ public class User implements UserInterface {
     }
 
     public boolean sendMessage(User person, String message) {
-        if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
+        if (person.hasBlocked(this) || (!person.isPublic && !person.hasFriended(this))) {
             return false;
         }
         TextMessage m = new TextMessage(message, this, person);
@@ -214,18 +219,19 @@ public class User implements UserInterface {
         }
     }
 
-    public boolean equals(Object o){
-        if(o instanceof User){
+    public boolean equals(Object o) {
+        if (o instanceof User) {
             User u = (User) o;
-          if(u.password.equals(this.password) && u.username.equals(this.username)) {
-                 return true;
-          }
-          return false;
+            if (u.password.equals(this.password) && u.username.equals(this.username)) {
+                return true;
+            }
+            return false;
 
         }
         return false;
 
     }
+
     public boolean hasBlocked(User u) {
         for (int i = 0; i < blockedUsers.size(); i++) {
             if (blockedUsers.get(i).equals(u)) {
@@ -234,6 +240,7 @@ public class User implements UserInterface {
         }
         return false;
     }
+
     public boolean hasFriended(User u) {
         for (int i = 0; i < friends.size(); i++) {
             if (friends.get(i).equals(u)) {
@@ -243,5 +250,17 @@ public class User implements UserInterface {
         return false;
     }
 
+    public String toString() {
+        String line = "";
+        line += this.username + "," + this.password + "," + this.isPublic;
+        for (User u : friends) {
+            line += u.getUsername();
 
+        }
+        line += "End of Friends";
+        for(User u : blockedUsers) {
+         line += u.getUsername();
+        }
+        return line;
+    }
 }
