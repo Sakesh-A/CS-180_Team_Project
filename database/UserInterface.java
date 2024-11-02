@@ -5,8 +5,8 @@ public interface UserInterface {
     public void setUsername(String username);
     public void setPassword(String password);
     public String getPassword();
-    public boolean isPrivateOrPublic();
-    public void setPrivateOrPublic(boolean privateOrPublic);
+    public boolean isPublic();
+    public void setPublic(boolean aPublic);
     public ArrayList<User> getFriends();
     public void setFriends(ArrayList<User> friends);
     public ArrayList<User> getBlockedUsers();

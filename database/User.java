@@ -1,16 +1,15 @@
 import java.util.*;
-import java.io.*;
 
 public class User implements UserInterface {
     private String username;
     private String password;
     private ArrayList<User> friends;
     private ArrayList<User> blockedUsers;
-    private boolean privateOrPublic;
+    private boolean isPublic;
     private ArrayList<TextMessage> messages;
     private ArrayList<PhotoMessage> photos;
 
-    public User(String username, String password, boolean privateOrPublic) throws BadException {
+    public User(String username, String password, boolean isPublic) throws BadException {
 
         for (char c : username.toCharArray()) {
             if (!(Character.isLetterOrDigit(c) || c == '_')) {
@@ -21,9 +20,33 @@ public class User implements UserInterface {
             throw new BadException("Username cannot contain more than 20 characters, have a space, or be empty.");
         }
         this.username = username;
-        this.password = password; // cannot be null, atleast 8 characters, no spaces,
-        // has to have at least one capital letter, one number, and one special character
-        this.privateOrPublic = privateOrPublic;
+
+
+        if (password.length() < 8) {
+            throw new BadException("You need at least eight characters");
+        }
+
+        boolean hasUpperCase = false;
+        boolean hasDigit = false;
+        boolean hasSpecialCharacter = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUpperCase = true;
+            }
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+            if (!Character.isLetterOrDigit(c)) {
+                hasSpecialCharacter = true;
+            }
+        }
+
+        if (!hasUpperCase || !hasDigit || !hasSpecialCharacter) {
+            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, and one ");
+        }
+        this.password = password;
+        this.isPublic = isPublic;
         this.friends = new ArrayList<User>();
         this.blockedUsers = new ArrayList<User>();
         this.messages = new ArrayList<TextMessage>();
@@ -46,12 +69,12 @@ public class User implements UserInterface {
         this.password = password;
     }
 
-    public boolean isPrivateOrPublic() {
-        return privateOrPublic;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setPrivateOrPublic(boolean privateOrPublic) {
-        this.privateOrPublic = privateOrPublic;
+    public void setPublic(boolean aPublic) {
+        this.isPublic = aPublic;
     }
 
     public ArrayList<User> getFriends() {
@@ -103,7 +126,7 @@ public class User implements UserInterface {
     }
 
     public boolean sendMessage(User person, String message) {
-        if (person.hasBlocked(this) || (person.privateOrPublic && !person.hasFriended(this))) {
+        if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
             return false;
         }
         TextMessage m = new TextMessage(message, this, person);
@@ -130,7 +153,7 @@ public class User implements UserInterface {
     }
 
     public boolean sendPhotoMessage(User person, String message, String photo) {
-        if (person.hasBlocked(this) || (person.privateOrPublic && !person.hasFriended(this))) {
+        if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
             return false;
         }
         PhotoMessage m = new PhotoMessage(message, this, person, photo);
@@ -182,4 +205,6 @@ public class User implements UserInterface {
         return false;
 
     }
+
+
 }

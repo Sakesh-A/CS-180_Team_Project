@@ -38,15 +38,8 @@ public class UserDatabase implements UserDatabaseInterface {
     }
 
     // saveUser method
-    public boolean saveUser(String username, String password, boolean allowMessagesFromAnyone) {
-        if (!isPasswordValid(password)) {
-            return false;
-        }
-
-        User newUser = new User(username, password, allowMessagesFromAnyone);
-
+    public boolean saveUser(User newUser) {
         users.add(newUser);
-
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("UsersList.txt", true))) {
             writer.write(username + "," + password + "," + allowMessagesFromAnyone + "\n");
         } catch (IOException e) {
@@ -66,32 +59,5 @@ public class UserDatabase implements UserDatabaseInterface {
 
         return false;
     }
-
-    // isPasswordValid method (private method for saveUser)
-    public boolean isPasswordValid(String password) {
-        if (password.length() < 8) {
-            return false;
-        }
-
-        boolean hasUpperCase = false;
-        boolean hasDigit = false;
-        boolean hasSpecialCharacter = false;
-
-        for (char c : password.toCharArray()) {
-            if (Character.isUpperCase(c)) {
-                hasUpperCase = true;
-            }
-            if (Character.isDigit(c)) {
-                hasDigit = true;
-            }
-            if (!Character.isLetterOrDigit(c)) {
-                hasSpecialCharacter = true;
-            }
-        }
-
-        return (hasUpperCase && hasDigit && hasSpecialCharacter) ;
-    }
-
-//test code
  
 } // End of class
