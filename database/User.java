@@ -171,22 +171,7 @@ public class User implements UserInterface {
 //        TextMessage.id++;
         return true;
     }
-    public boolean hasBlocked(User u) {
-        for (int i = 0; i < blockedUsers.size(); i++) {
-            if (blockedUsers.get(i).equals(u)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean hasFriended(User u) {
-        for (int i = 0; i < friends.size(); i++) {
-            if (friends.get(i).equals(u)) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     public boolean sendPhotoMessage(User person, String message, String photo) {
         if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
@@ -240,6 +225,22 @@ public class User implements UserInterface {
         }
         return false;
 
+    }
+    public boolean hasBlocked(User u) {
+        for (int i = 0; i < blockedUsers.size(); i++) {
+            if (blockedUsers.get(i).equals(u)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasFriended(User u) {
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).equals(u)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
