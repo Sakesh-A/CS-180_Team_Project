@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class User implements UserInterface {
@@ -6,7 +9,7 @@ public class User implements UserInterface {
     private ArrayList<User> friends;
     private ArrayList<User> blockedUsers;
     private boolean isPublic;
-    private ArrayList<TextMessage> messages;
+    private ArrayList<TextMessage> messages; // we needed a way to differentiate between recievers, so we are doing arrays
     private ArrayList<PhotoMessage> photos;
 
     public User(String username, String password, boolean isPublic) throws BadException {
@@ -94,6 +97,19 @@ public class User implements UserInterface {
     }
 
     public boolean addFriend(User u) {
+        boolean exists = false;
+        try (BufferedReader bfr = new BufferedReader(new FileReader("UsersList.txt"))) {
+            String line;
+            while ((line = bfr.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts[0].equals(u.getUsername())) {
+                    exists = true;
+                }
+            }
+        } catch(IOException e) {
+            return false;
+        }
+        if (!exists) {return false;}
         for(User user : friends){
             if(user.equals(u)) {
                 return false;
