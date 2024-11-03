@@ -1,24 +1,24 @@
 import java.util.*;
 
 public interface UserInterface {
-    public String getUsername();
-    public void setUsername(String username);
-    public void setPassword(String password);
-    public String getPassword();
-    public boolean isPublic();
-    public void setPublic(boolean aPublic);
-    public ArrayList<User> getFriends();
-    public void setFriends(ArrayList<User> friends);
-    public ArrayList<User> getBlockedUsers();
-    public void setBlockedUsers(ArrayList<User> blockedUsers);
-    public boolean addFriend(User u);
-    public boolean removeFriend(User u);
-    public boolean blockUser(User u);
+    String getUsername();
+    void setUsername(String username);
+    void setPassword(String password);
+    String getPassword();
+    boolean isPublic();
+    void setPublic(boolean aPublic);
+    ArrayList<User> getFriends();
+    void setFriends(ArrayList<User> friends);
+    ArrayList<User> getBlockedUsers();
+    void setBlockedUsers(ArrayList<User> blockedUsers);
+    boolean addFriend(User u);
+    boolean removeFriend(User u);
+    boolean blockUser(User u);
 
-    public boolean sendMessage(User person, String message);
-    public boolean sendPhotoMessage(User person, String message, String photo);
+    boolean sendMessage(User person, String message);
+//    public boolean sendPhotoMessage(User person, String message, String photo);
 
-    public void deleteMessage(TextMessage message);
-    public void deletePhotoMessage(PhotoMessage photo);
-    public boolean equals(Object o);
+    void deleteMessage(User person, String message);
+//    public void deletePhotoMessage(PhotoMessage photo);
+    boolean equals(Object o);
 }

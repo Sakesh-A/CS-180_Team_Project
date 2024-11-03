@@ -19,7 +19,7 @@ public class TextMessage implements MessageInterface{
 //    private String message;
 //    private User sender;
 //    private User receiver;
-    private int messageId;
+//    private int messageId;
 //    public static int id = 0;
 
     public TextMessage(String message, User sender, User receiver) {
