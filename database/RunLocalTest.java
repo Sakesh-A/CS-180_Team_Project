@@ -60,12 +60,22 @@ public class RunLocalTest {
             clazz = User.class;
 
             modifiers = clazz.getModifiers();
+            assertTrue("User class should be public", java.lang.reflect.Modifier.isPublic(modifiers));
 
             superclass = clazz.getSuperclass();
+            assertEquals("User class should extend Object", Object.class, superclass);
 
             superinterfaces = clazz.getInterfaces();
+            boolean implementsUserInterface = false;
 
-            //todo
+            for (Class<?> iface : superinterfaces) {
+                if (iface.equals(UserInterface.class)) {
+                    implementsUserInterface = true;
+                    break;
+                }
+            }
+
+            assertTrue("User class should implement UserInterface", implementsUserInterface);
         }
 
         @Test(timeout = 1000)
