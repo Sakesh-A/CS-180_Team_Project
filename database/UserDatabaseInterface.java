@@ -56,5 +56,5 @@ public interface UserDatabaseInterface {
     /**
      * Closes any open writers associated with the database, releasing resources.
      */
-    void closeAllWriters();
+//    void closeAllWriters();
 }
