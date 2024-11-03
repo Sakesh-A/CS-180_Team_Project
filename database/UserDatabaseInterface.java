@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * Team Project -- UserDatabaseInterface
  *
- * Interface for UserDatabase, 
+ * Interface for UserDatabase, creates the methods for the class
  *
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham

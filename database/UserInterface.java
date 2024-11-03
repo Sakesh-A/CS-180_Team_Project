@@ -1,5 +1,17 @@
 import java.util.*;
 
+/**
+ * Team Project -- UserInterface
+ *
+ * Interface for UserInterface, creates the methods for the class
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ *
+ * @version Nov 3, 2024
+ *
+ */
+
 public interface UserInterface {
     String getUsername();
     void setUsername(String username);
