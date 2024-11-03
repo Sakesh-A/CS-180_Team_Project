@@ -204,36 +204,35 @@ public class User implements UserInterface {
 //        return true;
 //    }
 
-    public void deleteMessage(User person, String message) {
-        TextMessage m = new TextMessage(message, this, person);
+    public void deleteMessage(TextMessage message) {
         for (int i = 0; i < this.messages.size(); i++) {
-            if (this.messages.get(i).equals(m)) {
+            if (this.messages.get(i).equals(message)) {
                 this.messages.remove(i);
                 break;
             }
         }
-        for (int j = 0; j < this.messages.size(); j++) {
-            if (person.messages.get(j).equals(m)) {
-                person.messages.remove(j);
+        for (int i = 0; i < message.getReceiver().messages.size(); i++) {
+            if (message.getReceiver().messages.get(i).equals(message)) {
+                message.getReceiver().messages.remove(i);
                 break;
             }
         }
     }
-
-//    public void deletePhotoMessage(PhotoMessage photo) {
-//        for (int i = 0; i < photos.size(); i++) {
-//            if (photos.get(i).equals(photo)) {
-//                photos.remove(i);
-//                break;
-//            }
-//        }
-//        for (int i = 0; i < photo.getReceiver().photos.size(); i++) {
-//            if (photo.getReceiver().photos.get(i).equals(photo)) {
-//                photo.getReceiver().photos.remove(i);
-//                break;
-//            }
-//        }
-//    }
+/*
+    public void deletePhotoMessage(PhotoMessage photo) {
+        for (int i = 0; i < photos.size(); i++) {
+            if (photos.get(i).equals(photo)) {
+                photos.remove(i);
+                break;
+            }
+        }
+        for (int i = 0; i < photo.getReceiver().photos.size(); i++) {
+            if (photo.getReceiver().photos.get(i).equals(photo)) {
+                photo.getReceiver().photos.remove(i);
+                break;
+            }
+        }
+    } */
 
     public boolean equals(Object o) {
         if (o instanceof User) {

@@ -115,25 +115,9 @@ public interface UserInterface {
      */
     boolean sendMessage(User person, String message);
 
-    // Future methods for sending and deleting photo messages can be implemented if needed.
-    // These are currently commented out to maintain focus on core messaging functionality.
-    // public boolean sendPhotoMessage(User person, String message, String photo);
-    
-    /**
-     * Deletes a text message from the conversation with a specified user.
-     * 
-     * @param person the User object representing the conversation partner
-     * @param message the message content as a String
-     */
-    void deleteMessage(User person, String message);
 
-    // public void deletePhotoMessage(PhotoMessage photo);
+    void deleteMessage(TextMessage message);
+//    public void deletePhotoMessage(PhotoMessage photo);
 
-    /**
-     * Compares this User object with another object for equality based on user details.
-     * 
-     * @param o the object to compare
-     * @return true if the objects are equivalent; false otherwise
-     */
     boolean equals(Object o);
 }
