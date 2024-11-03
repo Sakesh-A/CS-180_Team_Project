@@ -3,6 +3,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Team Project -- User
+ *
+ * Creates a User object and includes all needed methods including gets and sets
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ *
+ * @version Nov 3, 2024
+ *
+ */
+
 public class User implements UserInterface {
     private String username;
     private String password;
