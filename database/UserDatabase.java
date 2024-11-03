@@ -38,6 +38,12 @@ public class UserDatabase implements UserDatabaseInterface {
 
     // addUser method
     public boolean addUser(User user) {
+        for (User existingUser : users) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                System.err.println("User with this username already exists.");
+                return false;
+            }
+        }
         users.add(user);
         String file = String.format("%s.txt", user.getUsername());
         userFiles.add(file);
