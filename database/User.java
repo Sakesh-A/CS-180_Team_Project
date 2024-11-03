@@ -197,7 +197,12 @@ public class User implements UserInterface {
         for (int i = 0; i < this.messages.size(); i++) {
             if (this.messages.get(i).equals(m)) {
                 this.messages.remove(i);
-                person.messages.remove(i);
+                break;
+            }
+        }
+        for (int j = 0; j < this.messages.size(); j++) {
+            if (person.messages.get(j).equals(m)) {
+                person.messages.remove(j);
                 break;
             }
         }
