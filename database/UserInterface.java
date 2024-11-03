@@ -30,7 +30,7 @@ public interface UserInterface {
     boolean sendMessage(User person, String message);
 //    public boolean sendPhotoMessage(User person, String message, String photo);
 
-    void deleteMessage(User person, String message);
+    void deleteMessage(TextMessage message);
 //    public void deletePhotoMessage(PhotoMessage photo);
     boolean equals(Object o);
 }

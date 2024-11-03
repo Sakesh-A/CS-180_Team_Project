@@ -18,7 +18,9 @@ public class TextMessage implements MessageInterface {
 
    // Old code with direct attributes has been commented out to simplify access through the array
    // Uncomment if additional functionality or separate variables are needed in future
-   
+    private User sender;
+    private User receiver;
+
    /**
     * Constructor for TextMessage. Initializes the message array with sender username, receiver username, 
     * and message content.
@@ -31,6 +33,8 @@ public class TextMessage implements MessageInterface {
        messageArray[0] = sender.getUsername();
        messageArray[1] = receiver.getUsername();
        messageArray[2] = message;
+       this.sender = sender;
+       this.receiver = receiver;
    }
 
    /**
@@ -68,6 +72,16 @@ public class TextMessage implements MessageInterface {
    public String[] getMessageArray() {
        return messageArray.clone();
    }
+
+   public User getSender() {
+        return sender;
+    }
+
+
+
+    public User getReceiver() {
+        return receiver;
+    }
 
    /**
     * Checks equality between this TextMessage instance and another object.
