@@ -1,31 +1,68 @@
-import java.util.*;
-import java.io.*;
+import java.util.*; 
+import java.io.*; 
 
 /**
  * Team Project -- MessageInterface
  *
- * Creates an interface for Message
- *
- *
- * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- *
- * @version Nov 3, 2024
- *
+ * Defines an interface for a message, specifying required methods for message handling. 
+ * This includes methods for retrieving message details like sender, receiver, and content.
+ * 
+ * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * Version: Nov 3, 2024
  */
 
 public interface MessageInterface {
-    String[] getMessageArray();
-    boolean equals(Object o);
-    String toString();
-    String getSenderUsername();
-    String getReceiverUsername();
-    String getMessageContent();
-//    public static int id = 0; //Everytime you send a message, id++, gives each message a unique id for identification purposes
-//    public String getMessage();
-//    public User getReceiver();
-//    public User getSender();
-//    public void setMessage(String message);
-//    public void setReceiver(User receiver);
-//    public void setSender(User sender);
 
+    /**
+     * Returns an array representation of the message, typically including sender, receiver, 
+     * and message content.
+     * 
+     * @return a String array containing message details
+     */
+    String[] getMessageArray();
+
+    /**
+     * Compares this message object with another object for equality based on message content.
+     * 
+     * @param o the object to compare
+     * @return true if the messages are equivalent; false otherwise
+     */
+    boolean equals(Object o);
+
+    /**
+     * Returns a String representation of the message, typically formatted with sender, 
+     * receiver, and content details.
+     * 
+     * @return a formatted string representation of the message
+     */
+    String toString();
+
+    /**
+     * Retrieves the sender's username.
+     * 
+     * @return sender's username as a String
+     */
+    String getSenderUsername();
+
+    /**
+     * Retrieves the receiver's username.
+     * 
+     * @return receiver's username as a String
+     */
+    String getReceiverUsername();
+
+    /**
+     * Retrieves the message content.
+     * 
+     * @return message content as a String
+     */
+    String getMessageContent();
+
+    // public static int id = 0; // Unique ID for each message
+    // public String getMessage();
+    // public User getReceiver();
+    // public User getSender();
+    // public void setMessage(String message);
+    // public void setReceiver(User receiver);
+    // public void setSender(User sender);
 }
