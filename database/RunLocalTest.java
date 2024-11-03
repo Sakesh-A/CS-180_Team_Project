@@ -79,6 +79,24 @@ public class RunLocalTest {
         }
 
         @Test(timeout = 1000)
+        public void UserInterfaceTest() {
+            Class<?> clazz;
+            int modifiers;
+            Class<?> superclass;
+            Class<?>[] superinterfaces;
+
+            clazz = UserInterface.class;
+
+            modifiers = clazz.getModifiers();
+
+            superclass = clazz.getSuperclass();
+
+            superinterfaces = clazz.getInterfaces();
+
+            //todo
+        }
+
+        @Test(timeout = 1000)
         public void MessageTest() {
             Class<?> clazz;
             int modifiers;
