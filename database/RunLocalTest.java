@@ -10,9 +10,21 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
+/**
+ * Team Project -- RunLocalTest
+ *
+ * Test Cases for all classes and methods.
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ *
+ * @version Nov 3, 2024
+ *
+ */
+
 public class RunLocalTest {
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(TestCase.class);
+        Result result = JUnitCore.runClasses(TestCase.class); //stores the result of the JUnit test
         if (result.wasSuccessful()) {
             System.out.println("Excellent - Test ran successfully");
         } else {
