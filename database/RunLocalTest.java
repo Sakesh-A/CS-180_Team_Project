@@ -109,22 +109,52 @@ public class RunLocalTest {
         }
 
         @Test(timeout = 1000)
-        public void MessageTest() {
-            Class<?> clazz;
-            int modifiers;
-            Class<?> superclass;
-            Class<?>[] superinterfaces;
+        public void MessageInterfaceTest() {
+            Class<?> clazz = MessageInterface.class;
 
-            clazz = User.class;
+            // Check if the interface is public
+            int modifiers = clazz.getModifiers();
+            assertTrue("MessageInterface should be public", java.lang.reflect.Modifier.isPublic(modifiers));
 
-            modifiers = clazz.getModifiers();
+            // Check that it is an interface
+            assertTrue("MessageInterface should be an interface", clazz.isInterface());
 
-            superclass = clazz.getSuperclass();
+            // Check superclass (should be Object)
+            Class<?> superclass = clazz.getSuperclass();
+            assertEquals("MessageInterface should extend Object", Object.class, superclass);
 
-            superinterfaces = clazz.getInterfaces();
+            // Check methods
+            String[] expectedMethodNames = {
+                    "getMessageArray",
+                    "equals",
+                    "toString",
+                    "getSenderUsername",
+                    "getReceiverUsername",
+                    "getMessageContent"
+            };
 
-            //todo
+            for (String methodName : expectedMethodNames) {
+                try {
+                    // Check the method exists with correct signature
+                    if (methodName.equals("equals")) {
+                        clazz.getMethod(methodName, Object.class);
+                    } else if (methodName.equals("toString")) {
+                        clazz.getMethod(methodName);
+                    } else {
+                        clazz.getMethod(methodName);
+                    }
+                } catch (NoSuchMethodException e) {
+                    fail("Method " + methodName + " should exist in MessageInterface");
+                }
+            }
 
+            // You may also want to ensure the interface cannot be instantiated
+            try {
+                MessageInterface msgInterfaceInstance = (MessageInterface) clazz.getDeclaredConstructor().newInstance();
+                fail("MessageInterface should not be instantiable");
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                // Expected behavior, continue
+            }
         }
 
         @Test(timeout = 1000)
