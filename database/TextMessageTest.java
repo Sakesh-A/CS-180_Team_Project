@@ -5,6 +5,6 @@ class TextMessageTest {
 
     void SenderUsername(){
         var textmessage = new TextMessage();
-        assertEquals()
+        assertEquals();
     }
 }
