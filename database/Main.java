@@ -111,21 +111,53 @@ public class Main {
                                 }
                                 break;
                             case 6:
-                                String five = inputReader.readLine();
-                                String six = inputReader.readLine();
-                                try {
-                                    int seven = Integer.parseInt(five);
-                                    if (six != null) {
-                                        result = db.addResearcher(seven, six);
-                                    } else {
-                                        result = false;
+                                String username9 = inputReader.readLine();
+                                String password9 = inputReader.readLine();
+                                boolean isPublic9 = Boolean.parseBoolean(inputReader.readLine());
+                                String username10 = inputReader.readLine();
+                                String password10 = inputReader.readLine();
+                                boolean isPublic10 = Boolean.parseBoolean(inputReader.readLine());
+                                String message1 = inputReader.readLine();
+                                User user7 = new User(username9, password9, isPublic9);
+                                User user8 = new User(username10, password10, isPublic10);
+                                if (username9 != null && password9 != null && username10 != null && password10 != null && message1 != null) {
+                                    int first = 0;
+                                    int second = 0;
+                                    for (int i = 0; i < db.getUsers().size(); i++) {
+                                        if (user7.equals(db.getUsers().get(i))) {
+                                            first = i;
+                                        }
+                                        if (user8.equals(db.getUsers().get(i))) {
+                                            second = i;
+                                        }
                                     }
-                                } catch (NumberFormatException e) {
-                                    result = false;
+                                    result = db.getUsers().get(first).sendMessage(db.getUsers().get(second), message1);
                                 }
                                 break;
                             case 7:
-                                result = db.outputDatabase();
+                                String username11 = inputReader.readLine();
+                                String password11 = inputReader.readLine();
+                                boolean isPublic11 = Boolean.parseBoolean(inputReader.readLine());
+                                String username12 = inputReader.readLine();
+                                String password12 = inputReader.readLine();
+                                boolean isPublic12 = Boolean.parseBoolean(inputReader.readLine());
+                                String message2 = inputReader.readLine();
+                                User user9 = new User(username11, password11, isPublic11);
+                                User user10 = new User(username12, password12, isPublic12);
+                                TextMessage messageObject = new TextMessage(message2, user9, user10);
+                                if (username11 != null && password11 != null && username12 != null && password12 != null && message2 != null) {
+                                    int first = 0;
+                                    int second = 0;
+                                    for (int i = 0; i < db.getUsers().size(); i++) {
+                                        if (user9.equals(db.getUsers().get(i))) {
+                                            first = i;
+                                        }
+                                        if (user10.equals(db.getUsers().get(i))) {
+                                            second = i;
+                                        }
+                                    }
+                                    result = db.getUsers().get(first).deleteMessage(messageObject);
+                                }
                                 break;
                             default:
                                 // nothign to do
@@ -154,7 +186,5 @@ public class Main {
         } catch (IOException e) {
             System.out.println("IO Read Failure");
         }
-    }
-
     }
 }
