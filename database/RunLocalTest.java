@@ -171,20 +171,51 @@ public class RunLocalTest {
 
         @Test(timeout = 1000)
         public void PhotoMessageTest() {
-            Class<?> clazz;
-            int modifiers;
-            Class<?> superclass;
-            Class<?>[] superinterfaces;
+            Class<?> clazz = PhotoMessage.class;
 
-            clazz = PhotoMessage.class;
+            // Check if the class is public
+            int modifiers = clazz.getModifiers();
+            assertTrue("PhotoMessage should be public", java.lang.reflect.Modifier.isPublic(modifiers));
 
-            modifiers = clazz.getModifiers();
+            // Check superclass
+            Class<?> superclass = clazz.getSuperclass();
+            assertEquals("PhotoMessage should extend TextMessage", TextMessage.class, superclass);
 
-            superclass = clazz.getSuperclass();
+            // Check interfaces
+            Class<?>[] superinterfaces = clazz.getInterfaces();
+            assertEquals("PhotoMessage should implement MessageInterface", 1, superinterfaces.length);
+            assertEquals("PhotoMessage should implement MessageInterface", MessageInterface.class, superinterfaces[0]);
 
-            superinterfaces = clazz.getInterfaces();
+            // Create User objects for testing
+            User sender = new User("Alice");
+            User receiver = new User("Bob");
 
-            //todo
+            // Create a PhotoMessage instance
+            String messageContent = "Check out this photo!";
+            String photoUrl = "http://example.com/photo.jpg";
+            PhotoMessage photoMessage = new PhotoMessage(messageContent, sender, receiver, photoUrl);
+
+            // Test getters
+            assertEquals("Sender username should match", "Alice", photoMessage.getSenderUsername());
+            assertEquals("Receiver username should match", "Bob", photoMessage.getReceiverUsername());
+            assertEquals("Message content should match", messageContent, photoMessage.getMessageContent());
+            assertEquals("Photo URL should match", photoUrl, photoMessage.getPhoto());
+
+            // Test setPhoto
+            String newPhotoUrl = "http://example.com/new_photo.jpg";
+            photoMessage.setPhoto(newPhotoUrl);
+            assertEquals("Photo URL should be updated", newPhotoUrl, photoMessage.getPhoto());
+
+            // Test the equality method
+            PhotoMessage samePhotoMessage = new PhotoMessage(messageContent, sender, receiver, photoUrl);
+            assertTrue("PhotoMessages with the same content and photo should be equal", photoMessage.equals(samePhotoMessage));
+
+            PhotoMessage differentPhotoMessage = new PhotoMessage("Different Message", sender, receiver, newPhotoUrl);
+            assertFalse("PhotoMessages with different content should not be equal", photoMessage.equals(differentPhotoMessage));
+
+            // Test toString inherited from TextMessage
+            String expectedString = "Alice,Bob,Check out this photo!;";
+            assertEquals("toString should return the correct format from TextMessage", expectedString, photoMessage.toString());
         }
 
 
