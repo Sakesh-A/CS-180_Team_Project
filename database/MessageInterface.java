@@ -14,9 +14,12 @@ import java.io.*;
  */
 
 public interface MessageInterface {
-    public String[] getMessageArray();
-    public boolean equals(Object o);
-    public String toString();
+    String[] getMessageArray();
+    boolean equals(Object o);
+    String toString();
+    String getSenderUsername();
+    String getReceiverUsername();
+    String getMessageContent();
 //    public static int id = 0; //Everytime you send a message, id++, gives each message a unique id for identification purposes
 //    public String getMessage();
 //    public User getReceiver();

@@ -59,8 +59,13 @@ public class TextMessage implements MessageInterface{
 //    public void setReceiver(User receiver) {
 //        this.receiver = receiver;
 //    }
+
+    public String getSenderUsername() { return messageArray[0]; }
+    public String getReceiverUsername() { return messageArray[1]; }
+    public String getMessageContent() { return messageArray[2]; }
+
     public String[] getMessageArray() {
-        return messageArray;
+        return messageArray.clone();
     }
 
 
