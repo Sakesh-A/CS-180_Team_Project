@@ -38,55 +38,102 @@ public class UserDatabase implements UserDatabaseInterface {
 
     // addUser method
     public boolean addUser(User user) {
-        users.add(user);
+        for (User existingUser : users) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                System.err.println("User with this username already exists.");
+                return false;
+            }
+        }
         String file = String.format("%s.txt", user.getUsername());
-        userFiles.add(file);
+        BufferedWriter writer = null;
         try {
-            writers.add(new BufferedWriter(new FileWriter(file)));
+            writer = new BufferedWriter(new FileWriter(file));
+            users.add(user);
+            userFiles.add(file);
+            writers.add(writer);
+            if (!everythingToFile()) {
+                users.remove(user);
+                userFiles.remove(file);
+                writers.remove(writer);
+                writer.close();
+                return false;
+            }
         } catch(IOException e) {
+            System.err.println("Error adding user: " + e.getMessage());
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch(IOException ex) {
+                    System.err.println("Error closing writer during rollback: " + ex.getMessage());
+                }
+            }
+            return false;
+        }
+        return true;
+    }
 
+
+    // removeUser method
+    public boolean removeUser(User user) throws IOException {
+        int index = users.indexOf(user);
+        if (index == -1) {
+            System.err.println("User not found in the database.");
+            return false;
+        }
+        users.remove(index);
+        String fileToRemove = userFiles.remove(index);
+        try {
+            BufferedWriter writer = writers.remove(index);
+            writer.close();
+        } catch(IOException e) {
+            System.err.println("Error closing writer during user removal: " + e.getMessage());
             return false;
         }
         return everythingToFile();
     }
 
-    // addUser method
-    public boolean removeUser(User user) {
-        users.remove(user);
-        for(String file : userFiles) {
-            String temp = file.substring(0, file.lastIndexOf("."));
-            if(user.getUsername().equals(temp)) {
-                userFiles.remove(file);
-                writers.remove(0);
-            }
-        }
-        return everythingToFile();
-    }
 
-    // saveUser method
-    public boolean everythingToFile() {
+    // everythingToFile method
+    public boolean everythingToFile() throws IOException {
+        if (users.size() != userFiles.size() || users.size() != writers.size()) {
+            System.err.println("Inconsistent data structure sizes in UserDatabase.");
+            return false;
+        }
         String filename = "UsersList.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
             for (User user : users) {
-                writer.write(user.toString());
+                writer.write(user.toString() + System.lineSeparator());
             }
         } catch (IOException e) {
             System.err.println("Error writing users to file: " + e.getMessage());
             return false;
         }
-
-        for (int i = 0; i < users.size(); i++) {
-            try (BufferedWriter writer = writers.get(i)) {
-                User user = users.get(i);
-                ArrayList<TextMessage> messages = user.getMessages();
-                for (TextMessage message : messages) {
-                    writer.write(message.toString());
+        try {
+            for (int i = 0; i < users.size(); i++) {
+                BufferedWriter writer = writers.get(i);
+                for (TextMessage message : users.get(i).getMessages()) {
+                    writer.write(message.toString() + System.lineSeparator());
                 }
-            } catch(IOException e) {
-                System.err.println("Error writing users to file: " + e.getMessage());
-                return false;
+                writer.flush();
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing messages to file: " + e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public void closeAllWriters() {
+        for (BufferedWriter writer : writers) {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    System.err.println("Error closing writer: " + e.getMessage());
+                }
             }
         }
-        return true;
+        writers.clear();
     }
 } // End of class
