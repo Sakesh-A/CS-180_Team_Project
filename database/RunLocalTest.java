@@ -5,6 +5,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+import org.junit.*;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -204,12 +205,213 @@ public class RunLocalTest {
             clazz = UserInterface.class;
 
             modifiers = clazz.getModifiers();
+            assertTrue("UserInterface should be an interface",
+                    Modifier.isInterface(modifiers));
 
             superclass = clazz.getSuperclass();
+            assertNull("UserInterface should not extend any superclass", superclass);
 
             superinterfaces = clazz.getInterfaces();
+            assertEquals("UserInterface should not implement any other interfaces", 0,
+                    superinterfaces.length);
 
-            //todo
+            // All methods check
+            Method[] methods = clazz.getDeclaredMethods();
+
+            // Expected methods and signatures check
+            boolean hasGetUsername = false;
+            boolean hasSetUsername = false;
+            boolean hasSetPassword = false;
+            boolean hasGetPassword = false;
+            boolean hasIsPublic = false;
+            boolean hasSetPublic = false;
+            boolean hasGetFriends = false;
+            boolean hasSetFriends = false;
+            boolean hasGetBlockedUsers = false;
+            boolean hasSetBlockedUsers = false;
+            boolean hasAddFriend = false;
+            boolean hasRemoveFriend = false;
+            boolean hasBlockUser = false;
+            boolean hasSendMessage = false;
+            boolean hasDeleteMessage = false;
+            boolean hasEquals = false;
+
+            for (Method method : methods) {
+                switch (method.getName()) {
+                    case "getUsername":
+                        hasGetUsername = true;
+                        assertEquals("getUsername should return String", String.class,
+                                method.getReturnType());
+                        assertEquals("getUsername should have no parameters", 0,
+                                method.getParameterCount());
+                        break;
+
+                    case "setUsername":
+                        hasSetUsername = true;
+                        assertEquals("setUsername should return void", void.class,
+                                method.getReturnType());
+                        assertEquals("setUsername should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("setUsername parameter should be of type String",
+                                String.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "setPassword":
+                        hasSetPassword = true;
+                        assertEquals("setPassword should return void", void.class,
+                                method.getReturnType());
+                        assertEquals("setPassword should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("setPassword parameter should be of type String",
+                                String.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "getPassword":
+                        hasGetPassword = true;
+                        assertEquals("getPassword should return String",
+                                String.class, method.getReturnType());
+                        assertEquals("getPassword should have no parameters", 0,
+                                method.getParameterCount());
+                        break;
+
+                    case "isPublic":
+                        hasIsPublic = true;
+                        assertEquals("isPublic should return boolean", boolean.class,
+                                method.getReturnType());
+                        assertEquals("isPublic should have no parameters", 0,
+                                method.getParameterCount());
+                        break;
+
+                    case "setPublic":
+                        hasSetPublic = true;
+                        assertEquals("setPublic should return void", void.class,
+                                method.getReturnType());
+                        assertEquals("setPublic should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("setPublic parameter should be of type boolean",
+                                boolean.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "getFriends":
+                        hasGetFriends = true;
+                        assertEquals("getFriends should return ArrayList<User>",
+                                ArrayList.class, method.getReturnType());
+                        assertEquals("getFriends should have no parameters", 0,
+                                method.getParameterCount());
+                        break;
+
+                    case "setFriends":
+                        hasSetFriends = true;
+                        assertEquals("setFriends should return void", void.class,
+                                method.getReturnType());
+                        assertEquals("setFriends should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("setFriends parameter should be of type ArrayList<User>",
+                                ArrayList.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "getBlockedUsers":
+                        hasGetBlockedUsers = true;
+                        assertEquals("getBlockedUsers should return ArrayList<User>",
+                                ArrayList.class, method.getReturnType());
+                        assertEquals("getBlockedUsers should have no parameters", 0,
+                                method.getParameterCount());
+                        break;
+
+                    case "setBlockedUsers":
+                        hasSetBlockedUsers = true;
+                        assertEquals("setBlockedUsers should return void", void.class,
+                                method.getReturnType());
+                        assertEquals("setBlockedUsers should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("setBlockedUsers parameter should be of type " +
+                                "ArrayList<User>", ArrayList.class,
+                                method.getParameterTypes()[0]);
+                        break;
+
+                    case "addFriend":
+                        hasAddFriend = true;
+                        assertEquals("addFriend should return boolean", boolean.class,
+                                method.getReturnType());
+                        assertEquals("addFriend should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("addFriend parameter should be of type User",
+                                User.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "removeFriend":
+                        hasRemoveFriend = true;
+                        assertEquals("removeFriend should return boolean",
+                                boolean.class, method.getReturnType());
+                        assertEquals("removeFriend should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("removeFriend parameter should be of type User",
+                                User.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "blockUser":
+                        hasBlockUser = true;
+                        assertEquals("blockUser should return boolean", boolean.class,
+                                method.getReturnType());
+                        assertEquals("blockUser should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("blockUser parameter should be of type User",
+                                User.class, method.getParameterTypes()[0]);
+                        break;
+
+                    case "sendMessage":
+                        hasSendMessage = true;
+                        assertEquals("sendMessage should return boolean", boolean.class,
+                                method.getReturnType());
+                        assertEquals("sendMessage should have two parameters", 2,
+                                method.getParameterCount());
+                        assertEquals("sendMessage first parameter should be of type User",
+                                User.class, method.getParameterTypes()[0]);
+                        assertEquals("sendMessage second parameter should be of type String",
+                                String.class, method.getParameterTypes()[1]);
+                        break;
+
+                    case "deleteMessage":
+                        hasDeleteMessage = true;
+                        assertEquals("deleteMessage should return void", void.class,
+                                method.getReturnType());
+                        assertEquals("deleteMessage should have two parameters", 2,
+                                method.getParameterCount());
+                        assertEquals("deleteMessage first parameter should be of type User",
+                                User.class, method.getParameterTypes()[0]);
+                        assertEquals("deleteMessage second parameter should be of type String",
+                                String.class, method.getParameterTypes()[1]);
+                        break;
+
+                    case "equals":
+                        hasEquals = true;
+                        assertEquals("equals should return boolean", boolean.class,
+                                method.getReturnType());
+                        assertEquals("equals should have one parameter", 1,
+                                method.getParameterCount());
+                        assertEquals("equals parameter should be of type Object",
+                                Object.class, method.getParameterTypes()[0]);
+                        break;
+                }
+            }
+
+            // All expected methods found check
+            assertTrue("UserInterface should have getUsername method", hasGetUsername);
+            assertTrue("UserInterface should have setUsername method", hasSetUsername);
+            assertTrue("UserInterface should have setPassword method", hasSetPassword);
+            assertTrue("UserInterface should have getPassword method", hasGetPassword);
+            assertTrue("UserInterface should have isPublic method", hasIsPublic);
+            assertTrue("UserInterface should have setPublic method", hasSetPublic);
+            assertTrue("UserInterface should have getFriends method", hasGetFriends);
+            assertTrue("UserInterface should have setFriends method", hasSetFriends);
+            assertTrue("UserInterface should have getBlockedUsers method", hasGetBlockedUsers);
+            assertTrue("UserInterface should have setBlockedUsers method", hasSetBlockedUsers);
+            assertTrue("UserInterface should have addFriend method", hasAddFriend);
+            assertTrue("UserInterface should have removeFriend method", hasRemoveFriend);
+            assertTrue("UserInterface should have blockUser method", hasBlockUser);
+            assertTrue("UserInterface should have sendMessage method", hasSendMessage);
+            assertTrue("UserInterface should have deleteMessage method", hasDeleteMessage);
+            assertTrue("UserInterface should have equals method", hasEquals);
         }
 
         @Test(timeout = 1000)
@@ -351,9 +553,5 @@ public class RunLocalTest {
             String expectedString = "Alice,Bob,Check out this photo!;";
             assertEquals("toString should return the correct format from TextMessage", expectedString, photoMessage.toString());
         }
-
-
-
-
     }
 }
