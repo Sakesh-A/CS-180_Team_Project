@@ -204,19 +204,24 @@ public class User implements UserInterface {
 //        return true;
 //    }
 
-    public void deleteMessage(TextMessage message) {
+    public boolean deleteMessage(TextMessage message) {
+        boolean exists = false;
         for (int i = 0; i < this.messages.size(); i++) {
             if (this.messages.get(i).equals(message)) {
                 this.messages.remove(i);
+                exists = true;
                 break;
             }
         }
+        boolean exists2 = false;
         for (int i = 0; i < message.getReceiver().messages.size(); i++) {
             if (message.getReceiver().messages.get(i).equals(message)) {
                 message.getReceiver().messages.remove(i);
+                exists2 = true;
                 break;
             }
         }
+        return exists && exists2;
     }
 /*
     public void deletePhotoMessage(PhotoMessage photo) {
@@ -266,10 +271,10 @@ public class User implements UserInterface {
         String line = "";
         line += this.username + "," + this.password + "," + this.isPublic;
         for (User u : friends) {
-            line += u.getUsername();
+            line += "," + u.getUsername();
 
         }
-        line += "End of Friends";
+        line += ",End of Friends";
         for(User u : blockedUsers) {
          line += u.getUsername();
         }

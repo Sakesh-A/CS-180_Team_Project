@@ -116,7 +116,7 @@ public interface UserInterface {
     boolean sendMessage(User person, String message);
 
 
-    void deleteMessage(TextMessage message);
+    boolean deleteMessage(TextMessage message);
 //    public void deletePhotoMessage(PhotoMessage photo);
 
     boolean equals(Object o);
