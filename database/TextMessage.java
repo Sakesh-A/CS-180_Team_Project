@@ -65,10 +65,9 @@ public class TextMessage implements MessageInterface{
 
 
     public boolean equals(Object o) {
-        if(!(o instanceof TextMessage)) {
+        if(!(o instanceof TextMessage m)) {
             return false;
         }
-        TextMessage m = (TextMessage) o;
 
         return (this.messageArray[0].equals(m.messageArray[0]) && this.messageArray[1].equals(m.messageArray[1])
        && this.messageArray[2].equals(m.messageArray[2]));

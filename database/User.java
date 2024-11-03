@@ -13,14 +13,16 @@ public class User implements UserInterface {
     private ArrayList<PhotoMessage> photos;
 
     public User(String username, String password, boolean isPublic) throws BadException {
-
+        if (username == null) {
+            throw new BadException("Usernames can't be empty");
+        }
         for (char c : username.toCharArray()) {
             if (!(Character.isLetterOrDigit(c) || c == '_')) {
                 throw new BadException("Usernames can only contain letters, numbers, or underscores.");
             }
         }
-        if (username == null || username.length() > 20 || username.contains(" ")) {
-            throw new BadException("Username cannot contain more than 20 characters, have a space, or be empty.");
+        if (username.length() > 20 || username.contains(" ")) {
+            throw new BadException("Username cannot contain more than 20 characters and have a space");
         }
 
         this.username = username;
@@ -45,7 +47,7 @@ public class User implements UserInterface {
             }
         }
         if (!hasUpperCase || !hasDigit || !hasSpecialCharacter) {
-            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, and one ");
+            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, and one special character");
         }
 
         this.password = password;
@@ -130,6 +132,7 @@ public class User implements UserInterface {
         for (User a : this.friends) {
             if (a.equals(u)) {
                 exists = true;
+                break;
             }
         }
         if (exists) {
