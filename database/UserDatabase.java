@@ -18,11 +18,13 @@ public class UserDatabase implements UserDatabaseInterface {
     private ArrayList<User> users;
     final private String filename = "UsersList.txt";
     private ArrayList<String> userFiles;
+    private ArrayList<BufferedWriter> writers;
 
     // Constructor
     public UserDatabase() {
         this.users = new ArrayList<User>();
         this.userFiles = new ArrayList<String>();
+        this.writers = new ArrayList<>();
     }
 
     // Getter methods
@@ -40,6 +42,12 @@ public class UserDatabase implements UserDatabaseInterface {
         users.add(user);
         String file = String.format("%s.txt", user.getUsername());
         userFiles.add(file);
+        try {
+            writers.add(new BufferedWriter(new FileWriter(file)));
+        } catch(IOException e) {
+
+            return false;
+        }
         return usersToFile();
     }
 
@@ -50,6 +58,7 @@ public class UserDatabase implements UserDatabaseInterface {
             String temp = file.substring(0, file.lastIndexOf("."));
             if(user.getUsername().equals(temp)) {
                 userFiles.remove(file);
+                writers.remove()
             }
         }
         return usersToFile();
@@ -63,7 +72,11 @@ public class UserDatabase implements UserDatabaseInterface {
             }
         } catch (IOException e) {
             System.err.println("Error writing users to file: " + e.getMessage());
+            return false;
         }
+
+
+
         return true;
     }
 } // End of class
