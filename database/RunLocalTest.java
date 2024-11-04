@@ -553,6 +553,6 @@ public class RunLocalTest {
                 // Test toString inherited from TextMessage
                 String expectedString = "Alice,Bob,Check out this photo!;";
                 assertEquals("toString should return the correct format from TextMessage", expectedString, photoMessage.toString());
+                }
         }
-    }
 }
