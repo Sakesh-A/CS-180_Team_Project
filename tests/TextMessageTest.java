@@ -14,6 +14,13 @@ public class TextMessageTest {
         receiver = new User("Bob", "Password2@", true);
         textMessage = new TextMessage("Hello, Bob!", sender, receiver);
     }
+     @Test
+    public void testConstructorWithEmptyMessage() {
+        TextMessage message = new TextMessage("", sender, receiver);
+        assertEquals("Sender username should match", "Alice", message.getSenderUsername());
+        assertEquals("Receiver username should match", "Bob", message.getReceiverUsername());
+        assertEquals("Message content should be empty", "", message.getMessageContent());
+    }
 
     @Test
     public void testGetSenderUsername() {
