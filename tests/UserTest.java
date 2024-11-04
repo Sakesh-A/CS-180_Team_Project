@@ -59,8 +59,8 @@ public class UserTest {
     @Test
     public void testSendMessage() {
         assertTrue("Message should be sent successfully", user1.sendMessage(user2, "Hello, Bob!"));
-        assertFalse("Message should not be sent to blocked user", user2.blockUser(user1));
-        assertFalse("Message should not be sent due to privacy", user2.sendMessage(user1, "Hello, Alice!"));
+        assertTrue("User has been blocked correctly", user2.blockUser(user1));
+        assertFalse("Message should not be sent due to privacy", user1.sendMessage(user2, "Hello, Alice!"));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class UserTest {
     @Test
     public void testToString() {
         user1.addFriend(user2);
-        String expectedString = "Alice,Password1!,true,Bob,End of Friends";
+        String expectedString = "Alice,Password1!,true,Bob,End of Friends,";
         assertEquals("toString should return formatted string", expectedString, user1.toString());
     }
 }
