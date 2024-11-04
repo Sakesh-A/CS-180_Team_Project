@@ -3,16 +3,49 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Team Project -- User
+ *
+ * Represents a User in the system with capabilities to manage friends,
+ * block users, send messages, and manage privacy settings.
+ *
+ * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * Version: Nov 3, 2024
+ */
+
 public class User implements UserInterface {
+    // User's unique username
     private String username;
+    
+    // User's password
     private String password;
+    
+    // List of friends associated with the user
     private ArrayList<User> friends;
+    
+    // List of blocked users
     private ArrayList<User> blockedUsers;
+    
+    // Indicates whether the user's profile is public
     private boolean isPublic;
-    private ArrayList<TextMessage> messages; // we needed a way to differentiate between recievers, so we are doing arrays
+    
+    // List of text messages sent or received by the user
+    private ArrayList<TextMessage> messages;
+    
+    // List of photo messages sent or received by the user
     private ArrayList<PhotoMessage> photos;
+
+    // Creates an Object for synchronization purposes
     Object obj = new Object();
 
+    /**
+     * Constructor: Initializes a User object with the specified username, password, and public status.
+     *
+     * @param username the username for the user
+     * @param password the password for the user
+     * @param isPublic indicates if the user's profile is public
+     * @throws BadException if the username or password does not meet the specified criteria
+     */
     public User(String username, String password, boolean isPublic) throws BadException {
         if (username == null) {
             throw new BadException("Usernames can't be empty");
@@ -59,6 +92,8 @@ public class User implements UserInterface {
         this.photos = new ArrayList<PhotoMessage>();
     }
 
+    // Getter and setter methods
+
     public String getUsername() {
         return username;
     }
@@ -99,6 +134,16 @@ public class User implements UserInterface {
         this.blockedUsers = blockedUsers;
     }
 
+    public ArrayList<TextMessage> getMessages() {
+        return messages;
+    }
+
+    /**
+     * Adds a friend to the user's friend list after verifying the user's existence.
+     *
+     * @param u the User to be added as a friend
+     * @return true if the user was added successfully; false otherwise
+     */
     public boolean addFriend(User u) {
         synchronized(obj) {
             for (User user : friends) {
@@ -111,10 +156,12 @@ public class User implements UserInterface {
         } 
     }
 
-    public ArrayList<TextMessage> getMessages() {
-        return messages;
-    }
-
+    /**
+     * Removes a friend from the user's friend list.
+     *
+     * @param u the User to be removed from the friend list
+     * @return true if the user was removed successfully; false otherwise
+     */
     public boolean removeFriend(User u) {
         synchronized(obj) {
             boolean exists = false;
@@ -132,6 +179,12 @@ public class User implements UserInterface {
         }
     }
 
+    /**
+     * Blocks a user, preventing them from sending messages or viewing the user's profile.
+     *
+     * @param u the User to be blocked
+     * @return true if the user was blocked successfully; false otherwise
+     */
     public boolean blockUser(User u) {
         synchronized(obj) {
             for (User user : blockedUsers) {
@@ -144,6 +197,13 @@ public class User implements UserInterface {
         }
     }
 
+    /**
+     * Sends a message to another user if they are not blocked and the sender has permission.
+     *
+     * @param person the User to whom the message is sent
+     * @param message the content of the message
+     * @return true if the message was sent successfully; false otherwise
+     */
     public boolean sendMessage(User person, String message) {
         synchronized(obj) {
             if (person.hasBlocked(this) || (!person.isPublic && !person.hasFriended(this))) {
@@ -156,6 +216,13 @@ public class User implements UserInterface {
             return true;
         }
     }
+
+    /**
+     * Deletes a message from both the sender and receiver's message list.
+     *
+     * @param message the TextMessage to be deleted
+     * @return true if the message was deleted from both users; false otherwise
+     */
     public boolean deleteMessage(TextMessage message) {
         synchronized(obj) {
             boolean exists1 = false;
@@ -178,7 +245,13 @@ public class User implements UserInterface {
         }   
     }
 
-
+    /**
+     * Sends a message to another user if they are not blocked and the sender has permission.
+     *
+     * @param person the User to whom the message is sent
+     * @param message the content of the message
+     * @return true if the message was sent successfully; false otherwise
+     */
     public boolean sendPhotoMessage(User person, String message, String photo) {
         synchronized(obj) {
             if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
@@ -192,7 +265,12 @@ public class User implements UserInterface {
         }
     }
 
-
+    /**
+     * Deletes a message from both the sender and receiver's message list.
+     *
+     * @param message the PhotoMessage to be deleted
+     * @return true if the message was deleted from both users; false otherwise
+     */
     public void deletePhotoMessage(PhotoMessage photo) {
         synchronized(obj) {
             for (int i = 0; i < photos.size(); i++) {
@@ -210,6 +288,12 @@ public class User implements UserInterface {
         }
     }
 
+    /**
+     * Compares this User to another object for equality based on the username.
+     *
+     * @param o the object to compare
+     * @return true if the object is a User with the same username; false otherwise
+     */
     public boolean equals(Object o) {
         if (o instanceof User) {
             User u = (User) o;
@@ -220,6 +304,12 @@ public class User implements UserInterface {
 
     }
 
+    /**
+     * Checks if the user has blocked a specific user.
+     *
+     * @param u the User to check
+     * @return true if the user is blocked; false otherwise
+     */
     public boolean hasBlocked(User u) {
         for (int i = 0; i < blockedUsers.size(); i++) {
             if (blockedUsers.get(i).equals(u)) {
@@ -229,6 +319,12 @@ public class User implements UserInterface {
         return false;
     }
 
+    /**
+     * Checks if the user has added a specific user as a friend.
+     *
+     * @param u the User to check
+     * @return true if the user is a friend; false otherwise
+     */
     public boolean hasFriended(User u) {
         for (int i = 0; i < friends.size(); i++) {
             if (friends.get(i).equals(u)) {
@@ -238,6 +334,12 @@ public class User implements UserInterface {
         return false;
     }
 
+    /**
+     * Returns a string representation of the User object, including username, password,
+     * privacy setting, friends, and blocked users.
+     *
+     * @return a formatted string of the User's information
+     */
     public String toString() {
         String line = "";
         line += this.username + "," + this.password + "," + this.isPublic + ",";
