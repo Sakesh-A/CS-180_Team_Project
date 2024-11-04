@@ -1,7 +1,16 @@
 # CS-180_Team_Project
-1. d
-2. "Student" Submitted Voareum Workspace
-3. a. Classes
+1. a. Test Cases- The test cases are in a separate folder called "tests". We used JUNIT to write all of our test cases.
+      - UserTest:
+           - We test every method in the User class.
+           - Run it on IntelliJ to see the observed result.
+      - TextMessageTest:
+           - We test every method in the TextMessage class.
+           - Run it on IntelliJ to see the observed result.
+      - UserDatabaseTest:
+           - We test every method in the UserDatabase class.
+           - Run it on IntelliJ to see the observed result.
+3. Sakesh Andhavarapu Submitted Vocareum Workspace
+4. a. Classes- All of the classes are in the "database" folder
      - User:
        The User class models an individual user within the database, holding key information like username, password, and privacy status. It maintains lists of friends, blocked users, and received messages, allowing each user to connect with others, manage interactions, and handle communication. Core methods in this class include adding/removing friends, blocking users, and sending or deleting messages, which enable interaction. The equals method ensures that each user is uniquely identified by their username. This class interacts with TextMessage for messaging and is managed collectively by UserDatabase, which organizes users.
 
@@ -13,7 +22,7 @@
        
      - PhotoMessage: It is very similar to TextMessage, but it is still in progress.
 
-   b. Interfaces
+   b. Interfaces- All of the interfaces are in the "database" folder
      - UserInterface:
        The UserInterface outlines the operations for user management, including methods for accessing and modifying user details, friendships, and messaging capabilities. It provides a clear contract for implementing user-related functionality, enabling flexibility and consistent interactions across different user implementations.
        
@@ -23,7 +32,7 @@
      - MessageInterface:
        The MessageInterface establishes the required methods for handling messages, including retrieving details like sender, receiver, and content. This interface ensures that any message implementation adheres to a standard format, facilitating smooth message operations within the application.
        
-   c. Exceptions
+   c. Exceptions- All of the expections are in the "database" folder
      - BadException:
        The BadException class is a custom exception that handles specific error conditions in the project by allowing developers to provide descriptive error messages. It extends the standard Exception class, enabling it to be thrown and caught like other exceptions while offering additional context about the error through a detail message.
 
