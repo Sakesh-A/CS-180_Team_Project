@@ -2,8 +2,19 @@
 1. d
 2. "Student" Submitted Voareum Workspace
 3. a. Classes
-     - User: It contains 
-   b. Interfaces 
+     - User:
+       
+     - UserDatabase:
+       
+     - TextMessage:
+
+   b. Interfaces
+     - UserInterface:
+       
+     - UserDatabasInterface:
+   
+     - MessageInterface:
+       
    c. Exceptions
-   d.
+     - BadException:
    
