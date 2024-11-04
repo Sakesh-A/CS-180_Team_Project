@@ -3,7 +3,7 @@ public class test {
         try {
             User u1 = new User("John", "j#idsfHO44", true);
             User u2 = new User("Bob", "jj*&OGYLKJL!@@@112j", true);
-            User u3 = new User("Bob", "j#idsfHO44", true);
+            User u3 = new User("Bobw", "j#idsfHO44", true);
             UserDatabase db = new UserDatabase();
             db.addUser(u1);
             db.addUser(u2);
