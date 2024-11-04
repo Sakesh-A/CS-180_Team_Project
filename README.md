@@ -13,15 +13,25 @@
 
    b. Interfaces
      - UserInterface:
+       The UserInterface outlines the operations for user management, including methods for accessing and modifying user details, friendships, and messaging capabilities. It provides a clear contract for implementing user-related functionality, enabling flexibility and consistent interactions across different user implementations.
        
      - UserDatabasInterface:
+       The UserDatabaseInterface defines essential operations for managing a user database, including methods for adding, removing, and saving user data. It provides a structured way to interact with the user collection, ensuring that all database-related actions are handled consistently.
    
      - MessageInterface:
-       The MessageInterface defines a standardized contract for message objects within the application, specifying essential methods that any implementing class must provide. It includes methods to retrieve crucial message details, such as the sender's username, receiver's username, and the message content, ensuring consistent access across different message types. The interface also mandates the implementation of an equals method for comparing messages and a toString method for producing a formatted string representation of message details. By establishing these requirements, the interface facilitates polymorphism, allowing various message types to be handled uniformly within the messaging system. This design promotes code reusability and consistency, ensuring seamless interactions between message-related classes like TextMessage, User, and UserDatabase.
+       The MessageInterface establishes the required methods for handling messages, including retrieving details like sender, receiver, and content. This interface ensures that any message implementation adheres to a standard format, facilitating smooth message operations within the application.
 
 
 
        
    c. Exceptions
      - BadException:
+       The BadException class is a custom exception that handles specific error conditions in the project by allowing developers to provide descriptive error messages. It extends the standard Exception class, enabling it to be thrown and caught like other exceptions while offering additional context about the error through a detail message.
+
+
+
+
+
+
+
    
