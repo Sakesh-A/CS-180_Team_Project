@@ -48,7 +48,8 @@ public class UserDatabase implements UserDatabaseInterface {
         String file = String.format("%s.txt", user.getUsername());
         userFiles.add(file);
         try {
-            writers.add(new BufferedWriter(new FileWriter(file)));
+            BufferedWriter br = new BufferedWriter(new FileWriter(file));
+            br.close();
         } catch(IOException e) {
 
             return false;
@@ -68,7 +69,7 @@ public class UserDatabase implements UserDatabaseInterface {
             String temp = userFiles.get(i).substring(0, userFiles.get(i).lastIndexOf("."));
             if(user.getUsername().equals(temp)) {
                 userFiles.remove(userFiles.get(i));
-                writers.remove(i);
+                //writers.remove(i);
             }
         }
         return true;
@@ -87,8 +88,9 @@ public class UserDatabase implements UserDatabaseInterface {
         }
 
         for (int i = 0; i < users.size(); i++) {
-            try (BufferedWriter writer = writers.get(i)) {
-                User user = users.get(i);
+            User user = users.get(i);
+            String name = user.getUsername() + ".txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(name, false))) {
                 ArrayList<TextMessage> messages = user.getMessages();
                 for (TextMessage message : messages) {
                     writer.write(message.toString());
