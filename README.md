@@ -17,6 +17,10 @@
      - UserDatabasInterface:
    
      - MessageInterface:
+       The MessageInterface defines a standardized contract for message objects within the application, specifying essential methods that any implementing class must provide. It includes methods to retrieve crucial message details, such as the sender's username, receiver's username, and the message content, ensuring consistent access across different message types. The interface also mandates the implementation of an equals method for comparing messages and a toString method for producing a formatted string representation of message details. By establishing these requirements, the interface facilitates polymorphism, allowing various message types to be handled uniformly within the messaging system. This design promotes code reusability and consistency, ensuring seamless interactions between message-related classes like TextMessage, User, and UserDatabase.
+
+
+
        
    c. Exceptions
      - BadException:
