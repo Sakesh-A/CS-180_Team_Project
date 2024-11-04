@@ -79,10 +79,7 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
                     users.get(i).removeFriend(user);
                 }
             }
-            if (!exists) {
 
-                return false;
-            }
             for(int i = 0; i < userFiles.size(); i++) {
                 String temp = userFiles.get(i).substring(0, userFiles.get(i).lastIndexOf("."));
                 if(user.getUsername().equals(temp)) {
