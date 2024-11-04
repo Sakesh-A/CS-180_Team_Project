@@ -56,7 +56,7 @@ public class UserDatabase implements UserDatabaseInterface {
         return everythingToFile();
     }
 
-    // addUser method
+    // removeUser method
     public boolean removeUser(User user) {
         users.remove(user);
         for(String file : userFiles) {
