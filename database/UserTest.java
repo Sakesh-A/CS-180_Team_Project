@@ -59,7 +59,7 @@ public class UserTest {
     @Test
     public void testSendMessage() {
         assertTrue("Message should be sent successfully", user1.sendMessage(user2, "Hello, Bob!"));
-        assertFalse("Message should not be sent to blocked user", user2.blockUser(user1));
+        assertTrue("User has been blocked correctly", user2.blockUser(user1));
         assertFalse("Message should not be sent due to privacy", user2.sendMessage(user1, "Hello, Alice!"));
     }
 
