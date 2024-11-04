@@ -9,6 +9,10 @@
       - UserDatabaseTest:
            - We test every method in the UserDatabase class.
            - Run it on IntelliJ to see the observed result.
+      - PhotoMessageTest:
+           - We test every method in the PhotoMessage class.
+           - Run it on IntelliJ to see the observed result.
+    b. If you want to compile, create a main method and utilize all of our classes.   
 3. Sakesh Andhavarapu Submitted Vocareum Workspace
 4. a. Classes- All of the classes are in the "database" folder
      - User:
