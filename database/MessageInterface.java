@@ -57,12 +57,4 @@ public interface MessageInterface {
      * @return message content as a String
      */
     String getMessageContent();
-
-    // public static int id = 0; // Unique ID for each message
-    // public String getMessage();
-    // public User getReceiver();
-    // public User getSender();
-    // public void setMessage(String message);
-    // public void setReceiver(User receiver);
-    // public void setSender(User sender);
 }

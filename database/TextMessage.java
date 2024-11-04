@@ -16,8 +16,6 @@ public class TextMessage implements MessageInterface {
    // Stores sender, receiver usernames, and message content in a String array of length 3
    private String[] messageArray = new String[3];
 
-   // Old code with direct attributes has been commented out to simplify access through the array
-   // Uncomment if additional functionality or separate variables are needed in future
     private User sender;
     private User receiver;
 
