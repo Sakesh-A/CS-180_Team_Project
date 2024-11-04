@@ -42,7 +42,8 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
         synchronized(obj) {
             for (User existingUser : users) {
                 if (existingUser.getUsername().equals(user.getUsername())) {
-                    System.err.println("User with this username already exists.");
+                    //System.err.println("User with this username already exists.");
+                    //throw new BadException("Username already exists");
                     return false;
                 }
             }
@@ -63,11 +64,24 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
     // removeUser method
     public boolean removeUser(User user) {
         synchronized(obj) {
-            users.remove(user);
+            boolean exists = false;
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).equals(user)) {
+                    users.remove(i);
+                    exists = true;
+                }
+            }
+            if (!exists) {
+                return false;
+            }
             for (int i = 0; i < users.size(); i++) {
                 if (users.get(i).hasFriended(user)) {
                     users.get(i).removeFriend(user);
                 }
+            }
+            if (!exists) {
+
+                return false;
             }
             for(int i = 0; i < userFiles.size(); i++) {
                 String temp = userFiles.get(i).substring(0, userFiles.get(i).lastIndexOf("."));

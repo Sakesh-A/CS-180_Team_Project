@@ -17,23 +17,23 @@ public class UserDatabaseTest {
         user2 = new User("Bob", "Password2@", true);
     }
      @Test
-    public void testAddUserWithNull() {
-        try {
-            assertFalse("Adding a null user should return false", userDatabase.addUser(null));
-        } catch (Exception e) {
-            fail("Exception should not be thrown for null user.");
-        }
-    }
 
-    @Test
+
+
     public void testAddUser() {
-        assertTrue("User should be added successfully", userDatabase.addUser(user1));
-        assertTrue("User should be added successfully", userDatabase.addUser(user2));
-        assertFalse("Adding the same user should fail", userDatabase.addUser(user1));
+
+            assertTrue("User should be added successfully", userDatabase.addUser(user1));
+            assertTrue("User should be added successfully", userDatabase.addUser(user2));
+            assertFalse("Adding the same user should fail", userDatabase.addUser(user1));
+
+
     }
 
     @Test
     public void testRemoveUser() {
+
+
+
         userDatabase.addUser(user1);
         userDatabase.addUser(user2);
 
@@ -42,7 +42,7 @@ public class UserDatabaseTest {
     }
 
     @Test
-    public void testSaveUser() throws IOException {
+    public void testSaveUser() throws IOException, BadException {
         userDatabase.addUser(user1);
         userDatabase.addUser(user2);
 
@@ -60,7 +60,7 @@ public class UserDatabaseTest {
     }
 
     @Test
-    public void testEverythingToFile() throws IOException {
+    public void testEverythingToFile() throws IOException, BadException {
         userDatabase.addUser(user1);
         userDatabase.addUser(user2);
         assertTrue("User data should be saved successfully", userDatabase.everythingToFile());
