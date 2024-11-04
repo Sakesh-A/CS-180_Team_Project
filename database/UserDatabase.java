@@ -56,7 +56,7 @@ public class UserDatabase implements UserDatabaseInterface {
         return true;
     }
 
-    // addUser method
+    // removeUser method
     public boolean removeUser(User user) {
         users.remove(user);
         for (int i = 0; i < users.size(); i++) {
