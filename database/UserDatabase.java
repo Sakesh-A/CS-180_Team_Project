@@ -53,20 +53,25 @@ public class UserDatabase implements UserDatabaseInterface {
 
             return false;
         }
-        return everythingToFile();
+        return true;
     }
 
     // addUser method
     public boolean removeUser(User user) {
         users.remove(user);
-        for(String file : userFiles) {
-            String temp = file.substring(0, file.lastIndexOf("."));
-            if(user.getUsername().equals(temp)) {
-                userFiles.remove(file);
-                writers.remove(0);
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).hasFriended(user)) {
+                users.get(i).removeFriend(user);
             }
         }
-        return everythingToFile();
+        for(int i = 0; i < userFiles.size(); i++) {
+            String temp = userFiles.get(i).substring(0, userFiles.get(i).lastIndexOf("."));
+            if(user.getUsername().equals(temp)) {
+                userFiles.remove(userFiles.get(i));
+                writers.remove(i);
+            }
+        }
+        return true;
     }
 
     // saveUser method
@@ -74,7 +79,7 @@ public class UserDatabase implements UserDatabaseInterface {
         String filename = "UsersList.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
             for (User user : users) {
-                writer.write(user.toString());
+                writer.write(user.toString() + "\n");
             }
         } catch (IOException e) {
             System.err.println("Error writing users to file: " + e.getMessage());
