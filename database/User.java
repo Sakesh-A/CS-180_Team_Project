@@ -11,6 +11,7 @@ public class User implements UserInterface {
     private boolean isPublic;
     private ArrayList<TextMessage> messages; // we needed a way to differentiate between recievers, so we are doing arrays
     private ArrayList<PhotoMessage> photos;
+    Object obj = new Object();
 
     public User(String username, String password, boolean isPublic) throws BadException {
         if (username == null) {
@@ -99,13 +100,15 @@ public class User implements UserInterface {
     }
 
     public boolean addFriend(User u) {
-        for (User user : friends) {
-            if (user.equals(u)) {
-                return false;
+        synchronized(obj) {
+            for (User user : friends) {
+                if (user.equals(u)) {
+                    return false;
+                }
             }
-        }
-        friends.add(u);
-        return true;
+            friends.add(u);
+            return true;
+        } 
     }
 
     public ArrayList<TextMessage> getMessages() {
@@ -113,7 +116,8 @@ public class User implements UserInterface {
     }
 
     public boolean removeFriend(User u) {
-        boolean exists = false;
+        synchronized(obj) {
+            boolean exists = false;
         for (User a : this.friends) {
             if (a.equals(u)) {
                 exists = true;
@@ -125,74 +129,83 @@ public class User implements UserInterface {
             return true;
         }
         return false;
+        }
     }
 
     public boolean blockUser(User u) {
-        for (User user : blockedUsers) {
-            if (user.equals(u)) {
-                return false;
+        synchronized(obj) {
+            for (User user : blockedUsers) {
+                if (user.equals(u)) {
+                    return false;
+                }
             }
+            blockedUsers.add(u);
+            return true;
         }
-        blockedUsers.add(u);
-        return true;
-
-
     }
 
     public boolean sendMessage(User person, String message) {
-        if (person.hasBlocked(this) || (!person.isPublic && !person.hasFriended(this))) {
-            return false;
+        synchronized(obj) {
+            if (person.hasBlocked(this) || (!person.isPublic && !person.hasFriended(this))) {
+                return false;
+            }
+            TextMessage m = new TextMessage(message, this, person);
+            this.messages.add(m);
+            person.messages.add(m);
+            //TextMessage.id++;
+            return true;
         }
-        TextMessage m = new TextMessage(message, this, person);
-        this.messages.add(m);
-        person.messages.add(m);
-//        TextMessage.id++;
-        return true;
     }
     public boolean deleteMessage(TextMessage message) {
-        boolean exists1 = false;
-        for (int i = 0; i < this.messages.size(); i++) {
-            if (this.messages.get(i).equals(message)) {
-                this.messages.remove(i);
-                exists1 = true;
-                break;
+        synchronized(obj) {
+            boolean exists1 = false;
+            for (int i = 0; i < this.messages.size(); i++) {
+                if (this.messages.get(i).equals(message)) {
+                    this.messages.remove(i);
+                    exists1 = true;
+                    break;
+                }
             }
-        }
-        boolean exists2 = false;
-        for (int i = 0; i < message.getReceiver().messages.size(); i++) {
-            if (message.getReceiver().messages.get(i).equals(message)) {
-                message.getReceiver().messages.remove(i);
-                exists2 = true;
-                break;
+            boolean exists2 = false;
+            for (int i = 0; i < message.getReceiver().messages.size(); i++) {
+                if (message.getReceiver().messages.get(i).equals(message)) {
+                    message.getReceiver().messages.remove(i);
+                    exists2 = true;
+                    break;
+                }
             }
-        }
-        return exists1 && exists2;
+            return exists1 && exists2;
+        }   
     }
 
 
     public boolean sendPhotoMessage(User person, String message, String photo) {
-        if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
-            return false;
+        synchronized(obj) {
+            if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
+                return false;
+            }
+            PhotoMessage m = new PhotoMessage(message, this, person, photo);
+            this.photos.add(m);
+            person.photos.add(m);
+    
+            return true;
         }
-        PhotoMessage m = new PhotoMessage(message, this, person, photo);
-        this.photos.add(m);
-        person.photos.add(m);
-
-        return true;
     }
 
 
     public void deletePhotoMessage(PhotoMessage photo) {
-        for (int i = 0; i < photos.size(); i++) {
-            if (photos.get(i).equals(photo)) {
-                photos.remove(i);
-                break;
+        synchronized(obj) {
+            for (int i = 0; i < photos.size(); i++) {
+                if (photos.get(i).equals(photo)) {
+                    photos.remove(i);
+                    break;
+                }
             }
-        }
-        for (int i = 0; i < photo.getReceiver().photos.size(); i++) {
-            if (photo.getReceiver().photos.get(i).equals(photo)) {
-                photo.getReceiver().photos.remove(i);
-                break;
+            for (int i = 0; i < photo.getReceiver().photos.size(); i++) {
+                if (photo.getReceiver().photos.get(i).equals(photo)) {
+                    photo.getReceiver().photos.remove(i);
+                    break;
+                }
             }
         }
     }
