@@ -16,6 +16,14 @@ public class UserDatabaseTest {
         user1 = new User("Alice", "Password1!", true);
         user2 = new User("Bob", "Password2@", true);
     }
+     @Test
+    public void testAddUserWithNull() {
+        try {
+            assertFalse("Adding a null user should return false", userDatabase.addUser(null));
+        } catch (Exception e) {
+            fail("Exception should not be thrown for null user.");
+        }
+    }
 
     @Test
     public void testAddUser() {
