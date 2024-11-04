@@ -6,14 +6,7 @@ import java.io.*;
 public class Main {
     public static void main(String[] args) {
         try (BufferedReader inputReader = new BufferedReader(new FileReader("input.txt"))) {
-            String[] files = inputReader.readLine().split(" ");
-            if (files.length < 1) {
-                System.out.println("Insufficient commands in input.txt");
-                return;
-            }
-
             UserDatabase db = new UserDatabase();
-
             try (BufferedWriter mainOutWriter = new BufferedWriter(new FileWriter("output.txt"))) {
                 mainOutWriter.write("User Database Started");
                 mainOutWriter.newLine();
@@ -160,6 +153,8 @@ public class Main {
                                     result = db.getUsers().get(first).deleteMessage(messageObject);
                                 }
                                 break;
+                            case 8:
+                                result = db.everythingToFile();
                             default:
                                 // nothign to do
                         }
@@ -175,17 +170,17 @@ public class Main {
                         mainOutWriter.write("Command Failure");
                         mainOutWriter.newLine();
                     } catch (IOException e) {
-                        mainOutWriter.write("IO Read Failure");
+                        mainOutWriter.write("IO Read Failure 1");
                         mainOutWriter.newLine();
                     } catch (BadException e) {
                         throw new RuntimeException(e);
                     }
                 }
             } catch (IOException e) {
-                System.out.println("IO Read Failure");
+                System.out.println("IO Read Failure 2");
             }
         } catch (IOException e) {
-            System.out.println("IO Read Failure");
+            System.out.println("IO Read Failure 3");
         }
     }
 }
