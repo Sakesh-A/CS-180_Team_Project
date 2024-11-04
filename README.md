@@ -15,7 +15,7 @@
      - UserInterface:
        The UserInterface outlines the operations for user management, including methods for accessing and modifying user details, friendships, and messaging capabilities. It provides a clear contract for implementing user-related functionality, enabling flexibility and consistent interactions across different user implementations.
        
-     - UserDatabasInterface:
+     - UserDatabaseInterface:
        The UserDatabaseInterface defines essential operations for managing a user database, including methods for adding, removing, and saving user data. It provides a structured way to interact with the user collection, ensuring that all database-related actions are handled consistently.
    
      - MessageInterface:
