@@ -6,8 +6,8 @@ import java.util.ArrayList; // Specify imports to avoid wildcard imports
  * Defines an interface for user operations, including methods for managing user details, 
  * friendships, blocking, and messaging.
  * 
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
 public interface UserInterface {
