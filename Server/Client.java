@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Client {
     public static void main(String[] args) {
@@ -10,6 +10,7 @@ public class Client {
         OutputStreamWriter out = null;
         BufferedReader br = null;
         BufferedWriter bw = null;
+        Scanner sc = new Scanner(System.in);
 
         try {
             socket = new Socket("localhost", 1234);
