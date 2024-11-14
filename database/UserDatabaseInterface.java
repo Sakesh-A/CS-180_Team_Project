@@ -1,5 +1,5 @@
-import java.io.IOException; // Import only necessary classes to avoid unnecessary dependencies
-import java.util.ArrayList; // Specify imports rather than using wildcard imports
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Team Project -- UserDatabaseInterface
@@ -7,8 +7,8 @@ import java.util.ArrayList; // Specify imports rather than using wildcard import
  * Defines an interface for user database operations, including methods for adding, removing, 
  * and saving user data to a file.
  * 
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
 public interface UserDatabaseInterface {
