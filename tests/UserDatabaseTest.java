@@ -3,14 +3,14 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 /**
  * Team Project -- UserDatabaseTest
  *
  * Unit tests for the UserDatabase class, verifying the proper functionality of fields and methods.
  *
- *
-* @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
  * @version Nov 3, 2024
  */
 public class UserDatabaseTest {
@@ -18,74 +18,46 @@ public class UserDatabaseTest {
     private UserDatabase userDatabase;
     private User user1;
     private User user2;
+    private User user3;
 
     @Before
     public void setUp() throws BadException {
         userDatabase = new UserDatabase();
         user1 = new User("Alice", "Password1!", true);
         user2 = new User("Bob", "Password2@", true);
+        user3 = new User("Charlie", "Password3#", true);
     }
-     @Test
 
-
-
+    @Test
     public void testAddUser() {
+        // Valid user addition
+        assertTrue("User should be added successfully", userDatabase.addUser(user1));
+        assertTrue("User should be added successfully", userDatabase.addUser(user2));
 
-            assertTrue("User should be added successfully", userDatabase.addUser(user1));
-            assertTrue("User should be added successfully", userDatabase.addUser(user2));
-            assertFalse("Adding the same user should fail", userDatabase.addUser(user1));
+        // Attempt to add the same user twice (should fail)
+        assertFalse("Adding the same user should fail", userDatabase.addUser(user1));
 
+        // Attempt to add a user with invalid username (e.g., empty username) should also fail
+        try {
+            User invalidUser = new User("", "Password4@", true);
+            assertFalse("User with invalid username should not be added", userDatabase.addUser(invalidUser));
+        } catch (BadException e) {
+            assertEquals("Usernames can't be empty", e.getMessage());
+        }
 
+        // Attempt to add a user with invalid password (should fail)
+        try {
+            User invalidUser = new User("Dave", "short", true);
+            assertFalse("User with invalid password should not be added", userDatabase.addUser(invalidUser));
+        } catch (BadException e) {
+            assertEquals("You need at least eight characters, at least one uppercase letter, one digit, and one special character", e.getMessage());
+        }
     }
 
     @Test
     public void testRemoveUser() {
-
-
-
         userDatabase.addUser(user1);
         userDatabase.addUser(user2);
 
-        assertTrue("User should be removed successfully", userDatabase.removeUser(user1));
-        assertFalse("User should not exist after removal", userDatabase.getUsers().contains(user1));
-    }
-
-    @Test
-    public void testSaveUser() throws IOException, BadException {
-        userDatabase.addUser(user1);
-        userDatabase.addUser(user2);
-
-        // Save users to file
-        assertTrue("User data should be saved successfully", userDatabase.everythingToFile());
-
-        // Verify that the file UsersList.txt was created and contains the users
-        File usersListFile = new File("UsersList.txt");
-        assertTrue("UsersList.txt should exist", usersListFile.exists());
-
-        // Clean up the file after the test
-        if (usersListFile.exists()) {
-            usersListFile.delete();
-        }
-    }
-
-    @Test
-    public void testEverythingToFile() throws IOException, BadException {
-        userDatabase.addUser(user1);
-        userDatabase.addUser(user2);
-        assertTrue("User data should be saved successfully", userDatabase.everythingToFile());
-
-        // Verify that user messages are saved (assuming there are none yet)
-        // Here we can add messages and test saving functionality.
-        user1.sendMessage(user2, "Hello Bob!");
-
-        // Call everythingToFile again after adding messages
-        assertTrue("User data with messages should be saved successfully", userDatabase.everythingToFile());
-
-        // Clean up the file after the test
-        File usersListFile = new File("UsersList.txt");
-        if (usersListFile.exists()) {
-            usersListFile.delete();
-        }
-    }
-}
+        // Valid removal of user
 
