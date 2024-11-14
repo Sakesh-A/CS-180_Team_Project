@@ -21,6 +21,7 @@ public class PhotoMessage extends TextMessage {
 
     // Stores the file path or URL to the photo attached to the message
     private BufferedImage photo;
+    private String photoURL;
 
     /**
      * Constructs a PhotoMessage object with message content, sender, receiver, and a photo.
@@ -42,6 +43,14 @@ public class PhotoMessage extends TextMessage {
      */
     public BufferedImage getPhoto() {
         return photo;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 
     /**
