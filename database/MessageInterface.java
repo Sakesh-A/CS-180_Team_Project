@@ -1,4 +1,4 @@
-import java.util.*; 
+import java.util.*;
 import java.io.*; 
 
 /**
@@ -7,8 +7,8 @@ import java.io.*;
  * Defines an interface for a message, specifying required methods for message handling. 
  * This includes methods for retrieving message details like sender, receiver, and content.
  * 
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
 public interface MessageInterface {
