@@ -7,8 +7,8 @@ import java.io.*;
  * Represents a text message object with basic properties of sender, receiver, and message content.
  * This class implements the MessageInterface and provides methods for accessing message details.
  * 
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+* @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
 public class TextMessage implements MessageInterface {
