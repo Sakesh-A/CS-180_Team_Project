@@ -20,7 +20,7 @@ import java.io.IOException;
 public class PhotoMessage extends TextMessage {
 
     // Stores the file path or URL to the photo attached to the message
-    private String photURL;
+    private BufferedImage photo;
 
     /**
      * Constructs a PhotoMessage object with message content, sender, receiver, and a photo.
@@ -32,7 +32,7 @@ public class PhotoMessage extends TextMessage {
      */
     public PhotoMessage(String message, User sender, User receiver, String photoURL) {
         super(message, sender, receiver);
-        this.photoURL = photoURL;
+        this.photo = imageIO.read(new file(photoURL));
     }
 
     /**
@@ -40,8 +40,8 @@ public class PhotoMessage extends TextMessage {
      *
      * @return the file path or URL of the photo as a String
      */
-    public String getPhotoURL() {
-        return photoURL;
+    public BufferedImage getPhoto() {
+        return photo;
     }
 
     /**
@@ -50,6 +50,52 @@ public class PhotoMessage extends TextMessage {
      * @param photo the file path or URL of the new photo as a String
      */
     public void setPhoto(String photoURL) {
-        this.photo = photoURL;
+        this.photo = imageIO.read(new file(photoURL));
+    }
+
+    /**
+    * Returns the username of the sender.
+    *
+    * @return sender's username as a String
+    */
+   public String getSenderUsername() {
+       return messageArray[0];
+   }
+
+   /**
+    * Returns the username of the receiver.
+    *
+    * @return receiver's username as a String
+    */
+   public String getReceiverUsername() {
+       return messageArray[1];
+   }
+
+   /**
+    * Returns the content of the message.
+    *
+    * @return message content as a String
+    */
+   public String getMessageContent() {
+       return messageArray[2];
+   }
+
+   /**
+    * Returns a copy of the messageArray to prevent direct modification of the original array.
+    *
+    * @return a cloned String array containing sender username, receiver username, and message content
+    */
+   public String[] getMessageArray() {
+       return messageArray.clone();
+   }
+
+   public User getSender() {
+        return sender;
+    }
+
+
+
+    public User getReceiver() {
+        return receiver;
     }
 }
