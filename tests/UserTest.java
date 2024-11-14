@@ -2,6 +2,15 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Team Project -- UserTest
+ *
+ * Unit tests for the User class, verifying the proper functionality of fields and methods.
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
+ */
 public class UserTest {
 
     private User user1;
