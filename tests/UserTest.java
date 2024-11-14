@@ -16,7 +16,7 @@ public class UserTest {
     private User user2;
     private User user3;
 
-    @Before
+    @Test
     public void setUp() throws BadException {
         user1 = new User("Alice", "Password1!", true);
         user2 = new User("Bob", "Password2@", true);
