@@ -9,8 +9,8 @@ import java.util.*;
  * Represents a User in the system with capabilities to manage friends,
  * block users, send messages, and manage privacy settings.
  *
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+* @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
 public class User implements UserInterface {
