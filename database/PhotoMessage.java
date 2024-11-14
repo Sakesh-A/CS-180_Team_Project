@@ -1,5 +1,11 @@
 import java.util.*;
 import java.io.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+
 
 /**
  * Team Project -- PhotoMessage
@@ -14,7 +20,7 @@ import java.io.*;
 public class PhotoMessage extends TextMessage {
 
     // Stores the file path or URL to the photo attached to the message
-    private String photo;
+    private String photURL;
 
     /**
      * Constructs a PhotoMessage object with message content, sender, receiver, and a photo.
@@ -24,9 +30,9 @@ public class PhotoMessage extends TextMessage {
      * @param receiver the User object representing the receiver
      * @param photo the file path or URL to the photo attachment as a String
      */
-    public PhotoMessage(String message, User sender, User receiver, String photo) {
+    public PhotoMessage(String message, User sender, User receiver, String photoURL) {
         super(message, sender, receiver);
-        this.photo = photo;
+        this.photoURL = photoURL;
     }
 
     /**
@@ -34,8 +40,8 @@ public class PhotoMessage extends TextMessage {
      *
      * @return the file path or URL of the photo as a String
      */
-    public String getPhoto() {
-        return photo;
+    public String getPhotoURL() {
+        return photoURL;
     }
 
     /**
@@ -43,7 +49,7 @@ public class PhotoMessage extends TextMessage {
      *
      * @param photo the file path or URL of the new photo as a String
      */
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhoto(String photoURL) {
+        this.photo = photoURL;
     }
 }
