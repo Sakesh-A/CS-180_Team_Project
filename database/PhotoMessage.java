@@ -1,5 +1,5 @@
-import java.util.*; // Avoid wildcard imports; only import specific classes if needed
-import java.io.*; // Comment or remove unnecessary imports to improve code readability
+import java.util.*;
+import java.io.*;
 
 /**
  * Team Project -- PhotoMessage
@@ -7,8 +7,8 @@ import java.io.*; // Comment or remove unnecessary imports to improve code reada
  * Represents a photo message with additional attributes for sender, receiver, message content, 
  * and a photo attachment. Extends the TextMessage class to include photo-related functionality.
  * 
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+* @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
 public class PhotoMessage extends TextMessage {
