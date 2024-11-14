@@ -7,7 +7,6 @@ import org.junit.Test;
  *
  * Unit tests for the User class, verifying the proper functionality of fields and methods.
  *
- *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
  * @version Nov 3, 2024
  */
@@ -103,5 +102,86 @@ public class UserTest {
         String expectedString = "Alice,Password1!,true,Bob,End of Friends,";
         assertEquals("toString should return formatted string", expectedString, user1.toString());
     }
-}
 
+    
+
+    @Test(expected = BadException.class)
+    public void testInvalidUsername() throws BadException {
+        new User("Alice@Home", "Password1@", true); 
+    }
+
+    @Test(expected = BadException.class)
+    public void testInvalidPassword() throws BadException {
+        new User("Alice", "password", true); 
+    }
+
+    @Test(expected = BadException.class)
+    public void testEmptyUsername() throws BadException {
+        new User("", "Password1!", true); 
+    }
+
+    @Test(expected = BadException.class)
+    public void testShortPassword() throws BadException {
+        new User("Alice", "short", true); 
+    }
+
+    @Test
+    public void testMaxLengthUsername() throws BadException {
+        User user = new User("A".repeat(20), "Password1@", true);
+        assertEquals("Username should be 20 characters", "A".repeat(20), user.getUsername());
+    }
+
+    @Test(expected = BadException.class)
+    public void testTooLongUsername() throws BadException {
+        new User("A".repeat(21), "Password1@", true); 
+    }
+
+    @Test
+    public void testAddFriendAfterBlocked() {
+        user1.blockUser(user2);
+        assertFalse("User2 should not be able to become a friend after being blocked", user1.addFriend(user2));
+    }
+
+    @Test
+    public void testSendMessageWhenProfilePrivate() {
+        user2.setPublic(false); 
+        assertFalse("Message should not be sent because user's profile is private", user1.sendMessage(user2, "Hello, Bob!"));
+    }
+
+    @Test
+    public void testSendMessageWhenNotFriends() {
+        user2.setPublic(false);  
+        assertFalse("Message should not be sent because user1 and user2 are not friends", user1.sendMessage(user2, "Hello, Bob!"));
+    }
+
+    @Test
+    public void testSendMessageToBlockedUser() {
+        user1.blockUser(user2);
+        assertFalse("Message should not be sent to a blocked user", user1.sendMessage(user2, "This should not go through"));
+    }
+
+    @Test
+    public void testRemoveFriendAfterBlocking() {
+        user1.addFriend(user2);
+        user1.blockUser(user2);
+        assertFalse("User2 should not be removed as a friend after blocking", user1.removeFriend(user2));
+    }
+
+    @Test
+    public void testSendPhotoMessage() {
+        String photoMessage = "Check out this photo!";
+        String photo = "photo_url";
+        assertTrue("Photo message should be sent successfully", user1.sendPhotoMessage(user2, photoMessage, photo));
+    }
+
+    @Test
+    public void testDeletePhotoMessage() {
+        String photoMessage = "Check out this photo!";
+        String photo = "photo_url";
+        user1.sendPhotoMessage(user2, photoMessage, photo);
+        PhotoMessage message = user1.getPhotos().get(0);
+        user1.deletePhotoMessage(message);
+        assertTrue("Photo message should be deleted successfully", !user1.getPhotos().contains(message));
+    }
+
+}
