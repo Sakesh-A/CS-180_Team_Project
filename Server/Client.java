@@ -10,7 +10,6 @@ public class Client {
         OutputStreamWriter out = null;
         BufferedReader br = null;
         BufferedWriter bw = null;
-        Scanner sc = new Scanner(System.in);
 
         try {
             socket = new Socket("localhost", 1234);
@@ -24,7 +23,7 @@ public class Client {
             Scanner scan = new Scanner(System.in);
 
             while (true) {
-                String existing = scanner.nextLine();
+                String existing = scan.nextLine();
                 bw.write(existing);
                 bw.newLine();
                 bw.flush();

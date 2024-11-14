@@ -22,6 +22,9 @@ public class PhotoMessage extends TextMessage {
     // Stores the file path or URL to the photo attached to the message
     private BufferedImage photo;
     private String photoURL;
+    private User sender;
+    private User receiver;
+    private String[] messageArray;
 
     /**
      * Constructs a PhotoMessage object with message content, sender, receiver, and a photo.
@@ -31,9 +34,9 @@ public class PhotoMessage extends TextMessage {
      * @param receiver the User object representing the receiver
      * @param photo the file path or URL to the photo attachment as a String
      */
-    public PhotoMessage(String message, User sender, User receiver, String photoURL) {
+    public PhotoMessage(String message, User sender, User receiver, String photoURL) throws IOException {
         super(message, sender, receiver);
-        this.photo = imageIO.read(new file(photoURL));
+        this.photo = ImageIO.read(new File(photoURL));
     }
 
     /**
@@ -58,8 +61,8 @@ public class PhotoMessage extends TextMessage {
      *
      * @param photo the file path or URL of the new photo as a String
      */
-    public void setPhoto(String photoURL) {
-        this.photo = imageIO.read(new file(photoURL));
+    public void setPhoto(String photoURL) throws IOException {
+        this.photo = ImageIO.read(new File(photoURL));
     }
 
     /**
