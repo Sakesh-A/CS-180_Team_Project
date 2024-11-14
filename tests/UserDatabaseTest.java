@@ -4,6 +4,15 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Team Project -- UserDatabaseTest
+ *
+ * Unit tests for the UserDatabase class, verifying the proper functionality of fields and methods.
+ *
+ *
+* @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
+ */
 public class UserDatabaseTest {
 
     private UserDatabase userDatabase;
