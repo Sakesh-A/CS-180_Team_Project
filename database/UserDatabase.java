@@ -8,9 +8,7 @@ import java.io.*;
  *
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- *
  * @version Nov 3, 2024
- *
  */
 
 public class UserDatabase extends Thread implements UserDatabaseInterface {
