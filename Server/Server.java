@@ -1,18 +1,22 @@
+import java.net.*;
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
 
-public class Server {
-    public static void main(String[] args) {
-        Socket socket = null;
-        InputStreamReader in = null;
-        BufferedReader br = null;
-        OutputStreamWriter out = null;
-        BufferedWriter bw = null;
+public class Server
+{
+    public static void main(String[] args) throws IOException
+    {
         ServerSocket serverSocket = null;
+        boolean happening = true;
 
+        try {
+            serverSocket = new ServerSocket(1234);
+        } catch (IOException e) {
+            System.err.println("Port 1234 is now working");
+        }
 
-
+        while (happening) {
+            new Thread (new ClientHandler (serverSocket.accept()))).start();
+        }
+        serverSocket.close();
     }
 }
