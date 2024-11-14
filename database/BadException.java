@@ -5,11 +5,11 @@
  * This exception can be used to provide descriptive error messages when certain 
  * conditions are not met.
  * 
- * Authors: Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * Version: Nov 3, 2024
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
  */
 
- public class BadException extends Exception {
+public class BadException extends Exception {
 
     /**
      * Constructs a BadException with a specified detail message.
