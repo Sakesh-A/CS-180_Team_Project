@@ -2,6 +2,16 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Team Project -- PhotoMessageTest
+ *
+ * Unit tests for the PhotoMessage class, verifying the proper functionality of
+ * message content, sender and receiver usernames, and photo path management.
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
+ */
 public class PhotoMessageTest {
 
     private User sender;
@@ -23,7 +33,8 @@ public class PhotoMessageTest {
     @Test
     public void testSetPhoto() {
         photoMessage.setPhoto("new/path/to/photo.jpg");
-        assertEquals("Photo path should be updated to 'new/path/to/photo.jpg'", "new/path/to/photo.jpg", photoMessage.getPhoto());
+        assertEquals("Photo path should be updated to 'new/path/to/photo.jpg'",
+                     "new/path/to/photo.jpg", photoMessage.getPhoto());
     }
 
     @Test
@@ -38,21 +49,25 @@ public class PhotoMessageTest {
 
     @Test
     public void testGetMessageContent() {
-        assertEquals("Message content should be 'Check out this photo!'", "Check out this photo!", photoMessage.getMessageContent());
+        assertEquals("Message content should be 'Check out this photo!'", 
+                     "Check out this photo!", photoMessage.getMessageContent());
     }
 
     @Test
     public void testGetMessageArray() {
         String[] expectedArray = {"Alice", "Bob", "Check out this photo!"};
-        assertArrayEquals("Message array should contain sender, receiver, and message content", expectedArray, photoMessage.getMessageArray());
+        assertArrayEquals("Message array should contain sender, receiver, and message content", 
+                          expectedArray, photoMessage.getMessageArray());
     }
 
     @Test
     public void testEquals() {
-        PhotoMessage anotherPhotoMessage = new PhotoMessage("Check out this photo!", sender, receiver, "path/to/photo.jpg");
+        PhotoMessage anotherPhotoMessage = new PhotoMessage("Check out this photo!", 
+                                                            sender, receiver, "path/to/photo.jpg");
         assertTrue("Photo messages should be equal", photoMessage.equals(anotherPhotoMessage));
 
-        PhotoMessage differentPhotoMessage = new PhotoMessage("Different message", sender, receiver, "path/to/photo.jpg");
+        PhotoMessage differentPhotoMessage = new PhotoMessage("Different message", 
+            sender, receiver, "path/to/photo.jpg");
         assertFalse("Photo messages should not be equal", photoMessage.equals(differentPhotoMessage));
 
         assertFalse("Photo message should not equal null", photoMessage.equals(null));
