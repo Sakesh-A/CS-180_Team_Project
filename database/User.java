@@ -254,7 +254,7 @@ public class User implements UserInterface {
      */
     public boolean sendPhotoMessage(String message, User sender, User receiver, String photoURL) throws IOException{
         synchronized(obj) {
-            if (receiver.hasBlocked(sender) || (receiver.isPublic && !receiver.hasFriended(this))) {
+            if (receiver.hasBlocked(sender) || (!receiver.isPublic && !receiver.hasFriended(this))) {
                 return false;
             }
             PhotoMessage m = new PhotoMessage(message, sender, receiver, photoURL);
