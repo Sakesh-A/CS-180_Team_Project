@@ -18,8 +18,9 @@ public class Server
             System.exit(-1);
         }
 
-        while (happening)
-            new Thread (new ClientHandler (serverSocket.accept())).start();
+        while (happening) {
+            new Thread(new ClientHandler(serverSocket.accept())).start();
+        }
 
         serverSocket.close();
     }
