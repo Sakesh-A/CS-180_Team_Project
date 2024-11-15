@@ -252,14 +252,14 @@ public class User implements UserInterface {
      * @param message the content of the message
      * @return true if the message was sent successfully; false otherwise
      */
-    public boolean sendPhotoMessage(User person, String message, String photo) {
+    public boolean sendPhotoMessage(String message, User sender, User receiver, String photoURL) throws IOException{
         synchronized(obj) {
-            if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
+            if (receiver.hasBlocked(sender) || (receiver.isPublic && !receiver.hasFriended(this))) {
                 return false;
             }
-            PhotoMessage m = new PhotoMessage(message, this, person, photo);
+            PhotoMessage m = new PhotoMessage(message, sender, receiver, photoURL);
             this.photos.add(m);
-            person.photos.add(m);
+            receiver.photos.add(m);
     
             return true;
         }
