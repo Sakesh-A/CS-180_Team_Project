@@ -20,7 +20,7 @@ public class UserDatabaseTest {
     private User user2;
     private User user3;
 
-    @Test
+    @Before
     public void setUp() throws BadException {
         userDatabase = new UserDatabase();
         user1 = new User("Alice", "Password1!", true);
