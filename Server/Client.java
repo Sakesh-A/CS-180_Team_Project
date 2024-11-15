@@ -14,8 +14,8 @@ public class Client {
         try {
             socket = new Socket("localhost", 1234);
 
-            in = new InputStreamReader(socket.getInputStream);
-            out = new OutputStreamWriter(socket.getOutputStream);
+            in = new InputStreamReader(socket.getInputStream());
+            out = new OutputStreamWriter(socket.getOutputStream());
 
             br = new BufferedReader(in);
             bw = new BufferedWriter(out);
