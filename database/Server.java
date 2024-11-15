@@ -10,11 +10,11 @@ public class Server
 
         try
         {
-            serverSocket = new ServerSocket(4444);
+            serverSocket = new ServerSocket(4242);
         }
         catch (IOException e)
         {
-            System.err.println("Could not listen on port: 4444.");
+            System.err.println("Could not listen on port: 4242.");
             System.exit(-1);
         }
 

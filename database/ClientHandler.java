@@ -16,18 +16,57 @@ class ClientHandler implements Runnable
     }
 
     public void run () {
-        BufferedReader clientIn = null;
-        PrintWriter clientOut = null;
+        BufferedReader reader = null;
+        PrintWriter writer = null;
         String input = null;
-
+        UserDatabase db = new UserDatabase();
         try {
-            clientIn = new BufferedReader (new InputStreamReader (client.getInputStream ()));
-            clientOut = new PrintWriter (client.getOutputStream (), true);
+            reader = new BufferedReader (new InputStreamReader (client.getInputStream ()));
+            writer = new PrintWriter (client.getOutputStream (), true);
+
+            writer.println("Do you have an account?");
+            writer.flush();
+            //do you have an account?
+            input = reader.readLine();
+
+            if (input.equals("Yes")) {
+                while (true) {
+                    String username = reader.readLine();
+                    String password = reader.readLine();
+                    boolean contains = false;
+                    for (User u: db.getUsers()) {
+                        if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+                            contains = true;
+                            break;
+                        }
+                    }
+                    if (!contains) {
+                        System.out.println("Invalid credentials");
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                while (true) {
+                    String username = reader.readLine();
+                    String password = reader.readLine();
+                    boolean privacy = Boolean.parseBoolean(reader.readLine()); //probably have to change later
+                    User u = new User(username, password, privacy);
+                    boolean addedUser = db.addUser(u);
+                    if (addedUser == false) {
+                        System.out.println("User with username already exists");
+                    } else {
+                        break;
+                    }
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace ();
-        } 
-        
-        while(true) {
+        }
+
+
+/*        while(true) {
             System.out.println("Do you have an account?");
             choice = sc.nextLine();
 
@@ -73,6 +112,6 @@ class ClientHandler implements Runnable
             client.close ();
         } catch (Exception e) {
             e.printStackTrace ();
-        }
+        }*/
     }
 }

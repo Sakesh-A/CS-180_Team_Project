@@ -268,7 +268,7 @@ public class User implements UserInterface {
     /**
      * Deletes a message from both the sender and receiver's message list.
      *
-     * @param message the PhotoMessage to be deleted
+     * the PhotoMessage to be deleted
      * @return true if the message was deleted from both users; false otherwise
      */
     public void deletePhotoMessage(PhotoMessage photo) {
