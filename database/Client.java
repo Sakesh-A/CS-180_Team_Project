@@ -9,27 +9,63 @@ public class Client {
         InputStreamReader in = null;
         OutputStreamWriter out = null;
         BufferedReader br = null;
-        BufferedWriter bw = null;
+        PrintWriter pw = null;
 
         try {
-            socket = new Socket("localhost", 1234);
+            Scanner sc = new Scanner(System.in);
+            socket = new Socket("localhost", 4242);
 
             in = new InputStreamReader(socket.getInputStream());
             out = new OutputStreamWriter(socket.getOutputStream());
 
             br = new BufferedReader(in);
-            bw = new BufferedWriter(out);
+            pw = new PrintWriter(out);
 
-            Scanner scan = new Scanner(System.in);
+            System.out.println(br.readLine());
+            String hasAccount = sc.nextLine();
+            pw.println(hasAccount);
+            pw.flush();
 
-            while (true) {
-                String existing = scan.nextLine();
-                bw.write(existing);
-                bw.newLine();
-                bw.flush();
+            if (hasAccount.equals("yes")) {
+                while (true) {
+                    System.out.print(br.readLine());
+                    pw.println(sc.nextLine());
+                    pw.flush();
 
-                System.out.println("Server" + br.readLine());
+                    System.out.println(br.readLine());
+                    pw.println(sc.nextLine());
+                    pw.flush();
+
+                    String status = br.readLine();
+                    System.out.println(status);
+                    if (status.equals("Success")) {
+                        break;
+                    }
+                }
+
+            } else {
+                while (true) {
+                    System.out.print(br.readLine());
+                    pw.println(sc.nextLine());
+                    pw.flush();
+
+                    System.out.println(br.readLine());
+                    pw.println(sc.nextLine());
+                    pw.flush();
+
+                    System.out.print(br.readLine());
+                    pw.println(sc.nextLine());
+                    pw.flush();
+
+                    String response = br.readLine();
+                    System.out.println(response);
+                    if (response.equals("Success")) {
+                        break;
+                    }
+                }
             }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -46,8 +82,8 @@ public class Client {
                 if (br != null) {
                     br.close();
                 }
-                if (bw != null) {
-                    bw.close();
+                if (pw != null) {
+                    pw.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

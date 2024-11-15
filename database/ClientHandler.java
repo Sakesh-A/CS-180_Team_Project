@@ -24,14 +24,18 @@ class ClientHandler implements Runnable
             reader = new BufferedReader (new InputStreamReader (client.getInputStream ()));
             writer = new PrintWriter (client.getOutputStream (), true);
 
-            writer.println("Do you have an account?");
+            writer.println("Do you have an account? Enter yes or no");
             writer.flush();
             //do you have an account?
             input = reader.readLine();
 
-            if (input.equals("Yes")) {
+            if (input.equals("yes")) {
                 while (true) {
+                    writer.println("Please enter your username");
+                    writer.flush();
                     String username = reader.readLine();
+                    writer.println("Please enter your password");
+                    writer.flush();
                     String password = reader.readLine();
                     boolean contains = false;
                     for (User u: db.getUsers()) {
@@ -41,22 +45,41 @@ class ClientHandler implements Runnable
                         }
                     }
                     if (!contains) {
-                        System.out.println("Invalid credentials");
+                        writer.println("Invalid Credentials");
+                        writer.flush();
                     } else {
+                        writer.println("Success");
+                        writer.flush();
                         break;
                     }
                 }
-            } else {
+            } else if (input.equals("no")){
                 while (true) {
+                    writer.println("Please enter your username");
+                    writer.flush();
                     String username = reader.readLine();
+                    writer.println("Please enter your password ");
+                    writer.flush();
                     String password = reader.readLine();
+                    writer.println("Please enter your privacy, enter true or false");
+                    writer.flush();
                     boolean privacy = Boolean.parseBoolean(reader.readLine()); //probably have to change later
-                    User u = new User(username, password, privacy);
-                    boolean addedUser = db.addUser(u);
-                    if (addedUser == false) {
-                        System.out.println("User with username already exists");
-                    } else {
-                        break;
+
+                    boolean success = true;
+                    try {
+                        User u = new User(username, password, privacy);
+                        boolean addedUser = db.addUser(u);
+                        if (addedUser == false) {
+                            writer.println("User with username already exists");
+                            writer.flush();
+                        } else {
+                            writer.println("Success");
+                            writer.flush();
+                            break;
+                        }
+                    } catch (BadException e){
+                        writer.println("Invalid password");
+                        writer.flush();
                     }
                 }
             }
