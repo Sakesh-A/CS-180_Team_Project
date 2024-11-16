@@ -19,7 +19,7 @@ public class Client {
             System.out.println("Could not connect to the server: " + e.getMessage());
         }
     }
-
+// comment
     private void handleCommunication() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
