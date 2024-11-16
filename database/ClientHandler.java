@@ -272,7 +272,7 @@ class ClientHandler extends Thread {
         synchronized (userDatabase) {
             for (User user : userDatabase.getUsers()) {
                 if (user.getUsername().equals(username)) {
-                    out.writeObject("User found: " + user);
+                    out.writeObject("User found: " + user.getUsername());
                     return;
                 }
             }
