@@ -119,4 +119,16 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
             return true;
         }
     }
+
+    public User getUserByUsername(String username) {
+        synchronized (obj) {
+            for (User user : users) {
+                if (user.getUsername().equals(username)) {
+                    return user;
+                }
+            }
+            return null;
+        }
+    }
+
 }

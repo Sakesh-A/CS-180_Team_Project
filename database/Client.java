@@ -1,94 +1,62 @@
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.Scanner;
 
 public class Client {
-    public static void main(String[] args) {
-        Socket socket = null;
-        InputStreamReader in = null;
-        OutputStreamWriter out = null;
-        BufferedReader br = null;
-        PrintWriter pw = null;
+    private Socket socket;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
 
+    public Client(String host, int port) {
         try {
-            Scanner sc = new Scanner(System.in);
-            socket = new Socket("localhost", 4242);
+            socket = new Socket(host, port);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("Connected to the server.");
 
-            in = new InputStreamReader(socket.getInputStream());
-            out = new OutputStreamWriter(socket.getOutputStream());
+            handleCommunication();
+        } catch (IOException e) {
+            System.out.println("Could not connect to the server: " + e.getMessage());
+        }
+    }
 
-            br = new BufferedReader(in);
-            pw = new PrintWriter(out);
+    private void handleCommunication() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
+                String serverMessage = (String) in.readObject();
+                System.out.println("Server: " + serverMessage);
 
-            System.out.println(br.readLine());
-            String hasAccount = sc.nextLine();
-            pw.println(hasAccount);
-            pw.flush();
-
-            if (hasAccount.equals("yes")) {
-                while (true) {
-                    System.out.print(br.readLine());
-                    pw.println(sc.nextLine());
-                    pw.flush();
-
-                    System.out.println(br.readLine());
-                    pw.println(sc.nextLine());
-                    pw.flush();
-
-                    String status = br.readLine();
-                    System.out.println(status);
-                    if (status.equals("Success")) {
-                        break;
-                    }
+                // Exit condition: Close connection if server requests it
+                if ("You have logged out.".equalsIgnoreCase(serverMessage)) {
+                    break;
                 }
 
-            } else {
-                while (true) {
-                    System.out.print(br.readLine());
-                    pw.println(sc.nextLine());
-                    pw.flush();
+                // Send user input to the server
+                System.out.print("Your input: ");
+                String userInput = scanner.nextLine();
+                out.writeObject(userInput);
 
-                    System.out.println(br.readLine());
-                    pw.println(sc.nextLine());
-                    pw.flush();
-
-                    System.out.print(br.readLine());
-                    pw.println(sc.nextLine());
-                    pw.flush();
-
-                    String response = br.readLine();
-                    System.out.println(response);
-                    if (response.equals("Success")) {
-                        break;
-                    }
+                if ("LOGOUT".equalsIgnoreCase(userInput)) {
+                    System.out.println("Logging out...");
+                    break;
                 }
             }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Connection lost: " + e.getMessage());
         } finally {
             try {
-                if (socket != null) {
-                    socket.close();
-                }
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
-                }
-                if (br != null) {
-                    br.close();
-                }
-                if (pw != null) {
-                    pw.close();
-                }
+                socket.close();
+                System.out.println("Disconnected from the server.");
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Error closing connection: " + e.getMessage());
             }
         }
+    }
 
+    public static void main(String[] args) {
+        String host = "localhost"; // Replace with server address if needed
+        int port = 12345; // Replace with the server's port
+
+        new Client(host, port);
     }
 }

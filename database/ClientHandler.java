@@ -1,140 +1,300 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
-;
+class ClientHandler extends Thread {
+    private Socket clientSocket;
+    private final UserDatabase userDatabase;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private User currentUser = null;
 
-class ClientHandler implements Runnable
-{
-    private Socket client;
-    Scanner sc = new Scanner(System.in);
-    String choice = "";
-    boolean isPublic = true;
-
-    public ClientHandler (Socket c) {
-        client = c;
+    public ClientHandler(Socket socket, UserDatabase userDatabase) {
+        this.clientSocket = socket;
+        this.userDatabase = userDatabase;
     }
 
-    public void run () {
-        BufferedReader reader = null;
-        PrintWriter writer = null;
-        String input = null;
-        UserDatabase db = new UserDatabase();
+    @Override
+    public void run() {
         try {
-            reader = new BufferedReader (new InputStreamReader (client.getInputStream ()));
-            writer = new PrintWriter (client.getOutputStream (), true);
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            in = new ObjectInputStream(clientSocket.getInputStream());
 
-            writer.println("Do you have an account? Enter yes or no");
-            writer.flush();
-            //do you have an account?
-            input = reader.readLine();
+            authenticateUser(); // Ensures login or account creation before proceeding.
 
-            if (input.equals("yes")) {
-                while (true) {
-                    writer.println("Please enter your username");
-                    writer.flush();
-                    String username = reader.readLine();
-                    writer.println("Please enter your password");
-                    writer.flush();
-                    String password = reader.readLine();
-                    boolean contains = false;
-                    for (User u: db.getUsers()) {
-                        if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-                            contains = true;
-                            break;
-                        }
-                    }
-                    if (!contains) {
-                        writer.println("Invalid Credentials");
-                        writer.flush();
-                    } else {
-                        writer.println("Success");
-                        writer.flush();
-                        break;
-                    }
+            while (true) {
+                String action = (String) in.readObject(); // Read client action
+                System.out.println("Action requested: " + action);
+
+                if ("LOGOUT".equalsIgnoreCase(action)) {
+                    logout();
+                    break;
                 }
-            } else if (input.equals("no")){
-                while (true) {
-                    writer.println("Please enter your username");
-                    writer.flush();
-                    String username = reader.readLine();
-                    writer.println("Please enter your password ");
-                    writer.flush();
-                    String password = reader.readLine();
-                    writer.println("Please enter your privacy, enter true or false");
-                    writer.flush();
-                    boolean privacy = Boolean.parseBoolean(reader.readLine()); //probably have to change later
+                handleAction(action);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Client disconnected.");
+        } finally {
+            try {
+                if (currentUser != null) {
+                    Server.removeLoggedInUser(currentUser);
+                }
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-                    boolean success = true;
-                    try {
-                        User u = new User(username, password, privacy);
-                        boolean addedUser = db.addUser(u);
-                        if (addedUser == false) {
-                            writer.println("User with username already exists");
-                            writer.flush();
-                        } else {
-                            writer.println("Success");
-                            writer.flush();
-                            break;
-                        }
-                    } catch (BadException e){
-                        writer.println("Invalid password");
-                        writer.flush();
+    private void authenticateUser() throws IOException, ClassNotFoundException {
+        while (currentUser == null) {
+            out.writeObject("Please LOGIN or CREATE_ACCOUNT to continue.");
+            String action = (String) in.readObject();
+
+            if ("LOGIN".equalsIgnoreCase(action)) {
+                login();
+            } else if ("CREATE_ACCOUNT".equalsIgnoreCase(action)) {
+                createAccount();
+            } else {
+                out.writeObject("Invalid action. Only LOGIN or CREATE_ACCOUNT allowed.");
+            }
+        }
+    }
+
+    private void handleAction(String action) throws IOException, ClassNotFoundException {
+        switch (action.toUpperCase()) {
+            case "ADD_FRIEND":
+                addFriend();
+                break;
+            case "REMOVE_FRIEND":
+                removeFriend();
+                break;
+            case "BLOCK_USER":
+                blockUser();
+                break;
+            case "SEND_MESSAGE":
+                sendMessage();
+                break;
+            case "DELETE_MESSAGE":
+                deleteMessage();
+                break;
+            case "SEARCH_USER":
+                searchUser();
+                break;
+            case "VIEW_USER":
+                viewUser();
+                break;
+            default:
+                out.writeObject("Invalid action.");
+        }
+    }
+
+    private void login() throws IOException, ClassNotFoundException {
+        out.writeObject("Enter username: ");
+        String username = (String) in.readObject();
+        out.writeObject("Enter password: ");
+        String password = (String) in.readObject();
+
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                    if (Server.addLoggedInUser(user)) {
+                        currentUser = user;
+                        out.writeObject("Login successful.");
+                    } else {
+                        out.writeObject("User is already logged in.");
                     }
+                    return;
                 }
             }
+        }
+        out.writeObject("Invalid username or password.");
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace ();
+    private void createAccount() throws IOException, ClassNotFoundException {
+        out.writeObject("Enter new username: ");
+        String username = (String) in.readObject();
+        out.writeObject("Enter new password: ");
+        String password = (String) in.readObject();
+        out.writeObject("Is your profile public? (true/false): ");
+        boolean isPublic = Boolean.parseBoolean((String) in.readObject());
+
+        synchronized (userDatabase) {
+            try {
+                User newUser = new User(username, password, isPublic);
+                if (userDatabase.addUser(newUser)) {
+                    userDatabase.everythingToFile(); // Save to file after account creation
+                    out.writeObject("Account created successfully.");
+                } else {
+                    out.writeObject("Username already exists.");
+                }
+            } catch (BadException e) {
+                out.writeObject("Error creating account: " + e.getMessage());
+            }
+        }
+    }
+
+    private void addFriend() throws IOException, ClassNotFoundException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+            return;
         }
 
+        out.writeObject("Enter the username of the friend to add: ");
+        String friendUsername = (String) in.readObject();
 
-/*        while(true) {
-            System.out.println("Do you have an account?");
-            choice = sc.nextLine();
-
-            if (choice.equalsIgnoreCase("yes")) {
-                System.out.println("Enter in your Username:");
-                String user = sc.nextLine();
-
-                System.out.println("Enter in your Password:");
-                String pass = sc.nextLine();
-
-            } else if (choice.equalsIgnoreCase("no")) {
-                System.out.println("Please enter a username:");
-                String user = sc.nextLine();
-
-                System.out.println("Please enter a password:");
-                String pass = sc.nextLine();
-
-                System.out.println("Would you like anybody to be able to view your profile?");
-                choice = sc.nextLine();
-                if (choice.equalsIgnoreCase("yes")) { 
-                    boolean isPublic = true;
-                } else if (choice.equalsIgnoreCase("no"))  {
-                    boolean isPublic = false;
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(friendUsername)) {
+                    if (currentUser.addFriend(user)) {
+                        userDatabase.everythingToFile(); // Save to file after modifying friends list
+                        out.writeObject("Friend added successfully.");
+                    } else {
+                        out.writeObject("User is already in your friend list.");
+                    }
+                    return;
                 }
-
-
-
             }
+        }
+        out.writeObject("User not found.");
+    }
 
-            try {
-                input = clientIn.readLine ();
-                clientOut.println (input);
-            } catch (Exception e) {
-                e.printStackTrace ();
+    private void removeFriend() throws IOException, ClassNotFoundException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+            return;
+        }
+
+        out.writeObject("Enter the username of the friend to remove: ");
+        String friendUsername = (String) in.readObject();
+
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(friendUsername)) {
+                    if (currentUser.removeFriend(user)) {
+                        userDatabase.everythingToFile(); // Save to file after modifying friends list
+                        out.writeObject("Friend removed successfully.");
+                    } else {
+                        out.writeObject("User is not in your friend list.");
+                    }
+                    return;
+                }
             }
+        }
+        out.writeObject("User not found.");
+    }
 
-            break;
-        } 
+    private void blockUser() throws IOException, ClassNotFoundException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+            return;
+        }
 
-        try {
-            clientIn.close ();
-            clientOut.close ();
-            client.close ();
-        } catch (Exception e) {
-            e.printStackTrace ();
-        }*/
+        out.writeObject("Enter the username of the user to block: ");
+        String blockUsername = (String) in.readObject();
+
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(blockUsername)) {
+                    if (currentUser.blockUser(user)) {
+                        userDatabase.everythingToFile(); // Save to file after blocking a user
+                        out.writeObject("User blocked successfully.");
+                    } else {
+                        out.writeObject("User is already blocked.");
+                    }
+                    return;
+                }
+            }
+        }
+        out.writeObject("User not found.");
+    }
+
+    private void sendMessage() throws IOException, ClassNotFoundException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+            return;
+        }
+
+        out.writeObject("Enter the username of the recipient: ");
+        String recipientUsername = (String) in.readObject();
+        out.writeObject("Enter your message: ");
+        String messageContent = (String) in.readObject();
+
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(recipientUsername)) {
+                    if (currentUser.sendMessage(user, messageContent)) {
+                        userDatabase.everythingToFile(); // Save to file after sending a message
+                        out.writeObject("Message sent successfully.");
+                    } else {
+                        out.writeObject("Failed to send message. Check your permissions or ensure the user has not blocked you.");
+                    }
+                    return;
+                }
+            }
+        }
+        out.writeObject("User not found.");
+    }
+
+    private void deleteMessage() throws IOException, ClassNotFoundException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+            return;
+        }
+
+        out.writeObject("Enter the username of the message recipient to delete: ");
+        String recipientUsername = (String) in.readObject();
+        out.writeObject("Enter the message content to delete: ");
+        String messageContent = (String) in.readObject();
+
+        synchronized (userDatabase) {
+            for (TextMessage message : currentUser.getMessages()) {
+                if (message.getReceiverUsername().equals(recipientUsername) &&
+                        message.getMessageContent().equals(messageContent)) {
+                    if (currentUser.deleteMessage(message)) {
+                        userDatabase.everythingToFile(); // Save to file after deleting a message
+                        out.writeObject("Message deleted successfully.");
+                    } else {
+                        out.writeObject("Failed to delete message.");
+                    }
+                    return;
+                }
+            }
+        }
+        out.writeObject("Message not found.");
+    }
+
+    private void searchUser() throws IOException, ClassNotFoundException {
+        out.writeObject("Enter the username to search for: ");
+        String username = (String) in.readObject();
+
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(username)) {
+                    out.writeObject("User found: " + user);
+                    return;
+                }
+            }
+        }
+        out.writeObject("User not found.");
+    }
+
+    private void viewUser() throws IOException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+            return;
+        }
+
+        out.writeObject("Viewing your information: " + currentUser);
+    }
+
+    private void logout() throws IOException {
+        if (currentUser != null) {
+            Server.removeLoggedInUser(currentUser);
+            userDatabase.everythingToFile(); // Save to file after logging out
+            currentUser = null;
+        }
+        out.writeObject("You have logged out.");
     }
 }

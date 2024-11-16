@@ -354,4 +354,9 @@ public class User implements UserInterface {
         return line;
     }
 
+    public boolean validatePassword(String inputPassword) {
+        return this.password.equals(inputPassword);
+    }
+
+
 }
