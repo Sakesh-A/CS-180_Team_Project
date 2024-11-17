@@ -1,6 +1,16 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Team Project -- ServerInterface
+ *
+ * An interface for our server
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
+
 public interface ServerInterface {
     static final int PORT = 12345;
     static UserDatabase userDatabase = new UserDatabase();
