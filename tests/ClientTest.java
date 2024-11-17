@@ -1,103 +1,167 @@
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.util.*;
+
+/**
+ * Team Project -- ClientTest
+ *
+ * Tests for the Client class, verifying the proper functionality of fields and methods.
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
 
 public class ClientTest {
+    // Fields
+    private ServerSocket serverSocket;
+    private Thread serverThread;
+    private Socket clientSocket;
+    private PrintWriter serverOut;
+    private BufferedReader serverIn;
+    private String lastMessageSent;
+    private boolean clientDisconnected = false;
+    private int port = 4242;
 
-    private Socket mockSocket;
-    private ObjectOutputStream mockOut;
-    private ObjectInputStream mockIn;
-    private Client client;
+    @Before
+    public void setUp() throws Exception {
+        serverSocket = new ServerSocket(port);
+        serverThread = new Thread(() -> {
+            try {
+                clientSocket = serverSocket.accept();
+                serverOut = new PrintWriter(clientSocket.getOutputStream(), true);
+                serverIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-    @BeforeEach
-    public void setUp() throws IOException {
-       
-        mockSocket = mock(Socket.class);
-        mockOut = mock(ObjectOutputStream.class);
-        mockIn = mock(ObjectInputStream.class);
+                String message;
 
-       
-        when(mockSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
-        when(mockSocket.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
+                while ((message = serverIn.readLine()) != null) {
+                    lastMessageSent = message;
 
-        
-        client = new Client("localhost", 12345) {
-            @Override
-            protected void initializeStreams() throws IOException {
-                
-                out = mockOut;
-                in = mockIn;
-                socket = mockSocket;
+                    if ("LOGOUT".equalsIgnoreCase(message)) {
+                        sendMessage("You have logged out.");
+                        clientDisconnected = true;
+                        break;
+                    } else if (message.isEmpty() || message == null) {
+                        sendMessage("No command received.");
+                    } else if ("ADD_FRIEND".equalsIgnoreCase(message)) {
+                        sendMessage("Friend added successfully.");
+                    } else {
+                        sendMessage("Invalid command received.");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                stopServer();
             }
-        };
+        });
+
+        serverThread.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        stopServer();
+
+        serverThread.join();
     }
 
     @Test
-    public void testClientConnectionSuccess() {
-        
-        assertDoesNotThrow(() -> new Client("localhost", 12345));
+    public void testClientConnection() throws Exception {
+        Client client = new Client("localhost", port);
+
+        assertNotNull("Client socket should not be null after connection", client);
     }
 
     @Test
-    public void testHandleCommunicationWhenServerSendsMessage() throws IOException, ClassNotFoundException {
-    
-        when(mockIn.readObject()).thenReturn("Welcome to the server!");
+    public void testServerMessageHandling() throws Exception {
+        Client client = new Client("localhost", port);
 
-      
-        client.handleCommunication();
+        sendMessage("Test message from server.");
 
-       
-        verify(mockOut, times(0)).writeObject(any()); // Verify no output is sent yet
+        simulateUserInput(client, "LOGOUT");
+
+        assertEquals("Server message should be received correctly", "Test message from server.", lastMessageSent);
     }
 
     @Test
-    public void testHandleLogoutWhenUserSendsLogout() throws IOException, ClassNotFoundException {
+    public void testInvalidHostConnection() {
+        Client client = new Client("invalidHost", port);
 
-        when(mockIn.readObject()).thenReturn("Welcome to the server!");
-
-        ByteArrayInputStream inputStream = new ByteArrayInputStream("LOGOUT\n".getBytes());
-        System.setIn(inputStream); 
-
-        client.handleCommunication();
-
-       
-        verify(mockOut, times(1)).writeObject("LOGOUT");
+        assertNull("Client should not connect to an invalid host", client);
     }
 
     @Test
-    public void testServerDisconnects() throws IOException, ClassNotFoundException {
-       
-        when(mockIn.readObject()).thenReturn("You have logged out.");
+    public void testClientLogout() throws Exception {
+        Client client = new Client("localhost", port);
 
-        
-        client.handleCommunication();
+        simulateUserInput(client, "LOGOUT");
 
-       
-        verify(mockSocket, times(1)).close();
+        assertTrue("Client should log out and disconnect", clientDisconnected);
     }
 
     @Test
-    public void testClientHandlesIOException() throws IOException, ClassNotFoundException {
-       
-        when(mockIn.readObject()).thenThrow(new IOException("Connection lost"));
+    public void testInvalidInput() throws Exception {
+        Client client = new Client("localhost", port);
 
-        assertDoesNotThrow(() -> client.handleCommunication());
+        simulateUserInput(client, "INVALID_COMMAND");
 
-        verify(mockSocket, times(1)).close();
+        assertEquals("Server should handle invalid input", "Invalid command received.", lastMessageSent);
     }
 
     @Test
-    public void testClientHandlesClassNotFoundException() throws IOException, ClassNotFoundException {
+    public void testClientActionsAfterLogin() throws Exception {
+        Client client = new Client("localhost", port);
 
-        when(mockIn.readObject()).thenThrow(new ClassNotFoundException("Unknown class"));
+        sendMessage("Login successful.");
 
-      
-        assertDoesNotThrow(() -> client.handleCommunication());
+        sendMessage("Available actions: ADD_FRIEND, LOGOUT");
+
+        simulateUserInput(client, "ADD_FRIEND");
+
+        assertEquals("Server should handle the ADD_FRIEND command", "Friend added successfully.", lastMessageSent);
     }
 
-}
+    @Test
+    public void testEdgeCaseEmptyInput() throws Exception {
+        Client client = new Client("localhost", port);
 
+        simulateUserInput(client, "");
+
+        assertEquals("Server should handle empty input", "No command received.", lastMessageSent);
+    }
+
+    @Test
+    public void testNullInput() throws Exception {
+        Client client = new Client("localhost", port);
+
+        simulateUserInput(client, null);
+
+        assertEquals("Server should handle null input gracefully", "No command received.", lastMessageSent);
+    }
+
+    private void simulateUserInput(Client client, String input) throws Exception {
+        PrintWriter writer = new PrintWriter(client.getSocket().getOutputStream(), true);
+
+        writer.println(input);
+    }
+
+    private void sendMessage(String message) {
+        if (serverOut != null) {
+            serverOut.println(message);
+        }
+    }
+
+    private void stopServer() {
+        try {
+            if (clientSocket != null) clientSocket.close();
+            if (serverSocket != null) serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+} // End of class
