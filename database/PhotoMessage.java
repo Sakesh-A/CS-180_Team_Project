@@ -24,7 +24,7 @@ public class PhotoMessage extends TextMessage {
     private String photoURL;
     private User sender;
     private User receiver;
-    private String[] messageArray;
+    private String[] messageArray = new String[4];
 
     /**
      * Constructs a PhotoMessage object with message content, sender, receiver, and a photo.
@@ -37,6 +37,11 @@ public class PhotoMessage extends TextMessage {
     public PhotoMessage(String message, User sender, User receiver, String photoURL) throws IOException {
         super(message, sender, receiver);
         this.photo = ImageIO.read(new File(photoURL));
+        messageArray[0] = sender.getUsername();
+        messageArray[1] = receiver.getUsername();
+        messageArray[2] = message;
+        messageArray[3] = photoURL;
+        
     }
 
     /**
@@ -49,20 +54,7 @@ public class PhotoMessage extends TextMessage {
     }
 
     public String getPhotoURL() {
-        return photoURL;
-    }
-
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
-    }
-
-    /**
-     * Sets a new photo attachment for this message.
-     *
-     * @param photo the file path or URL of the new photo as a String
-     */
-    public void setPhoto(String photoURL) throws IOException {
-        this.photo = ImageIO.read(new File(photoURL));
+        return messageArray[3];
     }
 
     /**
@@ -97,17 +89,11 @@ public class PhotoMessage extends TextMessage {
     *
     * @return a cloned String array containing sender username, receiver username, and message content
     */
-   public String[] getMessageArray() {
-       return messageArray.clone();
-   }
-
-   public User getSender() {
-        return sender;
+    public String[] getMessageArray() {
+        return messageArray.clone();
     }
 
-
-
-    public User getReceiver() {
-        return receiver;
+    public String toString() {
+        return messageArray[0] + "," + messageArray[1] + "," + messageArray[2] + "," + messageArray[3] + ";";
     }
 }
