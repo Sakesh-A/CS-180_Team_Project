@@ -63,7 +63,7 @@ class ClientHandler extends Thread {
                 createAccount();
 //                sendOptions();
             } else {
-                out.writeObject("Invalid action. Only LOGIN or CREATE_ACCOUNT allowed.");
+                out.writeObject("Error: Invalid action. Only LOGIN or CREATE_ACCOUNT allowed.");
             }
         }
     }
@@ -118,13 +118,13 @@ class ClientHandler extends Thread {
                         out.writeObject("Login successful.");
 //                        sendOptions();
                     } else {
-                        out.writeObject("User is already logged in.");
+                        out.writeObject("Error: User is already logged in.");
                     }
                     return;
                 }
             }
         }
-        out.writeObject("Invalid username or password.");
+        out.writeObject("Error: Invalid username or password.");
     }
 
     private void createAccount() throws IOException, ClassNotFoundException {
@@ -135,6 +135,7 @@ class ClientHandler extends Thread {
         out.writeObject("Is your profile public? (true/false): ");
         boolean isPublic = Boolean.parseBoolean((String) in.readObject());
 
+        System.out.println("Username: " + username + "  password: " + password + "  public: " + isPublic);
         synchronized (userDatabase) {
             try {
                 User newUser = new User(username, password, isPublic);
@@ -143,10 +144,12 @@ class ClientHandler extends Thread {
                     out.writeObject("Account created successfully.");
 //                    sendOptions();
                 } else {
-                    out.writeObject("Username already exists.");
+                    out.writeObject("Error: Username already exists.");
+
                 }
             } catch (BadException e) {
                 out.writeObject("Error creating account: " + e.getMessage());
+
             }
         }
     }

@@ -24,7 +24,13 @@ public class Client {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 String serverMessage = (String) in.readObject();
+
                 System.out.println("Server: " + serverMessage);
+
+                if (serverMessage.substring(0,5).equals("Error") || serverMessage.equals("Account created successfully.")) {
+                    serverMessage = (String) in.readObject();
+                    System.out.println("Server: " + serverMessage);
+                }
 
                 // Exit condition: Close connection if server requests it
                 if ("You have logged out.".equalsIgnoreCase(serverMessage)) {
