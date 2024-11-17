@@ -30,8 +30,10 @@ class ClientHandler extends Thread {
                 if ("LOGOUT".equalsIgnoreCase(action)) {
                     logout();
                     break;
+                } else {
+                    handleAction(action);
+//                    sendOptions();
                 }
-                handleAction(action);
             }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Client disconnected.");
@@ -54,8 +56,12 @@ class ClientHandler extends Thread {
 
             if ("LOGIN".equalsIgnoreCase(action)) {
                 login();
+                if (currentUser != null) {
+//                    sendOptions();
+                }
             } else if ("CREATE_ACCOUNT".equalsIgnoreCase(action)) {
                 createAccount();
+//                sendOptions();
             } else {
                 out.writeObject("Invalid action. Only LOGIN or CREATE_ACCOUNT allowed.");
             }
@@ -66,27 +72,35 @@ class ClientHandler extends Thread {
         switch (action.toUpperCase()) {
             case "ADD_FRIEND":
                 addFriend();
+//                sendOptions();
                 break;
             case "REMOVE_FRIEND":
                 removeFriend();
+//                sendOptions();
                 break;
             case "BLOCK_USER":
                 blockUser();
+//                sendOptions();
                 break;
             case "SEND_MESSAGE":
                 sendMessage();
+//                sendOptions();
                 break;
             case "DELETE_MESSAGE":
                 deleteMessage();
+//                sendOptions();
                 break;
             case "SEARCH_USER":
                 searchUser();
+//                sendOptions();
                 break;
             case "VIEW_USER":
                 viewUser();
+//                sendOptions();
                 break;
             default:
                 out.writeObject("Invalid action.");
+//                sendOptions();
         }
     }
 
@@ -100,8 +114,9 @@ class ClientHandler extends Thread {
             for (User user : userDatabase.getUsers()) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                     if (Server.addLoggedInUser(user)) {
-                        currentUser = user;
+                            currentUser = user;
                         out.writeObject("Login successful.");
+//                        sendOptions();
                     } else {
                         out.writeObject("User is already logged in.");
                     }
@@ -126,6 +141,7 @@ class ClientHandler extends Thread {
                 if (userDatabase.addUser(newUser)) {
                     userDatabase.everythingToFile(); // Save to file after account creation
                     out.writeObject("Account created successfully.");
+//                    sendOptions();
                 } else {
                     out.writeObject("Username already exists.");
                 }
@@ -297,4 +313,17 @@ class ClientHandler extends Thread {
         }
         out.writeObject("You have logged out.");
     }
+
+//    private void sendOptions() throws IOException {
+//        out.writeObject("Available actions: \n" +
+//                "1. ADD_FRIEND\n" +
+//                "2. REMOVE_FRIEND\n" +
+//                "3. BLOCK_USER\n" +
+//                "4. SEND_MESSAGE\n" +
+//                "5. DELETE_MESSAGE\n" +
+//                "6. SEARCH_USER\n" +
+//                "7. VIEW_USER\n" +
+//                "8. LOGOUT\n" +
+//                "Enter your choice:");
+//    }
 }
