@@ -1,5 +1,6 @@
 # CS-180_Team_Project
 1. Testing/Compiling
+   
    a. Testing- We used JUNIT to write all of our test cases.
       - UserTest:
            - We test every method in the User class.
