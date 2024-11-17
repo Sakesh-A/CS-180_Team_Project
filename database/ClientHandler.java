@@ -3,6 +3,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Team Project -- ClientHandler
+ *
+ * A helper class for the server to handle the client. All client interactions are done here
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
+
 class ClientHandler extends Thread implements ClientHandlerInterface{
     private Socket clientSocket;
     private final UserDatabase userDatabase;
