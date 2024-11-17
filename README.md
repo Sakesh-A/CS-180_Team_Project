@@ -12,7 +12,17 @@
       - PhotoMessageTest:
            - We test every method in the PhotoMessage class.
            - Run it on IntelliJ to see the observed result.
-    b. If you want to compile, create a main method and utilize all of our classes.   
+      - ServerTest:
+           - We test every method that doesn't utilize NetworkIO in the ServerTest class.
+           - Run it on IntelliJ to see the observed result.
+      - ClientTest:
+           - We test every method that doesn't utilize NetworkIO in the ClientTest class.
+           - Run it on IntelliJ to see the observed result.
+      - ClientHandlerTest:
+           - We test every method that doesn't utilize NetworkIO in the ClientTest class.
+           - Run it on IntelliJ to see the observed result.
+    b. Manual Testing/Compiling Instructions:
+       
 3. Sakesh Andhavarapu Submitted Vocareum Workspace
 4. a. Classes- All of the classes are in the "database" folder
      - User:
