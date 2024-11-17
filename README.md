@@ -1,5 +1,6 @@
 # CS-180_Team_Project
-1. a. Testing/Compiling- We used JUNIT to write all of our test cases.
+1. Testing/Compiling
+   a. Testing- We used JUNIT to write all of our test cases.
       - UserTest:
            - We test every method in the User class.
            - Run it on IntelliJ to see the observed result.
@@ -22,12 +23,14 @@
            - We test every method that doesn't utilize NetworkIO in the ClientTest class.
            - Run it on IntelliJ to see the observed result.
              
-    b. Manual Testing/Compiling Instructions:
-         1. Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
-         2. 
+   b. Manual Testing/Compiling
+      - We used JUNIT to write all of our test cases.+ Manual Testing/Compiling Instructions: Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
+
+         
        
 3. Sakesh Andhavarapu Submitted Vocareum Workspace
-4. a. Classes 
+4. Classes/Interfaces/Exceptions
+    a. Classes 
      - User:
        The User class models an individual user within the database, holding key information like username, password, and privacy status. It maintains lists of friends, blocked users, and received messages, allowing each user to connect with others, manage interactions, and handle communication. Core methods in this class include adding/removing friends, blocking users, and sending or deleting messages, which enable interaction. The equals method ensures that each user is uniquely identified by their username. This class interacts with TextMessage for messaging and is managed collectively by UserDatabase, which organizes users.
 
@@ -66,7 +69,7 @@
      - ClientInterface:
        The ClientInterface defines a single method, handleCommunication, to manage interactions between the client and the server.
        
-   c. Exceptions- All of the exceptions are in the "database" folder
+   c. Exceptions
      - BadException:
        The BadException class is a custom exception that handles specific error conditions in the project by allowing developers to provide descriptive error messages. It extends the standard Exception class, enabling it to be thrown and caught like other exceptions while offering additional context about the error through a detailed message.
        
