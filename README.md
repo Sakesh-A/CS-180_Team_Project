@@ -24,7 +24,7 @@
     b. Manual Testing/Compiling Instructions:
        
 3. Sakesh Andhavarapu Submitted Vocareum Workspace
-4. a. Classes- All of the classes are in the "database" folder
+4. a. Classes 
      - User:
        The User class models an individual user within the database, holding key information like username, password, and privacy status. It maintains lists of friends, blocked users, and received messages, allowing each user to connect with others, manage interactions, and handle communication. Core methods in this class include adding/removing friends, blocking users, and sending or deleting messages, which enable interaction. The equals method ensures that each user is uniquely identified by their username. This class interacts with TextMessage for messaging and is managed collectively by UserDatabase, which organizes users.
 
@@ -34,9 +34,19 @@
      - TextMessage:
        The TextMessage class represents a text message exchange between users, including the sender's username, receiver's username, and the message content itself. It utilizes a string array to store these details, providing methods to retrieve each piece of information, including the sender and receiver usernames and the message content. The class overrides the equals method to ensure accurate comparison of TextMessage instances based on their sender, receiver, and message content, while the toString method formats the message for display. This class is designed to work with User and UserDatabase.
        
-     - PhotoMessage: It is very similar to TextMessage, but it is still in progress.
+     - PhotoMessage:
+        It is very similar to TextMessage, but it is still in progress.
+       
+     - Server
+       The Server class is responsible for facilitating client connections and user authentication. It maintains a thread-safe list of currently logged-in users and delegates client-specific operations to the ClientHandler class. The server continuously looks for incoming client connections on a specified port and starts a new thread to handle each client session.
+       
+     - ClientHandler
+       The ClientHandler class is a thread responsible for managing interactions with an individual client connected to the server. It handles tasks such as authenticating users, managing friend requests, blocking users, sending and deleting messages, and providing various account-related operations. Each client interaction is processed independently in a thread-safe manner, ensuring concurrent handling of multiple clients. The class maintains a connection with the client through input and output streams, which enables real-time communication and updates. Upon client logout or disconnection, the handler ensures proper cleanup by updating the server's logged-in users list and saving relevant data.
+       
+     - Client
+       The Client class establishes a connection to the server, enabling communication through object streams for sending and receiving messages. It manages user interactions through the console for now, allowing users to perform actions like login, account creation, and various commands sent to the server. The client handles the server by providing real-time feedback to users and ensuring graceful disconnection when the session ends.
 
-   b. Interfaces- All of the interfaces are in the "database" folder
+   b. Interfaces
      - UserInterface:
        The UserInterface outlines the operations for user management, including methods for accessing and modifying user details, friendships, and messaging capabilities. It provides a clear contract for implementing user-related functionality, enabling flexibility and consistent interactions across different user implementations.
        
@@ -45,10 +55,13 @@
    
      - MessageInterface:
        The MessageInterface establishes the required methods for handling messages, including retrieving details like sender, receiver, and content. This interface ensures that any message implementation adheres to a standard format, facilitating smooth message operations within the application.
+
+     - 
        
-   c. Exceptions- All of the expections are in the "database" folder
+   c. Exceptions- All of the exceptions are in the "database" folder
      - BadException:
-       The BadException class is a custom exception that handles specific error conditions in the project by allowing developers to provide descriptive error messages. It extends the standard Exception class, enabling it to be thrown and caught like other exceptions while offering additional context about the error through a detail message.
+       The BadException class is a custom exception that handles specific error conditions in the project by allowing developers to provide descriptive error messages. It extends the standard Exception class, enabling it to be thrown and caught like other exceptions while offering additional context about the error through a detailed message.
+       
 
 
 
