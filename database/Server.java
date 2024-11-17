@@ -36,6 +36,10 @@ public class Server implements ServerInterface{
      * Adds a user to the list of logged-in users, ensuring thread safety.
      */
     public static boolean addLoggedInUser(User user) {
+        if(user == null){
+            return false;
+        }
+
         synchronized (loginLock) {
             for (User loggedInUser : loggedInUsers) {
                 if (loggedInUser.getUsername().equals(user.getUsername())) {

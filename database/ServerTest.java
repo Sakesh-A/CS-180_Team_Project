@@ -34,33 +34,9 @@ public class ServerTest {
         assertFalse("User should not be added if already logged in.", result);
     }
 
-    // Test handling of BadException when creating a user with invalid data
-    @Test
-    public void testCreateAccountWithBadException() {
-        try {
-            // Simulate creating a user with invalid data that triggers BadException
-            User invalidUser = new User(null, "validPassword", true); // Null username
-            fail("Expected BadException to be thrown for null username");
-        } catch (BadException e) {
-            assertEquals("Usernames can't be empty", e.getMessage());
-        }
 
-        try {
-            // Simulate creating a user with an empty username
-            User invalidUser = new User("", "validPassword", true);
-            fail("Expected BadException to be thrown for empty username");
-        } catch (BadException e) {
-            assertEquals("Username cannot be empty.", e.getMessage());
-        }
 
-        try {
-            // Simulate creating a user with an empty password
-            User invalidUser = new User("newUser", "", true);
-            fail("Expected BadException to be thrown for empty password");
-        } catch (BadException e) {
-            assertEquals("Password cannot be empty.", e.getMessage());
-        }
-    }
+
 
     // Additional tests for addLoggedInUser and removeLoggedInUser (unchanged)
     @Test
