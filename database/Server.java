@@ -3,6 +3,16 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Team Project -- Server
+ *
+ * A server that interacts with our database and client to manage our social media site
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
+
 public class Server implements ServerInterface{
     private static final int PORT = 12345;
     private static UserDatabase userDatabase = new UserDatabase();
