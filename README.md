@@ -56,7 +56,12 @@
      - MessageInterface:
        The MessageInterface establishes the required methods for handling messages, including retrieving details like sender, receiver, and content. This interface ensures that any message implementation adheres to a standard format, facilitating smooth message operations within the application.
 
-     - 
+     - ServerInterface:
+       The ServerInterface provides shared constants and static methods for managing server-side functionality, including a user database, a list of logged-in users, and synchronization for thread-safe operations. It offers methods to add or remove logged-in users, ensuring no duplicate logins and safe modifications to the shared user list.
+     - ClientHandlerInterface:
+       The ClientHandlerInterface defines methods for handling various client-related actions in a server, such as user authentication, account creation, and managing interactions like adding friends or sending messages. It ensures a structured approach to implementing client operations while handling potential exceptions during input/output and class deserialization.
+     - ClientInterface:
+       The ClientInterface defines a single method, handleCommunication, to manage interactions between the client and the server.
        
    c. Exceptions- All of the exceptions are in the "database" folder
      - BadException:
