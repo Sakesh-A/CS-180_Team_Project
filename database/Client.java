@@ -2,6 +2,16 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Team Project -- Client
+ *
+ * Creates a simple client that interacts with the server. All input/output is done in the terminal
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
+
 public class Client implements ClientInterface {
     private Socket socket;
     private ObjectOutputStream out;
