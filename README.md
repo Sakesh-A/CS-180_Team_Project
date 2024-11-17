@@ -1,5 +1,5 @@
 # CS-180_Team_Project
-1. a. Test Cases- The test cases are in a separate folder called "tests". We used JUNIT to write all of our test cases.
+1. a. Testing/Compiling- We used JUNIT to write all of our test cases.
       - UserTest:
            - We test every method in the User class.
            - Run it on IntelliJ to see the observed result.
@@ -21,6 +21,7 @@
       - ClientHandlerTest:
            - We test every method that doesn't utilize NetworkIO in the ClientTest class.
            - Run it on IntelliJ to see the observed result.
+             
     b. Manual Testing/Compiling Instructions:
        
 3. Sakesh Andhavarapu Submitted Vocareum Workspace
