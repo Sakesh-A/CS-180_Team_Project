@@ -1,186 +1,201 @@
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 import java.io.*;
 import java.net.Socket;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
+/**
+ * Team Project -- ClientHandlerTest
+ *
+ * Tests for the ClientHandler class, verifying the proper functionality of fields and methods.
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
 
 public class ClientHandlerTest {
-
+    // Fields
     private ClientHandler clientHandler;
     private Socket mockSocket;
+    private ByteArrayOutputStream outputStream;
     private ObjectOutputStream mockOut;
+    private ByteArrayInputStream inputStream;
     private ObjectInputStream mockIn;
     private UserDatabase mockUserDatabase;
     private User mockUser;
 
-    @BeforeEach
+    @Before
     public void setUp() throws IOException {
-       
-        mockSocket = mock(Socket.class);
-        mockOut = mock(ObjectOutputStream.class);
-        mockIn = mock(ObjectInputStream.class);
-        mockUserDatabase = mock(UserDatabase.class);
-        mockUser = mock(User.class);
+        mockSocket = new Socket();
+        outputStream = new ByteArrayOutputStream();
+        mockOut = new ObjectOutputStream(outputStream);
+        inputStream = new ByteArrayInputStream(new byte[0]);
+        mockIn = new ObjectInputStream(inputStream);
+        mockUserDatabase = new UserDatabase();
+        mockUser = new User("user", "password", true);
 
-        when(mockSocket.getOutputStream()).thenReturn(new ByteArrayOutputStream());
-        when(mockSocket.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[0]));
-
-        
         clientHandler = new ClientHandler(mockSocket, mockUserDatabase) {
             @Override
-            public void authenticateUser() throws IOException, ClassNotFoundException {
-                // Mock the user authentication flow
-                when(mockIn.readObject()).thenReturn("LOGIN");
-                when(mockIn.readObject()).thenReturn("user");
-                when(mockIn.readObject()).thenReturn("password");
-                when(mockUserDatabase.getUsers()).thenReturn(java.util.Collections.singletonList(mockUser));
-                when(mockUser.getUsername()).thenReturn("user");
-                when(mockUser.getPassword()).thenReturn("password");
-                when(mockUser.getMessages()).thenReturn(java.util.Collections.emptyList());
+            protected ObjectInputStream getInputStream() {
+                return mockIn;
+            }
+
+            @Override
+            protected ObjectOutputStream getOutputStream() {
+                return mockOut;
             }
         };
-
-    
-        when(mockUserDatabase.addUser(any(User.class))).thenReturn(true);
-        when(mockUserDatabase.getUsers()).thenReturn(java.util.Collections.singletonList(mockUser));
     }
 
     @Test
     public void testClientLogin() throws IOException, ClassNotFoundException {
-       
-        when(mockIn.readObject()).thenReturn("LOGIN");
-        when(mockIn.readObject()).thenReturn("user");
-        when(mockIn.readObject()).thenReturn("password");
+        setInputData("LOGIN", "user", "password");
+        mockUserDatabase.addUser(mockUser);
 
         clientHandler.run();
 
-        
-        verify(mockOut, times(1)).writeObject("Login successful.");
+        assertEquals("Login successful.", getOutputData());
     }
 
     @Test
     public void testCreateAccount() throws IOException, ClassNotFoundException {
-      
-        when(mockIn.readObject()).thenReturn("CREATE_ACCOUNT");
-        when(mockIn.readObject()).thenReturn("newuser");
-        when(mockIn.readObject()).thenReturn("newpassword");
-        when(mockIn.readObject()).thenReturn("true");
-
-       
-        when(mockUserDatabase.addUser(any(User.class))).thenReturn(true);
+        setInputData("CREATE_ACCOUNT", "newuser", "newpassword", "true");
 
         clientHandler.run();
 
-        // Verify that account creation was successful
-        verify(mockOut, times(1)).writeObject("Account created successfully.");
+        assertEquals("Account created successfully.", getOutputData());
     }
 
     @Test
     public void testAddFriend() throws IOException, ClassNotFoundException {
-        
-        when(mockIn.readObject()).thenReturn("LOGIN");
-        when(mockIn.readObject()).thenReturn("user");
-        when(mockIn.readObject()).thenReturn("password");
+        setInputData("LOGIN", "user", "password", "ADD_FRIEND", "friend");
 
-        
-        when(mockIn.readObject()).thenReturn("ADD_FRIEND");
-        when(mockIn.readObject()).thenReturn("friend");
-
-      
-        User mockFriend = mock(User.class);
-        when(mockFriend.getUsername()).thenReturn("friend");
-        when(mockUserDatabase.getUsers()).thenReturn(java.util.Collections.singletonList(mockFriend));
-
-        when(mockUser.addFriend(mockFriend)).thenReturn(true);
+        User mockFriend = new User("friend", "friendpassword", true);
+        mockUserDatabase.addUser(mockUser);
+        mockUserDatabase.addUser(mockFriend);
+        mockUser.addFriend(mockFriend);
 
         clientHandler.run();
 
-        
-        verify(mockOut, times(1)).writeObject("Friend added successfully.");
+        assertEquals("Friend added successfully.", getOutputData());
     }
 
     @Test
     public void testRemoveFriend() throws IOException, ClassNotFoundException {
+        setInputData("LOGIN", "user", "password", "REMOVE_FRIEND", "friend");
 
-        when(mockIn.readObject()).thenReturn("LOGIN");
-        when(mockIn.readObject()).thenReturn("user");
-        when(mockIn.readObject()).thenReturn("password");
-
-       
-        when(mockIn.readObject()).thenReturn("REMOVE_FRIEND");
-        when(mockIn.readObject()).thenReturn("friend");
-
-        
-        User mockFriend = mock(User.class);
-        when(mockFriend.getUsername()).thenReturn("friend");
-        when(mockUserDatabase.getUsers()).thenReturn(java.util.Collections.singletonList(mockFriend));
-
-      
-        when(mockUser.removeFriend(mockFriend)).thenReturn(true);
+        User mockFriend = new User("friend", "friendpassword", true);
+        mockUserDatabase.addUser(mockUser);
+        mockUserDatabase.addUser(mockFriend);
+        mockUser.addFriend(mockFriend);
 
         clientHandler.run();
 
-      
-        verify(mockOut, times(1)).writeObject("Friend removed successfully.");
+        assertEquals("Friend removed successfully.", getOutputData());
     }
 
     @Test
     public void testSendMessage() throws IOException, ClassNotFoundException {
-     
-        when(mockIn.readObject()).thenReturn("LOGIN");
-        when(mockIn.readObject()).thenReturn("user");
-        when(mockIn.readObject()).thenReturn("password");
+        setInputData("LOGIN", "user", "password", "SEND_MESSAGE", "recipient", "Hello!");
 
-     
-        when(mockIn.readObject()).thenReturn("SEND_MESSAGE");
-        when(mockIn.readObject()).thenReturn("recipient");
-        when(mockIn.readObject()).thenReturn("Hello!");
-
-     
-        User mockRecipient = mock(User.class);
-        when(mockRecipient.getUsername()).thenReturn("recipient");
-        when(mockUserDatabase.getUsers()).thenReturn(java.util.Collections.singletonList(mockRecipient));
-
-        when(mockUser.sendMessage(mockRecipient, "Hello!")).thenReturn(true);
+        User mockRecipient = new User("recipient", "recipientpassword", true);
+        mockUserDatabase.addUser(mockUser);
+        mockUserDatabase.addUser(mockRecipient);
+        mockUser.sendMessage(mockRecipient, "Hello!");
 
         clientHandler.run();
 
-       
-        verify(mockOut, times(1)).writeObject("Message sent successfully.");
+        assertEquals("Message sent successfully.", getOutputData());
     }
 
     @Test
     public void testLogout() throws IOException {
+        setInputData("LOGIN", "user", "password", "LOGOUT");
 
-        when(mockIn.readObject()).thenReturn("LOGIN");
-        when(mockIn.readObject()).thenReturn("user");
-        when(mockIn.readObject()).thenReturn("password");
-
-   
-        when(mockIn.readObject()).thenReturn("LOGOUT");
-
-     
         clientHandler.run();
 
-    
-        verify(mockOut, times(1)).writeObject("You have logged out.");
+        assertEquals("You have logged out.", getOutputData());
     }
 
     @Test
     public void testHandleInvalidAction() throws IOException, ClassNotFoundException {
-     
-        when(mockIn.readObject()).thenReturn("LOGIN");
-        when(mockIn.readObject()).thenReturn("user");
-        when(mockIn.readObject()).thenReturn("password");
-
-    
-        when(mockIn.readObject()).thenReturn("INVALID_ACTION");
+        setInputData("LOGIN", "user", "password", "INVALID_ACTION");
 
         clientHandler.run();
 
-        
-        verify(mockOut, times(1)).writeObject("Invalid action.");
+        assertEquals("Invalid action.", getOutputData());
     }
-}
+
+    @Test
+    public void testLoginWithInvalidCredentials() throws IOException, ClassNotFoundException {
+        setInputData("LOGIN", "user", "wrongpassword");
+
+        clientHandler.run();
+
+        assertEquals("Error: Invalid username or password.", getOutputData());
+    }
+
+    @Test
+    public void testCreateAccountWithExistingUsername() throws IOException,
+            ClassNotFoundException {
+        setInputData("CREATE_ACCOUNT", "user", "newpassword", "true");
+        mockUserDatabase.addUser(mockUser);
+
+        clientHandler.run();
+
+        assertEquals("Error: Username already exists.", getOutputData());
+    }
+
+    @Test
+    public void testAddFriendWhenNotLoggedIn() throws IOException, ClassNotFoundException {
+        setInputData("ADD_FRIEND", "friend");
+
+        clientHandler.run();
+
+        assertEquals("You must log in first.", getOutputData());
+    }
+
+    @Test
+    public void testRemoveFriendWhenNotLoggedIn() throws IOException, ClassNotFoundException {
+        setInputData("REMOVE_FRIEND", "friend");
+
+        clientHandler.run();
+
+        assertEquals("You must log in first.", getOutputData());
+    }
+
+    @Test
+    public void testSendMessageWhenNotLoggedIn() throws IOException, ClassNotFoundException {
+        setInputData("SEND_MESSAGE", "recipient", "Hello!");
+
+        clientHandler.run();
+
+        assertEquals("You must log in first.", getOutputData());
+    }
+
+    @Test
+    public void testLogoutWhenNotLoggedIn() throws IOException {
+        setInputData("LOGOUT");
+
+        clientHandler.run();
+
+        assertEquals("You have logged out.", getOutputData());
+    }
+
+    private void setInputData(String... inputs) {
+        StringBuilder inputData = new StringBuilder();
+
+        for (String input : inputs) {
+            inputData.append(input).append("\n");
+        }
+
+        inputStream = new ByteArrayInputStream(inputData.toString().getBytes());
+        mockIn = new ObjectInputStream(inputStream);
+    }
+
+    private String getOutputData() throws IOException {
+        mockOut.flush();
+
+        return outputStream.toString().trim();
+    }
+} // End of class
