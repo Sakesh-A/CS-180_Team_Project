@@ -82,7 +82,7 @@ public class Client implements ClientInterface {
 
     public static void main(String[] args) {
         String host = "localhost"; // Replace with server address if needed
-        int port = 12345; // Replace with the server's port
+        int port = 4242; // Replace with the server's port
 
         new Client(host, port);
     }
