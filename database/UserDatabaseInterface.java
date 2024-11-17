@@ -52,6 +52,7 @@ public interface UserDatabaseInterface {
      * @throws IOException if an I/O error occurs during the file operation
      */
     boolean everythingToFile() throws IOException;
+    public User getUserByUsername(String username);
 
     /**
      * Closes any open writers associated with the database, releasing resources.

@@ -3,7 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-class ClientHandler extends Thread {
+class ClientHandler extends Thread implements ClientHandlerInterface{
     private Socket clientSocket;
     private final UserDatabase userDatabase;
     private ObjectOutputStream out;
@@ -50,7 +50,7 @@ class ClientHandler extends Thread {
         }
     }
 
-    private void authenticateUser() throws IOException, ClassNotFoundException {
+    public void authenticateUser() throws IOException, ClassNotFoundException {
         while (currentUser == null) {
             out.writeObject("Please LOGIN or CREATE_ACCOUNT to continue.");
             String action = (String) in.readObject();
@@ -69,7 +69,7 @@ class ClientHandler extends Thread {
         }
     }
 
-    private void handleAction(String action) throws IOException, ClassNotFoundException {
+    public void handleAction(String action) throws IOException, ClassNotFoundException {
         switch (action.toUpperCase()) {
             case "ADD_FRIEND":
                 addFriend();
@@ -105,7 +105,7 @@ class ClientHandler extends Thread {
         }
     }
 
-    private void login() throws IOException, ClassNotFoundException {
+    public void login() throws IOException, ClassNotFoundException {
         out.writeObject("Enter username: ");
         String username = (String) in.readObject();
         out.writeObject("Enter password: ");
@@ -128,7 +128,7 @@ class ClientHandler extends Thread {
         out.writeObject("Error: Invalid username or password.");
     }
 
-    private void createAccount() throws IOException, ClassNotFoundException {
+    public void createAccount() throws IOException, ClassNotFoundException {
         out.writeObject("Enter new username: ");
         String username = (String) in.readObject();
         out.writeObject("Enter new password: ");
@@ -155,7 +155,7 @@ class ClientHandler extends Thread {
         }
     }
 
-    private void addFriend() throws IOException, ClassNotFoundException {
+    public void addFriend() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
             out.writeObject("You must log in first.");
             return;
@@ -180,7 +180,7 @@ class ClientHandler extends Thread {
         out.writeObject("User not found.");
     }
 
-    private void removeFriend() throws IOException, ClassNotFoundException {
+    public void removeFriend() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
             out.writeObject("You must log in first.");
             return;
@@ -205,7 +205,7 @@ class ClientHandler extends Thread {
         out.writeObject("User not found.");
     }
 
-    private void blockUser() throws IOException, ClassNotFoundException {
+    public void blockUser() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
             out.writeObject("You must log in first.");
             return;
@@ -230,7 +230,7 @@ class ClientHandler extends Thread {
         out.writeObject("User not found.");
     }
 
-    private void sendMessage() throws IOException, ClassNotFoundException {
+    public void sendMessage() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
             out.writeObject("You must log in first.");
             return;
@@ -257,7 +257,7 @@ class ClientHandler extends Thread {
         out.writeObject("User not found.");
     }
 
-    private void deleteMessage() throws IOException, ClassNotFoundException {
+    public void deleteMessage() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
             out.writeObject("You must log in first.");
             return;
@@ -285,7 +285,7 @@ class ClientHandler extends Thread {
         out.writeObject("Message not found.");
     }
 
-    private void searchUser() throws IOException, ClassNotFoundException {
+    public void searchUser() throws IOException, ClassNotFoundException {
         out.writeObject("Enter the username to search for: ");
         String username = (String) in.readObject();
 
@@ -300,7 +300,7 @@ class ClientHandler extends Thread {
         out.writeObject("User not found.");
     }
 
-    private void viewUser() throws IOException {
+    public void viewUser() throws IOException {
         if (currentUser == null) {
             out.writeObject("You must log in first.");
             return;
@@ -309,7 +309,7 @@ class ClientHandler extends Thread {
         out.writeObject("Viewing your information: " + currentUser);
     }
 
-    private void logout() throws IOException {
+    public void logout() throws IOException {
         if (currentUser != null) {
             Server.removeLoggedInUser(currentUser);
             userDatabase.everythingToFile(); // Save to file after logging out

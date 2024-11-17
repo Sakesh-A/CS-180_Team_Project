@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server {
+public class Server implements ServerInterface{
     private static final int PORT = 12345;
     private static UserDatabase userDatabase = new UserDatabase();
     private static final List<User> loggedInUsers = new ArrayList<>();

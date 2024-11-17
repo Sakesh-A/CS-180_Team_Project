@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements ClientInterface {
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -20,7 +20,7 @@ public class Client {
         }
     }
 // comment
-    private void handleCommunication() {
+    public void handleCommunication() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 String serverMessage = (String) in.readObject();

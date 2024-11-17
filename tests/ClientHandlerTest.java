@@ -30,7 +30,7 @@ public class ClientHandlerTest {
         
         clientHandler = new ClientHandler(mockSocket, mockUserDatabase) {
             @Override
-            protected void authenticateUser() throws IOException, ClassNotFoundException {
+            public void authenticateUser() throws IOException, ClassNotFoundException {
                 // Mock the user authentication flow
                 when(mockIn.readObject()).thenReturn("LOGIN");
                 when(mockIn.readObject()).thenReturn("user");
