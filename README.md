@@ -23,6 +23,8 @@
            - Run it on IntelliJ to see the observed result.
              
     b. Manual Testing/Compiling Instructions:
+         1. Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
+         2. 
        
 3. Sakesh Andhavarapu Submitted Vocareum Workspace
 4. a. Classes 
