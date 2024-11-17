@@ -25,11 +25,22 @@
              
    b. Manual Testing/Compiling
       - We used JUNIT to write all of our test cases.+ Manual Testing/Compiling Instructions: Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
-
-         
+      - Open a terminal or command prompt.
+      - Navigate to the directory containing the .java files using the cd command.
+      - Start the server in the terminal. The server will begin on the default port and wait for client connections.
+      - Open a new terminal or command prompt.
+      - Navigate to the same directory where the compiled classes are located.
+      - Start the client. The client will attempt to connect to the server at localhost.
+      - Then, the client will receive options to either "CREATE_ACCOUNT" or "LOGIN". The client has to type the chose option next to "Your input:"
+      - The related message will be printed on the terminal if there are any errors with creating the account or logging in. Then you will be given the opportunity to act again by typing "CREATE_ACCOUNT" or "LOGIN".
+      - If the client choose to create an account, you have to perform the "LOGIN" before you get access to the rest of the actions available.
+      - After Logging in, all actions will be printed to the terminal one time: "ADD_FRIEND" "REMOVE_FRIEND" "BLOCK_USER" "SEND_MESSAGE" "DELETE_MESSAGE"  "SEARCH_USER"  "VIEW_USER"  "LOGOUT".
+      - To perform any of these functions, the client has to type them next to "Your input:", and the user will be prompted for more information.
+      - "ADD_FRIEND" adds a friend, "REMOVE_FRIEND" removes a friend, "BLOCK_USER" blocks a user, "SEND_MESSAGE" sends a message to a specific user, "DELETE_MESSAGE" deletes a message that was sent to a certain user, "SEARCH_USER" prints out the username if the username the client enters exists, "VIEW_USER" shows the clients personal information, and "LOGOUT" disconnects from the server.
+      - Notes: Ensure the server is started before running the client. Use multiple terminals or command prompt windows to simulate multiple clients connecting to the server.
        
-3. Sakesh Andhavarapu Submitted Vocareum Workspace
-4. Classes/Interfaces/Exceptions
+2. Sakesh Andhavarapu Submitted Vocareum Workspace
+3. Classes/Interfaces/Exceptions
     a. Classes 
      - User:
        The User class models an individual user within the database, holding key information like username, password, and privacy status. It maintains lists of friends, blocked users, and received messages, allowing each user to connect with others, manage interactions, and handle communication. Core methods in this class include adding/removing friends, blocking users, and sending or deleting messages, which enable interaction. The equals method ensures that each user is uniquely identified by their username. This class interacts with TextMessage for messaging and is managed collectively by UserDatabase, which organizes users.
