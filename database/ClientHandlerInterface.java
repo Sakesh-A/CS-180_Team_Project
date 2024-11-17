@@ -1,5 +1,15 @@
 import java.io.IOException;
 
+/**
+ * Team Project -- ClientHandlerInterface
+ *
+ * Creates an interface for ClientHandler
+ *
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 17, 2024
+ */
+
 public interface ClientHandlerInterface {
     public void authenticateUser() throws IOException, ClassNotFoundException;
     public void handleAction(String action) throws IOException, ClassNotFoundException;
