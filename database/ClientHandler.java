@@ -24,6 +24,7 @@ class ClientHandler extends Thread {
             authenticateUser(); // Ensures login or account creation before proceeding.
 
             while (true) {
+                //sendOptions();
                 String action = (String) in.readObject(); // Read client action
                 System.out.println("Action requested: " + action);
 
@@ -329,4 +330,8 @@ class ClientHandler extends Thread {
 //                "8. LOGOUT\n" +
 //                "Enter your choice:");
 //    }
+/*    private void sendOptions() throws IOException {
+        out.writeObject("Available actions: 1. ADD_FRIEND, 2. REMOVE_FRIEND, 3. BLOCK_USER, 4. SEND_MESSAGE, 5. DELETE_MESSAGE, 6. SEARCH_USER, 7. VIEW_USER, 8.LOGOUT");
+    }*/
+
 }

@@ -26,10 +26,21 @@ public class Client {
                 String serverMessage = (String) in.readObject();
 
                 System.out.println("Server: " + serverMessage);
-
                 if (serverMessage.substring(0,5).equals("Error") || serverMessage.equals("Account created successfully.")) {
                     serverMessage = (String) in.readObject();
                     System.out.println("Server: " + serverMessage);
+                }
+
+                if (serverMessage.equals("Login successful.")) {
+                    System.out.println("Available actions: \n" +
+                    "ADD_FRIEND\n" +
+                    "REMOVE_FRIEND\n" +
+                    "BLOCK_USER\n" +
+                    "SEND_MESSAGE\n" +
+                    "DELETE_MESSAGE\n" +
+                    "SEARCH_USER\n" +
+                    "VIEW_USER\n" +
+                    "LOGOUT\n");
                 }
 
                 // Exit condition: Close connection if server requests it
