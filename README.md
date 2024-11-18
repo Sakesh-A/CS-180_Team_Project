@@ -40,7 +40,7 @@
       - "ADD_FRIEND" adds a friend, "REMOVE_FRIEND" removes a friend, "BLOCK_USER" blocks a user, "SEND_MESSAGE" sends a message to a specific user, "DELETE_MESSAGE" deletes a message that was sent to a certain user, "SEARCH_USER" prints out the username if the username the client enters exists, "VIEW_USER" shows the clients personal information, and "LOGOUT" disconnects from the server.
       - Notes: 1. Ensure the server is started before running the client. 2. Use multiple terminals or command prompt windows to simulate multiple clients connecting to the server. 3. All information related to a user (username, password, friends, blocked users) gets stored in UserList.txt. 4. Messages that are sent and received in a separate file for each user. The files are named "username".txt.
        
-2. Sakesh Andhavarapu Submitted Vocareum Workspace
+2. Zachary O'Connell Submitted Vocareum Workspace
 3. Classes/Interfaces/Exceptions
     a. Classes 
      - User:
