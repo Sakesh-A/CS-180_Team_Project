@@ -202,21 +202,21 @@ public class UserDatabaseTest {
     }
     @Test
     public void testGetUserByUsername() {
-        // Add users to the database
+
         userDatabase.addUser(user1);
         userDatabase.addUser(user2);
 
-        // Test case for valid username
+
         User result = userDatabase.getUserByUsername("Alice");
         assertNotNull("User should be found by username 'Alice'", result);
         assertEquals("Username should match", "Alice", result.getUsername());
 
-        // Test case for invalid username
+
         result = userDatabase.getUserByUsername("Charlie");
         assertNull("User should not be found by username 'Charlie'", result);
 
-        // Test case for empty database
-        userDatabase.removeUser(user1);  // Remove all users to simulate empty database
+
+        userDatabase.removeUser(user1);
         userDatabase.removeUser(user2);
         result = userDatabase.getUserByUsername("Alice");
         assertNull("User should not be found in empty database", result);
