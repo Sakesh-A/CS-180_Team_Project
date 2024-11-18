@@ -14,10 +14,10 @@ import java.io.*;
 public class TextMessage implements MessageInterface {
    
    // Stores sender, receiver usernames, and message content in a String array of length 3
-   private String[] messageArray = new String[3];
+    private String[] messageArray = new String[3];
 
-   private User sender;
-   private User receiver;
+    private User sender;
+    private User receiver;
 
    /**
     * Constructor for TextMessage. Initializes the message array with sender username, receiver username, 
@@ -27,51 +27,51 @@ public class TextMessage implements MessageInterface {
     * @param sender the User object representing the message sender
     * @param receiver the User object representing the message receiver
     */
-   public TextMessage(String message, User sender, User receiver) {
-       messageArray[0] = sender.getUsername();
-       messageArray[1] = receiver.getUsername();
-       messageArray[2] = message;
-       this.sender = sender;
-       this.receiver = receiver;
-   }
+    public TextMessage(String message, User sender, User receiver) {
+        messageArray[0] = sender.getUsername();
+        messageArray[1] = receiver.getUsername();
+        messageArray[2] = message;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
 
    /**
     * Returns the username of the sender.
     *
     * @return sender's username as a String
     */
-   public String getSenderUsername() {
-       return messageArray[0];
-   }
+    public String getSenderUsername() {
+        return messageArray[0];
+    }
 
    /**
     * Returns the username of the receiver.
     *
     * @return receiver's username as a String
     */
-   public String getReceiverUsername() {
-       return messageArray[1];
-   }
+    public String getReceiverUsername() {
+        return messageArray[1];
+    }
 
    /**
     * Returns the content of the message.
     *
     * @return message content as a String
     */
-   public String getMessageContent() {
-       return messageArray[2];
-   }
+    public String getMessageContent() {
+        return messageArray[2];
+    }
 
    /**
     * Returns a copy of the messageArray to prevent direct modification of the original array.
     *
     * @return a cloned String array containing sender username, receiver username, and message content
     */
-   public String[] getMessageArray() {
-       return messageArray.clone();
-   }
+    public String[] getMessageArray() {
+        return messageArray.clone();
+    }
 
-   public User getSender() {
+    public User getSender() {
         return sender;
     }
 
@@ -87,8 +87,8 @@ public class TextMessage implements MessageInterface {
     * @param o the object to compare
     * @return true if o is a TextMessage with identical sender, receiver, and message; false otherwise
     */
-   @Override
-   public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (!(o instanceof TextMessage m)) {
             return false;
         }
@@ -96,15 +96,15 @@ public class TextMessage implements MessageInterface {
         return (this.messageArray[0].equals(m.messageArray[0]) &&
                 this.messageArray[1].equals(m.messageArray[1]) &&
                 this.messageArray[2].equals(m.messageArray[2]));
-   }
+    }
 
    /**
     * Returns a String representation of the TextMessage.
     *
     * @return a formatted string containing sender, receiver, and message content
     */
-   @Override
-   public String toString() {
-       return messageArray[0] + "," + messageArray[1] + "," + messageArray[2] + ";";
-   }
+    @Override
+    public String toString() {
+        return messageArray[0] + "," + messageArray[1] + "," + messageArray[2] + ";";
+    }
 }
