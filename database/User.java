@@ -81,7 +81,8 @@ public class User implements UserInterface {
             }
         }
         if (!hasUpperCase || !hasDigit || !hasSpecialCharacter) {
-            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, and one special character");
+            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, 
+                                   and one special character");
         }
 
         this.password = password;
@@ -145,7 +146,7 @@ public class User implements UserInterface {
      * @return true if the user was added successfully; false otherwise
      */
     public boolean addFriend(User u) {
-        synchronized(obj) {
+        synchronized (obj) {
             for (User user : friends) {
                 if (user.equals(u)) {
                     return false;
@@ -165,17 +166,17 @@ public class User implements UserInterface {
     public boolean removeFriend(User u) {
         synchronized(obj) {
             boolean exists = false;
-        for (User a : this.friends) {
-            if (a.equals(u)) {
-                exists = true;
-                break;
+            for (User a : this.friends) {
+                if (a.equals(u)) {
+                    exists = true;
+                    break;
+                }
             }
-        }
-        if (exists) {
-            friends.remove(u);
-            return true;
-        }
-        return false;
+            if (exists) {
+                friends.remove(u);
+                return true;
+            }
+            return false;
         }
     }
 
@@ -186,7 +187,7 @@ public class User implements UserInterface {
      * @return true if the user was blocked successfully; false otherwise
      */
     public boolean blockUser(User u) {
-        synchronized(obj) {
+        synchronized (obj) {
             for (User user : blockedUsers) {
                 if (user.equals(u)) {
                     return false;
@@ -205,7 +206,7 @@ public class User implements UserInterface {
      * @return true if the message was sent successfully; false otherwise
      */
     public boolean sendMessage(User person, String message) {
-        synchronized(obj) {
+        synchronized (obj) {
             if (person.hasBlocked(this) || (!person.isPublic && !person.hasFriended(this))) {
                 return false;
             }
@@ -224,7 +225,7 @@ public class User implements UserInterface {
      * @return true if the message was deleted from both users; false otherwise
      */
     public boolean deleteMessage(TextMessage message) {
-        synchronized(obj) {
+        synchronized (obj) {
             boolean exists1 = false;
             for (int i = 0; i < this.messages.size(); i++) {
                 if (this.messages.get(i).equals(message)) {
@@ -252,14 +253,14 @@ public class User implements UserInterface {
      * @param message the content of the message
      * @return true if the message was sent successfully; false otherwise
      */
-    public boolean sendPhotoMessage(String message, User sender, User receiver, String photoURL) throws IOException{
-        synchronized(obj) {
-            if (receiver.hasBlocked(sender) || (!receiver.isPublic && !receiver.hasFriended(this))) {
+    public boolean sendPhotoMessage(User person, String message, String photo) {
+        synchronized (obj) {
+            if (person.hasBlocked(this) || (person.isPublic && !person.hasFriended(this))) {
                 return false;
             }
-            PhotoMessage m = new PhotoMessage(message, sender, receiver, photoURL);
+            PhotoMessage m = new PhotoMessage(message, this, person, photo);
             this.photos.add(m);
-            receiver.photos.add(m);
+            person.photos.add(m);
     
             return true;
         }
@@ -268,11 +269,11 @@ public class User implements UserInterface {
     /**
      * Deletes a message from both the sender and receiver's message list.
      *
-     * the PhotoMessage to be deleted
+     * @param message the PhotoMessage to be deleted
      * @return true if the message was deleted from both users; false otherwise
      */
     public void deletePhotoMessage(PhotoMessage photo) {
-        synchronized(obj) {
+        synchronized (obj) {
             for (int i = 0; i < photos.size(); i++) {
                 if (photos.get(i).equals(photo)) {
                     photos.remove(i);
@@ -348,15 +349,10 @@ public class User implements UserInterface {
 
         }
         line += "End of Friends,";
-        for(User u : blockedUsers) {
+        for (User u : blockedUsers) {
             line += u.getUsername() + ",";
         }
         return line;
     }
-
-    public boolean validatePassword(String inputPassword) {
-        return this.password.equals(inputPassword);
-    }
-
 
 }
