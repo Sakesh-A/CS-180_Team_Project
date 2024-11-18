@@ -13,7 +13,7 @@ import java.net.Socket;
  * @version Nov 17, 2024
  */
 
-class ClientHandler extends Thread implements ClientHandlerInterface{
+class ClientHandler extends Thread implements ClientHandlerInterface {
     private Socket clientSocket;
     private final UserDatabase userDatabase;
     private ObjectOutputStream out;
@@ -125,7 +125,7 @@ class ClientHandler extends Thread implements ClientHandlerInterface{
             for (User user : userDatabase.getUsers()) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                     if (Server.addLoggedInUser(user)) {
-                            currentUser = user;
+                        currentUser = user;
                         out.writeObject("Login successful.");
 //                        sendOptions();
                     } else {
@@ -258,7 +258,8 @@ class ClientHandler extends Thread implements ClientHandlerInterface{
                         userDatabase.everythingToFile(); // Save to file after sending a message
                         out.writeObject("Message sent successfully.");
                     } else {
-                        out.writeObject("Failed to send message. Check your permissions or ensure the user has not blocked you.");
+                        out.writeObject("Failed to send message."
+                                       + "Check your permissions or ensure the user has not blocked you.");
                     }
                     return;
                 }
@@ -341,7 +342,8 @@ class ClientHandler extends Thread implements ClientHandlerInterface{
 //                "Enter your choice:");
 //    }
 /*    private void sendOptions() throws IOException {
-        out.writeObject("Available actions: 1. ADD_FRIEND, 2. REMOVE_FRIEND, 3. BLOCK_USER, 4. SEND_MESSAGE, 5. DELETE_MESSAGE, 6. SEARCH_USER, 7. VIEW_USER, 8.LOGOUT");
+        out.writeObject("Available actions: 1. ADD_FRIEND, 2. REMOVE_FRIEND, 3. BLOCK_USER, 
+        4. SEND_MESSAGE, 5. DELETE_MESSAGE, 6. SEARCH_USER, 7. VIEW_USER, 8.LOGOUT");
     }*/
 
 }
