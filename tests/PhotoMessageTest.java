@@ -1,111 +1,82 @@
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.File;
-import java.io.IOException;
-import java.awt.image.BufferedImage;
 
 /**
  * Team Project -- PhotoMessageTest
  *
- * Tests for the PhotoMessage class, verifying the proper functionality of fields and methods.
+ * Unit tests for the PhotoMessage class, verifying the proper functionality of
+ * message content, sender and receiver usernames, and photo path management.
+ *
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * @version Nov 17, 2024
+ * @version Nov 3, 2024
  */
-
 public class PhotoMessageTest {
 
     private User sender;
     private User receiver;
-    private String messageContent;
-    private String photoURL;
     private PhotoMessage photoMessage;
 
     @Before
-    public void setUp() throws IOException {
-
-        sender = new User("senderUser", "password", true);
-        receiver = new User("receiverUser", "password", false);
-        messageContent = "Hello, this is a photo message!";
-        photoURL = "src/test/resources/test-photo.jpg";
-
-
-        photoMessage = new PhotoMessage(messageContent, sender, receiver, photoURL);
+    public void setUp() throws BadException {
+        sender = new User("Alice", "Password1!", true);
+        receiver = new User("Bob", "Password2@", true);
+        photoMessage = new PhotoMessage("Check out this photo!", sender, receiver, "path/to/photo.jpg");
     }
 
     @Test
-    public void testConstructor() {
-
-        assertNotNull("PhotoMessage should be instantiated", photoMessage);
+    public void testGetPhoto() {
+        assertEquals("Photo path should be 'path/to/photo.jpg'", "path/to/photo.jpg", photoMessage.getPhoto());
     }
 
     @Test
-    public void testGetPhoto() throws IOException {
-
-        BufferedImage photo = photoMessage.getPhoto();
-        assertNotNull("Photo should not be null", photo);
-        assertTrue("Photo should be an instance of BufferedImage", photo instanceof BufferedImage);
-    }
-
-    @Test
-    public void testGetPhotoURL() {
-
-        assertEquals("Photo URL should match the provided URL", photoURL, photoMessage.getPhotoURL());
+    public void testSetPhoto() {
+        photoMessage.setPhoto("new/path/to/photo.jpg");
+        assertEquals("Photo path should be updated to 'new/path/to/photo.jpg'",
+                     "new/path/to/photo.jpg", photoMessage.getPhoto());
     }
 
     @Test
     public void testGetSenderUsername() {
-
-        assertEquals("Sender's username should be correct", sender.getUsername(), photoMessage.getSenderUsername());
+        assertEquals("Sender username should be 'Alice'", "Alice", photoMessage.getSenderUsername());
     }
 
     @Test
     public void testGetReceiverUsername() {
-
-        assertEquals("Receiver's username should be correct", receiver.getUsername(), photoMessage.getReceiverUsername());
+        assertEquals("Receiver username should be 'Bob'", "Bob", photoMessage.getReceiverUsername());
     }
 
     @Test
     public void testGetMessageContent() {
-
-        assertEquals("Message content should match", messageContent, photoMessage.getMessageContent());
+        assertEquals("Message content should be 'Check out this photo!'", 
+                     "Check out this photo!", photoMessage.getMessageContent());
     }
 
     @Test
     public void testGetMessageArray() {
+        String[] expectedArray = {"Alice", "Bob", "Check out this photo!"};
+        assertArrayEquals("Message array should contain sender, receiver, and message content", 
+                          expectedArray, photoMessage.getMessageArray());
+    }
 
-        String[] messageArray = photoMessage.getMessageArray();
-        assertNotNull("Message array should not be null", messageArray);
-        assertEquals("Message array should contain correct sender username", sender.getUsername(), messageArray[0]);
-        assertEquals("Message array should contain correct receiver username", receiver.getUsername(), messageArray[1]);
-        assertEquals("Message array should contain correct message content", messageContent, messageArray[2]);
-        assertEquals("Message array should contain correct photo URL", photoURL, messageArray[3]);
+    @Test
+    public void testEquals() {
+        PhotoMessage anotherPhotoMessage = new PhotoMessage("Check out this photo!", 
+                                                            sender, receiver, "path/to/photo.jpg");
+        assertTrue("Photo messages should be equal", photoMessage.equals(anotherPhotoMessage));
 
+        PhotoMessage differentPhotoMessage = new PhotoMessage("Different message", 
+            sender, receiver, "path/to/photo.jpg");
+        assertFalse("Photo messages should not be equal", photoMessage.equals(differentPhotoMessage));
 
-        messageArray[0] = "NewUsername";
-        assertNotEquals("Sender username in original message array should not change", "NewUsername", photoMessage.getMessageArray()[0]);
+        assertFalse("Photo message should not equal null", photoMessage.equals(null));
+        assertFalse("Photo message should not equal different object", photoMessage.equals("Not a PhotoMessage"));
     }
 
     @Test
     public void testToString() {
-
-        String expectedString = sender.getUsername() + "," + receiver.getUsername() + "," + messageContent + "," + photoURL + ";";
-        assertEquals("toString should return correct string format", expectedString, photoMessage.toString());
-    }
-
-    @Test(expected = IOException.class)
-    public void testConstructorWithInvalidPhotoURL() throws IOException {
-
-        String invalidPhotoURL = "invalid/photo/path.jpg";
-        new PhotoMessage(messageContent, sender, receiver, invalidPhotoURL);
-    }
-
-    @Test
-    public void testCloneMessageArray() {
-
-        String[] originalMessageArray = photoMessage.getMessageArray();
-        originalMessageArray[0] = "NewSender";
-        assertNotEquals("Original message array should not be affected by modification", "NewSender", photoMessage.getMessageArray()[0]);
+        String expectedString = "Alice,Bob,Check out this photo!;";
+        assertEquals("toString should return formatted string", expectedString, photoMessage.toString());
     }
 }
