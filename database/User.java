@@ -81,8 +81,8 @@ public class User implements UserInterface {
             }
         }
         if (!hasUpperCase || !hasDigit || !hasSpecialCharacter) {
-            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit, 
-                                   and one special character");
+            throw new BadException("You need at least eight characters, at least one uppercase letter, one digit," +
+                                   " and one special character");
         }
 
         this.password = password;
