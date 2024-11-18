@@ -95,6 +95,20 @@ public class ClientHandlerTest {
     }
 
     @Test
+    public void testBlockUser() throws IOException, ClassNotFoundException {
+        setInputData("LOGIN", "user", "password", "BLOCK_USER", "blockedUser");
+
+        User mockBlockedUser = new User("blockedUser", "blockedpassword", true);
+        mockUserDatabase.addUser(mockUser);
+        mockUserDatabase.addUser(mockBlockedUser);
+        mockUser.blockUser(mockBlockedUser);
+
+        clientHandler.run();
+
+        assertEquals("User blocked successfully.", getOutputData());
+    }
+
+    @Test
     public void testSendMessage() throws IOException, ClassNotFoundException {
         setInputData("LOGIN", "user", "password", "SEND_MESSAGE", "recipient", "Hello!");
 
@@ -106,6 +120,41 @@ public class ClientHandlerTest {
         clientHandler.run();
 
         assertEquals("Message sent successfully.", getOutputData());
+    }
+
+    @Test
+    public void testDeleteMessage() throws IOException, ClassNotFoundException {
+        setInputData("LOGIN", "user", "password", "DELETE_MESSAGE", "recipient", "Hello!");
+
+        User mockRecipient = new User("recipient", "recipientpassword", true);
+        mockUserDatabase.addUser(mockUser);
+        mockUserDatabase.addUser(mockRecipient);
+        mockUser.sendMessage(mockRecipient, "Hello!");
+        mockUser.deleteMessage(mockUser.getMessages().get(0));
+
+        clientHandler.run();
+
+        assertEquals("Message deleted successfully.", getOutputData());
+    }
+
+    @Test
+    public void testSearchUser() throws IOException, ClassNotFoundException {
+        setInputData("SEARCH_USER", "user");
+
+        mockUserDatabase.addUser(mockUser);
+
+        clientHandler.run();
+
+        assertEquals("User found: user", getOutputData());
+    }
+
+    @Test
+    public void testViewUser() throws IOException {
+        setInputData("LOGIN", "user", "password", "VIEW_USER");
+
+        clientHandler.run();
+
+        assertEquals("Viewing your information: " + mockUser, getOutputData());
     }
 
     @Test
