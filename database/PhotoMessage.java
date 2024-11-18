@@ -1,11 +1,5 @@
 import java.util.*;
 import java.io.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
-
 
 /**
  * Team Project -- PhotoMessage
@@ -20,11 +14,7 @@ import java.io.IOException;
 public class PhotoMessage extends TextMessage {
 
     // Stores the file path or URL to the photo attached to the message
-    private BufferedImage photo;
-    private String photoURL;
-    private User sender;
-    private User receiver;
-    private String[] messageArray = new String[4];
+    private String photo;
 
     /**
      * Constructs a PhotoMessage object with message content, sender, receiver, and a photo.
@@ -34,14 +24,9 @@ public class PhotoMessage extends TextMessage {
      * @param receiver the User object representing the receiver
      * @param photo the file path or URL to the photo attachment as a String
      */
-    public PhotoMessage(String message, User sender, User receiver, String photoURL) throws IOException {
+    public PhotoMessage(String message, User sender, User receiver, String photo) {
         super(message, sender, receiver);
-        this.photo = ImageIO.read(new File(photoURL));
-        messageArray[0] = sender.getUsername();
-        messageArray[1] = receiver.getUsername();
-        messageArray[2] = message;
-        messageArray[3] = photoURL;
-        
+        this.photo = photo;
     }
 
     /**
@@ -49,51 +34,16 @@ public class PhotoMessage extends TextMessage {
      *
      * @return the file path or URL of the photo as a String
      */
-    public BufferedImage getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public String getPhotoURL() {
-        return messageArray[3];
-    }
-
     /**
-    * Returns the username of the sender.
-    *
-    * @return sender's username as a String
-    */
-   public String getSenderUsername() {
-       return messageArray[0];
-   }
-
-   /**
-    * Returns the username of the receiver.
-    *
-    * @return receiver's username as a String
-    */
-   public String getReceiverUsername() {
-       return messageArray[1];
-   }
-
-   /**
-    * Returns the content of the message.
-    *
-    * @return message content as a String
-    */
-   public String getMessageContent() {
-       return messageArray[2];
-   }
-
-   /**
-    * Returns a copy of the messageArray to prevent direct modification of the original array.
-    *
-    * @return a cloned String array containing sender username, receiver username, and message content
-    */
-    public String[] getMessageArray() {
-        return messageArray.clone();
-    }
-
-    public String toString() {
-        return messageArray[0] + "," + messageArray[1] + "," + messageArray[2] + "," + messageArray[3] + ";";
+     * Sets a new photo attachment for this message.
+     *
+     * @param photo the file path or URL of the new photo as a String
+     */
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
