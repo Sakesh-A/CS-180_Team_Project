@@ -55,13 +55,13 @@
      - PhotoMessage:
         It is very similar to TextMessage, but it is still in progress.
        
-     - Server
+     - Server:
        The Server class is responsible for facilitating client connections and user authentication. It maintains a thread-safe list of currently logged-in users and delegates client-specific operations to the ClientHandler class. The server continuously looks for incoming client connections on a specified port and starts a new thread to handle each client session.
        
-     - ClientHandler
+     - ClientHandler:
        The ClientHandler class is a thread responsible for managing interactions with an individual client connected to the server. It handles tasks such as authenticating users, managing friend requests, blocking users, sending and deleting messages, and providing various account-related operations. Each client interaction is processed independently in a thread-safe manner, ensuring concurrent handling of multiple clients. The class maintains a connection with the client through input and output streams, which enables real-time communication and updates. Upon client logout or disconnection, the handler ensures proper cleanup by updating the server's logged-in users list and saving relevant data.
        
-     - Client
+     - Client:
        The Client class establishes a connection to the server, enabling communication through object streams for sending and receiving messages. It manages user interactions through the console for now, allowing users to perform actions like login, account creation, and various commands sent to the server. The client handles the server by providing real-time feedback to users and ensuring graceful disconnection when the session ends.
 
    b. Interfaces
