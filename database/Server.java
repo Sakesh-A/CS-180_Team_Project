@@ -13,11 +13,11 @@ import java.util.List;
  * @version Nov 17, 2024
  */
 
-public class Server implements ServerInterface{
+public class Server implements ServerInterface {
     private static final int PORT = 4242;
     private static UserDatabase userDatabase = new UserDatabase();
-    private static final List<User> loggedInUsers = new ArrayList<>();
-    private static final Object loginLock = new Object();
+    private static final List<User> LOGGED_IN_USERS = new ArrayList<>();
+    private static final Object LOGIN_LOCK = new Object();
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -36,17 +36,13 @@ public class Server implements ServerInterface{
      * Adds a user to the list of logged-in users, ensuring thread safety.
      */
     public static boolean addLoggedInUser(User user) {
-        if(user == null){
-            return false;
-        }
-
-        synchronized (loginLock) {
-            for (User loggedInUser : loggedInUsers) {
+        synchronized (LOGIN_LOCK) {
+            for (User loggedInUser : LOGGED_IN_USERS) {
                 if (loggedInUser.getUsername().equals(user.getUsername())) {
                     return false; // User is already logged in
                 }
             }
-            loggedInUsers.add(user);
+            LOGGED_IN_USERS.add(user);
             return true;
         }
     }
@@ -55,8 +51,8 @@ public class Server implements ServerInterface{
      * Removes a user from the list of logged-in users, ensuring thread safety.
      */
     public static void removeLoggedInUser(User user) {
-        synchronized (loginLock) {
-            loggedInUsers.remove(user);
+        synchronized (LOGIN_LOCK) {
+            LOGGED_IN_USERS.remove(user);
         }
     }
 }
