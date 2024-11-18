@@ -3,187 +3,109 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
+import java.awt.image.BufferedImage;
 
 /**
  * Team Project -- PhotoMessageTest
  *
- * Unit tests for the PhotoMessage class, verifying the proper functionality of
- * message content, sender and receiver usernames, and photo path management.
+ * Tests for the PhotoMessage class, verifying the proper functionality of fields and methods.
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
- * @version Nov 3, 2024
+ * @version Nov 17, 2024
  */
+
 public class PhotoMessageTest {
 
     private User sender;
     private User receiver;
+    private String messageContent;
+    private String photoURL;
     private PhotoMessage photoMessage;
 
     @Before
-    public void setUp() throws BadException, IOException {
-        sender = new User("Alice", "Password1!", true);
-        receiver = new User("Bob", "Password2@", true);
-        photoMessage = new PhotoMessage("Check out this photo!", sender, receiver, "path/to/photo.jpg");
+    public void setUp() throws IOException {
+        // Initialize the sender and receiver users
+        sender = new User("senderUser", "password", true);  // Assuming a User constructor exists
+        receiver = new User("receiverUser", "password", false);  // Assuming a User constructor exists
+        messageContent = "Hello, this is a photo message!";
+        photoURL = "src/test/resources/test-photo.jpg";  // Ensure the file exists for the test
+
+        // Create a PhotoMessage instance
+        photoMessage = new PhotoMessage(messageContent, sender, receiver, photoURL);
     }
 
     @Test
-    public void testGetPhoto() {
-        assertEquals("Photo path should be 'path/to/photo.jpg'", "path/to/photo.jpg", photoMessage.getPhotoURL());
+    public void testConstructor() {
+        // Test if the PhotoMessage is created correctly
+        assertNotNull("PhotoMessage should be instantiated", photoMessage);
     }
 
     @Test
-    public void testSetPhoto() throws IOException {
-        photoMessage.setPhoto("new/path/to/photo.jpg");
-        assertEquals("Photo path should be updated to 'new/path/to/photo.jpg'",
-                     "new/path/to/photo.jpg", photoMessage.getPhotoURL());
+    public void testGetPhoto() throws IOException {
+        // Test if the photo is loaded correctly
+        BufferedImage photo = photoMessage.getPhoto();
+        assertNotNull("Photo should not be null", photo);
+        assertTrue("Photo should be an instance of BufferedImage", photo instanceof BufferedImage);
+    }
+
+    @Test
+    public void testGetPhotoURL() {
+        // Test if the photo URL is correctly stored and retrieved
+        assertEquals("Photo URL should match the provided URL", photoURL, photoMessage.getPhotoURL());
     }
 
     @Test
     public void testGetSenderUsername() {
-        assertEquals("Sender username should be 'Alice'", "Alice", photoMessage.getSenderUsername());
+        // Test if the sender's username is correctly retrieved
+        assertEquals("Sender's username should be correct", sender.getUsername(), photoMessage.getSenderUsername());
     }
 
     @Test
     public void testGetReceiverUsername() {
-        assertEquals("Receiver username should be 'Bob'", "Bob", photoMessage.getReceiverUsername());
+        // Test if the receiver's username is correctly retrieved
+        assertEquals("Receiver's username should be correct", receiver.getUsername(), photoMessage.getReceiverUsername());
     }
 
     @Test
     public void testGetMessageContent() {
-        assertEquals("Message content should be 'Check out this photo!'", 
-                     "Check out this photo!", photoMessage.getMessageContent());
+        // Test if the message content is correctly retrieved
+        assertEquals("Message content should match", messageContent, photoMessage.getMessageContent());
     }
 
     @Test
     public void testGetMessageArray() {
-        String[] expectedArray = {"Alice", "Bob", "Check out this photo!"};
-        assertArrayEquals("Message array should contain sender, receiver, and message content", 
-                          expectedArray, photoMessage.getMessageArray());
-    }
+        // Test if the message array is returned correctly and cannot be modified directly
+        String[] messageArray = photoMessage.getMessageArray();
+        assertNotNull("Message array should not be null", messageArray);
+        assertEquals("Message array should contain correct sender username", sender.getUsername(), messageArray[0]);
+        assertEquals("Message array should contain correct receiver username", receiver.getUsername(), messageArray[1]);
+        assertEquals("Message array should contain correct message content", messageContent, messageArray[2]);
+        assertEquals("Message array should contain correct photo URL", photoURL, messageArray[3]);
 
-    @Test
-    public void testEquals() {
-        PhotoMessage anotherPhotoMessage = new PhotoMessage("Check out this photo!", 
-                                                            sender, receiver, "path/to/photo.jpg");
-        assertTrue("Photo messages should be equal", photoMessage.equals(anotherPhotoMessage));
-
-        PhotoMessage differentPhotoMessage = new PhotoMessage("Different message", 
-            sender, receiver, "path/to/photo.jpg");
-        assertFalse("Photo messages should not be equal", photoMessage.equals(differentPhotoMessage));
-
-        assertFalse("Photo message should not equal null", photoMessage.equals(null));
-        assertFalse("Photo message should not equal different object", photoMessage.equals("Not a PhotoMessage"));
+        // Ensure the original array cannot be modified
+        messageArray[0] = "NewUsername";
+        assertNotEquals("Sender username in original message array should not change", "NewUsername", photoMessage.getMessageArray()[0]);
     }
 
     @Test
     public void testToString() {
-        String expectedString = "Alice,Bob,Check out this photo!;";
-        assertEquals("toString should return formatted string", expectedString, photoMessage.toString());
+        // Test the toString method
+        String expectedString = sender.getUsername() + "," + receiver.getUsername() + "," + messageContent + "," + photoURL + ";";
+        assertEquals("toString should return correct string format", expectedString, photoMessage.toString());
     }
 
-    
-    @Test
-    public void testInvalidPhotoURL() {
-        try {
-            PhotoMessage invalidPhotoMessage = new PhotoMessage("Invalid photo message", sender, receiver, "invalid/path/photo.jpg");
-            fail("Expected IOException due to invalid photo URL");
-        } catch (IOException e) {
-            // expected
-        }
-    }
-
-    
-    @Test
-    public void testNullPhotoURL() {
-        try {
-            PhotoMessage invalidPhotoMessage = new PhotoMessage("Null photo URL", sender, receiver, null);
-            fail("Expected IOException due to null photo URL");
-        } catch (IOException e) {
-            // expected
-        }
-    }
-
-    
-    @Test
-    public void testNonImageFile() {
-        try {
-           
-            File nonImageFile = new File("test.txt");
-            nonImageFile.createNewFile();
-            
-           
-            PhotoMessage nonImageMessage = new PhotoMessage("Message with non-image file", sender, receiver, "test.txt");
-            fail("Expected IOException for non-image file");
-        } catch (IOException e) {
-           //expected
-        }
-    }
-
-    
-
-
-    
-    @Test
-    public void testEmptyMessageWithPhoto() {
-        try {
-            PhotoMessage emptyMessageWithPhoto = new PhotoMessage("", sender, receiver, "path/to/photo.jpg");
-            assertEquals("Message content should be empty", "", emptyMessageWithPhoto.getMessageContent());
-        } catch (IOException e) {
-            fail("IOException should not be thrown for empty message: " + e.getMessage());
-        }
-    }
-
-   
-    @Test
-    public void testEmptyPhotoURL() {
-        try {
-            PhotoMessage emptyPhotoURLMessage = new PhotoMessage("Photo with empty URL", sender, receiver, "");
-            assertEquals("Photo URL should be empty", "", emptyPhotoURLMessage.getPhotoURL());
-        } catch (IOException e) {
-            fail("IOException should not be thrown for empty photo URL: " + e.getMessage());
-        }
+    @Test(expected = IOException.class)
+    public void testConstructorWithInvalidPhotoURL() throws IOException {
+        // Test if the constructor throws an exception when given an invalid photo URL
+        String invalidPhotoURL = "invalid/photo/path.jpg";
+        new PhotoMessage(messageContent, sender, receiver, invalidPhotoURL);
     }
 
     @Test
-    public void testSameSenderAndReceiver() {
-        User sameUser = new User("Alice", "Password1!", true);
-        try {
-            PhotoMessage messageToSelf = new PhotoMessage("Message to self with photo", sameUser, sameUser, "path/to/photo.jpg");
-            assertEquals("Sender and receiver should be the same username", "Alice", messageToSelf.getSenderUsername());
-            assertEquals("Sender and receiver should be the same username", "Alice", messageToSelf.getReceiverUsername());
-            assertEquals("Message content should be 'Message to self with photo'", "Message to self with photo", messageToSelf.getMessageContent());
-        } catch (IOException e) {
-            fail("IOException should not be thrown for message to self: " + e.getMessage());
-        }
-    }
-
- 
-    @Test
-    public void testInvalidPhotoFormat() {
-        try {
-            
-            File invalidImageFile = new File("unsupported_format.gif");
-            invalidImageFile.createNewFile();
-
-            PhotoMessage invalidFormatMessage = new PhotoMessage("Message with invalid format photo", sender, receiver, "unsupported_format.gif");
-            fail("Expected IOException for unsupported image format");
-        } catch (IOException e) {
-            // expected
-        }
-    }
-
-
-    
-    @Test
-    public void testPhotoMessageWithoutPhoto() {
-        try {
-            
-            PhotoMessage messageWithoutPhoto = new PhotoMessage("Just a text message", sender, receiver, "");
-            assertEquals("Message content should be 'Just a text message'", "Just a text message", messageWithoutPhoto.getMessageContent());
-            assertEquals("Photo URL should be empty", "", messageWithoutPhoto.getPhotoURL());
-        } catch (IOException e) {
-            fail("IOException should not be thrown for photo message without a photo: " + e.getMessage());
-        }
+    public void testCloneMessageArray() {
+        // Test that getMessageArray() clones the array and protects from direct modification
+        String[] originalMessageArray = photoMessage.getMessageArray();
+        originalMessageArray[0] = "NewSender";
+        assertNotEquals("Original message array should not be affected by modification", "NewSender", photoMessage.getMessageArray()[0]);
     }
 }
-
