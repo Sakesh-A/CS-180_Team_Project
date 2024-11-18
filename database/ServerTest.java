@@ -20,8 +20,7 @@ public class ServerTest {
         try {
 
             mockUser = new User("user1", "Password1!", true); // Username, password, and public profile
-        }
-        catch(BadException e){
+        } catch (BadException e) {
             assertEquals("Mock user can't be created.", e.getMessage());
         }
 
@@ -84,7 +83,7 @@ public class ServerTest {
             try {
                 User user = new User("user1", "password", true);
                 Server.addLoggedInUser(user);
-            }catch(BadException e){
+            } catch (BadException e) {
                 assertEquals("Mock user can't be created.", e.getMessage());
             }
 
@@ -93,7 +92,7 @@ public class ServerTest {
             try {
                 User user = new User("user2", "password", true);
                 Server.addLoggedInUser(user);
-            } catch(BadException e){
+            } catch (BadException e) {
                 assertEquals("Mock user can't be created.", e.getMessage());
             }
         });
