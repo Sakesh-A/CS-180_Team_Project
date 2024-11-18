@@ -37,7 +37,7 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
 
     // addUser method
     public boolean addUser(User user) {
-        synchronized(obj) {
+        synchronized (obj) {
             for (User existingUser : users) {
                 if (existingUser.getUsername().equals(user.getUsername())) {
                     //System.err.println("User with this username already exists.");
@@ -51,7 +51,7 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
             try {
                 //writers.add(new BufferedWriter(new FileWriter(file)));
                 BufferedWriter br = new BufferedWriter(new FileWriter(file));
-            } catch(IOException e) {
+            } catch (IOException e) {
 
                 return false;
             }
@@ -61,7 +61,7 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
 
     // removeUser method
     public boolean removeUser(User user) {
-        synchronized(obj) {
+        synchronized (obj) {
             boolean exists = false;
             for (int i = 0; i < users.size(); i++) {
                 if (users.get(i).equals(user)) {
@@ -78,9 +78,9 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
                 }
             }
 
-            for(int i = 0; i < userFiles.size(); i++) {
+            for (int i = 0; i < userFiles.size(); i++) {
                 String temp = userFiles.get(i).substring(0, userFiles.get(i).lastIndexOf("."));
-                if(user.getUsername().equals(temp)) {
+                if (user.getUsername().equals(temp)) {
                     userFiles.remove(userFiles.get(i));
                     //writers.remove(i);
                 }
@@ -91,7 +91,7 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
 
     // saveUser method
     public boolean everythingToFile() {
-        synchronized(obj) {
+        synchronized (obj) {
             String filename = "UsersList.txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, false))) {
                 for (User user : users) {
@@ -111,7 +111,7 @@ public class UserDatabase extends Thread implements UserDatabaseInterface {
                     for (TextMessage message : messages) {
                         writer.write(message.toString());
                     }
-                } catch(IOException e) {
+                } catch (IOException e) {
                     System.err.println("Error writing users to file: " + e.getMessage());
                     return false;
                 }
