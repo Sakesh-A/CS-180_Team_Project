@@ -2,293 +2,257 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.net.Socket;
 
-public class ClientGUI {
-    private JFrame frame;
+public class ClientGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
-    private JTextArea messageArea;
-
+    private UserDatabase userDatabase;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JRadioButton publicRadio;
-    private JRadioButton privateRadio;
-    private ButtonGroup accountTypeGroup;
+    private JButton loginButton, createAccountButton, submitButton;
+    private JLabel statusLabel;
 
-    private Socket socket;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    // Main actions buttons
+    private JButton addFriendButton, removeFriendButton, sendMessageButton, blockUserButton;
+    private JButton deleteMessageButton, searchUserButton, viewUserButton, logoutButton;
 
-    public ClientGUI() {
-        setupGUI();
-        connectToServer("localhost", 4242);
+    public ClientGUI(UserDatabase userDatabase) {
+        this.userDatabase = userDatabase;
+        initGUI();
     }
 
-    private void setupGUI() {
-        frame = new JFrame("Messaging App");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-
+    private void initGUI() {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        // Initial screen
-        mainPanel.add(createInitialScreen(), "INITIAL");
+        // Panel 1: Initial Screen with Login and Create Account buttons
+        JPanel initialPanel = new JPanel();
+        initialPanel.setLayout(new GridLayout(2, 1));
 
-        // Account creation / login screen
-        mainPanel.add(createAccountLoginScreen(), "ACCOUNT_LOGIN");
+        loginButton = new JButton("Login");
+        createAccountButton = new JButton("Create Account");
 
-        // Main menu screen
-        mainPanel.add(createMainMenuPanel(), "MAIN_MENU");
-
-        frame.add(mainPanel);
-        frame.setVisible(true);
-    }
-
-    private JPanel createInitialScreen() {
-        JPanel panel = new JPanel(new GridLayout(3, 1));
-
-        JButton loginButton = new JButton("Login");
-        JButton createAccountButton = new JButton("Create Account");
-
-        loginButton.addActionListener(e -> showAccountLoginScreen(true));
-        createAccountButton.addActionListener(e -> showAccountLoginScreen(false));
-
-        panel.add(loginButton);
-        panel.add(createAccountButton);
-
-        return panel;
-    }
-
-    private void showAccountLoginScreen(boolean isLogin) {
-        if (isLogin) {
-            // Show the login screen
-            cardLayout.show(mainPanel, "ACCOUNT_LOGIN");
-            ((JLabel) ((JPanel) mainPanel.getComponent(1)).getComponent(0)).setText("Login");
-        } else {
-            // Show the create account screen
-            cardLayout.show(mainPanel, "ACCOUNT_LOGIN");
-            ((JLabel) ((JPanel) mainPanel.getComponent(1)).getComponent(0)).setText("Create Account");
-        }
-    }
-
-    private JPanel createAccountLoginScreen() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        // Title label
-        JLabel titleLabel = new JLabel("Login");
-        panel.add(titleLabel);
-
-        // Username and Password fields
-        usernameField = new JTextField(20);
-        passwordField = new JPasswordField(20);
-
-        panel.add(new JLabel("Username:"));
-        panel.add(usernameField);
-        panel.add(Box.createVerticalStrut(5));
-        panel.add(new JLabel("Password:"));
-        panel.add(passwordField);
-        panel.add(Box.createVerticalStrut(10));
-
-        // Account Type (only for account creation)
-        JPanel accountTypePanel = new JPanel(new FlowLayout());
-        publicRadio = new JRadioButton("Public");
-        privateRadio = new JRadioButton("Private");
-        accountTypeGroup = new ButtonGroup();
-        accountTypeGroup.add(publicRadio);
-        accountTypeGroup.add(privateRadio);
-
-        accountTypePanel.add(publicRadio);
-        accountTypePanel.add(privateRadio);
-        panel.add(accountTypePanel);
-
-        // Submit button
-        JButton submitButton = new JButton("Submit");
-        submitButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-
-            if (titleLabel.getText().equals("Login")) {
-                login(username, password);
-            } else {
-                String accountType = publicRadio.isSelected() ? "public" : "private";
-                createAccount(username, password, accountType);
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(mainPanel, "LOGIN");
             }
         });
-        panel.add(submitButton);
 
-        return panel;
-    }
-
-    private JPanel createMainMenuPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-
-        // Main Menu
-        JPanel buttonPanel = new JPanel(new GridLayout(4, 2));
-        JButton addFriendButton = new JButton("Add Friend");
-        JButton removeFriendButton = new JButton("Remove Friend");
-        JButton blockUserButton = new JButton("Block User");
-        JButton sendMessageButton = new JButton("Send Message");
-        JButton deleteMessageButton = new JButton("Delete Message");
-        JButton searchUserButton = new JButton("Search User");
-        JButton viewUserButton = new JButton("View User");
-        JButton logoutButton = new JButton("Logout");
-
-        addFriendButton.addActionListener(e -> addFriend());
-        removeFriendButton.addActionListener(e -> removeFriend());
-        blockUserButton.addActionListener(e -> blockUser());
-        sendMessageButton.addActionListener(e -> sendMessage());
-        deleteMessageButton.addActionListener(e -> deleteMessage());
-        searchUserButton.addActionListener(e -> searchUser());
-        viewUserButton.addActionListener(e -> viewUser());
-        logoutButton.addActionListener(e -> logout());
-
-        buttonPanel.add(addFriendButton);
-        buttonPanel.add(removeFriendButton);
-        buttonPanel.add(blockUserButton);
-        buttonPanel.add(sendMessageButton);
-        buttonPanel.add(deleteMessageButton);
-        buttonPanel.add(searchUserButton);
-        buttonPanel.add(viewUserButton);
-        buttonPanel.add(logoutButton);
-
-        messageArea = new JTextArea();
-        messageArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(messageArea);
-
-        panel.add(buttonPanel, BorderLayout.CENTER);
-        panel.add(scrollPane, BorderLayout.SOUTH);
-
-        return panel;
-    }
-
-    private void connectToServer(String host, int port) {
-        try {
-            socket = new Socket(host, port);
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
-            new Thread(this::listenToServer).start();
-        } catch (IOException e) {
-            showMessage("Error: Unable to connect to server.");
-        }
-    }
-
-    private void listenToServer() {
-        try {
-            while (true) {
-                String response = (String) in.readObject();
-                showMessage(response);
+        createAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(mainPanel, "CREATE_ACCOUNT");
             }
-        } catch (IOException | ClassNotFoundException e) {
-            showMessage("Connection to server lost.");
-        }
+        });
+
+        initialPanel.add(loginButton);
+        initialPanel.add(createAccountButton);
+
+        // Panel 2: Login Screen
+        JPanel loginPanel = new JPanel();
+        loginPanel.setLayout(new GridLayout(4, 1));
+
+        usernameField = new JTextField();
+        passwordField = new JPasswordField();
+        submitButton = new JButton("Submit");
+        statusLabel = new JLabel(" ");
+
+        loginPanel.add(new JLabel("Username:"));
+        loginPanel.add(usernameField);
+        loginPanel.add(new JLabel("Password:"));
+        loginPanel.add(passwordField);
+        loginPanel.add(submitButton);
+        loginPanel.add(statusLabel);
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                if (username.isEmpty() || password.isEmpty()) {
+                    statusLabel.setText("Username and password cannot be empty.");
+                    return;
+                }
+
+                login(username, password);
+            }
+        });
+
+        // Panel 3: Account Creation Screen
+        JPanel createAccountPanel = new JPanel();
+        createAccountPanel.setLayout(new GridLayout(5, 1));
+
+        JTextField createUsernameField = new JTextField();
+        JPasswordField createPasswordField = new JPasswordField();
+        JCheckBox publicProfileCheckbox = new JCheckBox("Public Profile?");
+        JButton createAccountSubmitButton = new JButton("Create Account");
+        JLabel createAccountStatusLabel = new JLabel(" ");
+
+        createAccountPanel.add(new JLabel("Username:"));
+        createAccountPanel.add(createUsernameField);
+        createAccountPanel.add(new JLabel("Password:"));
+        createAccountPanel.add(createPasswordField);
+        createAccountPanel.add(publicProfileCheckbox);
+        createAccountPanel.add(createAccountSubmitButton);
+        createAccountPanel.add(createAccountStatusLabel);
+
+        createAccountSubmitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = createUsernameField.getText();
+                String password = new String(createPasswordField.getPassword());
+
+                if (username.isEmpty() || password.isEmpty()) {
+                    createAccountStatusLabel.setText("Username and password cannot be empty.");
+                    return;
+                }
+
+                createAccount(username, password);
+            }
+        });
+
+        // Panel 4: Main Actions Screen (Post-login)
+        JPanel mainActionsPanel = new JPanel();
+        mainActionsPanel.setLayout(new GridLayout(5, 2));
+
+        addFriendButton = new JButton("Add Friend");
+        removeFriendButton = new JButton("Remove Friend");
+        sendMessageButton = new JButton("Send Message");
+        blockUserButton = new JButton("Block User");
+        deleteMessageButton = new JButton("Delete Message");
+        searchUserButton = new JButton("Search User");
+        viewUserButton = new JButton("View User");
+        logoutButton = new JButton("Logout");
+
+        addFriendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add friend action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "Add Friend functionality.");
+            }
+        });
+
+        removeFriendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Remove friend action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "Remove Friend functionality.");
+            }
+        });
+
+        sendMessageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Send message action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "Send Message functionality.");
+            }
+        });
+
+        blockUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Block user action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "Block User functionality.");
+            }
+        });
+
+        deleteMessageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Delete message action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "Delete Message functionality.");
+            }
+        });
+
+        searchUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Search user action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "Search User functionality.");
+            }
+        });
+
+        viewUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // View user action logic
+                JOptionPane.showMessageDialog(ClientGUI.this, "View User functionality.");
+            }
+        });
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(mainPanel, "INITIAL");
+            }
+        });
+
+        mainActionsPanel.add(addFriendButton);
+        mainActionsPanel.add(removeFriendButton);
+        mainActionsPanel.add(sendMessageButton);
+        mainActionsPanel.add(blockUserButton);
+        mainActionsPanel.add(deleteMessageButton);
+        mainActionsPanel.add(searchUserButton);
+        mainActionsPanel.add(viewUserButton);
+        mainActionsPanel.add(logoutButton);
+
+        // Add panels to CardLayout
+        mainPanel.add(initialPanel, "INITIAL");
+        mainPanel.add(loginPanel, "LOGIN");
+        mainPanel.add(createAccountPanel, "CREATE_ACCOUNT");
+        mainPanel.add(mainActionsPanel, "MAIN_ACTIONS");
+
+        // Set the initial view
+        cardLayout.show(mainPanel, "INITIAL");
+
+        // Frame setup
+        this.setTitle("Client GUI");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(400, 400);
+        this.add(mainPanel);
+        this.setVisible(true);
     }
 
-    private void showMessage(String message) {
-        SwingUtilities.invokeLater(() -> messageArea.append(message + "\n"));
+    private void createAccount(String username, String password) {
+        synchronized (userDatabase) {
+            try {
+                User newUser = new User(username, password, true); // Assuming public profile for account creation
+                if (userDatabase.addUser(newUser)) {
+                    userDatabase.everythingToFile(); // Save to file after account creation
+                    JOptionPane.showMessageDialog(this, "Account created successfully. Please log in.");
+                    cardLayout.show(mainPanel, "LOGIN");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Username already exists.");
+                }
+            } catch (BadException e) {
+                JOptionPane.showMessageDialog(this, "Error creating account: " + e.getMessage());
+            }
+        }
     }
 
     private void login(String username, String password) {
-        try {
-            out.writeObject("LOGIN");
-            out.writeObject(username);
-            out.writeObject(password);
-
-            String response = (String) in.readObject();
-            showMessage(response);
-
-            if (response.contains("successful")) {
-                cardLayout.show(mainPanel, "MAIN_MENU");
+        synchronized (userDatabase) {
+            for (User user : userDatabase.getUsers()) {
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                    // Log the user in
+                    if (Server.addLoggedInUser(user)) {
+                        JOptionPane.showMessageDialog(this, "Login successful.");
+                        cardLayout.show(mainPanel, "MAIN_ACTIONS");
+                        return;
+                    } else {
+                        JOptionPane.showMessageDialog(this, "User is already logged in.");
+                        return;
+                    }
+                }
             }
-        } catch (IOException | ClassNotFoundException e) {
-            showMessage("Error during login.");
         }
-    }
-
-    private void createAccount(String username, String password, String accountType) {
-        try {
-            out.writeObject("CREATE_ACCOUNT");
-            out.writeObject(username);
-            out.writeObject(password);
-            out.writeObject(accountType);
-
-            String response = (String) in.readObject();
-            showMessage(response);
-
-            if (response.contains("successfully")) {
-                cardLayout.show(mainPanel, "MAIN_MENU");
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            showMessage("Error during account creation.");
-        }
-    }
-
-    private void addFriend() {
-        String friendUsername = JOptionPane.showInputDialog(frame, "Enter friend's username:");
-        if (friendUsername != null) {
-            sendAction("ADD_FRIEND", friendUsername);
-        }
-    }
-
-    private void removeFriend() {
-        String friendUsername = JOptionPane.showInputDialog(frame, "Enter friend's username:");
-        if (friendUsername != null) {
-            sendAction("REMOVE_FRIEND", friendUsername);
-        }
-    }
-
-    private void blockUser() {
-        String blockUsername = JOptionPane.showInputDialog(frame, "Enter username to block:");
-        if (blockUsername != null) {
-            sendAction("BLOCK_USER", blockUsername);
-        }
-    }
-
-    private void sendMessage() {
-        String recipient = JOptionPane.showInputDialog(frame, "Enter recipient's username:");
-        String message = JOptionPane.showInputDialog(frame, "Enter your message:");
-        if (recipient != null && message != null) {
-            sendAction("SEND_MESSAGE", recipient + ":" + message);
-        }
-    }
-
-    private void deleteMessage() {
-        String recipient = JOptionPane.showInputDialog(frame, "Enter recipient's username:");
-        String message = JOptionPane.showInputDialog(frame, "Enter message content to delete:");
-        if (recipient != null && message != null) {
-            sendAction("DELETE_MESSAGE", recipient + ":" + message);
-        }
-    }
-
-    private void searchUser() {
-        String username = JOptionPane.showInputDialog(frame, "Enter username to search:");
-        if (username != null) {
-            sendAction("SEARCH_USER", username);
-        }
-    }
-
-    private void viewUser() {
-        sendAction("VIEW_USER", null);
-    }
-
-    private void logout() {
-        sendAction("LOGOUT", null);
-        cardLayout.show(mainPanel, "INITIAL");
-    }
-
-    private void sendAction(String action, String data) {
-        try {
-            out.writeObject(action);
-            out.writeObject(data);
-        } catch (IOException e) {
-            showMessage("Error sending action to server.");
-        }
+        JOptionPane.showMessageDialog(this, "Error: Invalid username or password.");
     }
 
     public static void main(String[] args) {
-        new ClientGUI();
+        UserDatabase userDatabase = new UserDatabase();
+        new ClientGUI(userDatabase);
     }
 }
