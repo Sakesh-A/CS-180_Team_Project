@@ -13,8 +13,9 @@ public class ClientGUI {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JTextField friendField;
-    private JTextField messageField;
+    private JRadioButton publicRadio;
+    private JRadioButton privateRadio;
+    private ButtonGroup accountTypeGroup;
 
     private Socket socket;
     private ObjectOutputStream out;
@@ -33,32 +34,91 @@ public class ClientGUI {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        mainPanel.add(createLoginPanel(), "LOGIN");
-        mainPanel.add(createMainMenuPanel(), "MAIN_MENU");
-        frame.add(mainPanel);
+        // Initial screen
+        mainPanel.add(createInitialScreen(), "INITIAL");
 
+        // Account creation / login screen
+        mainPanel.add(createAccountLoginScreen(), "ACCOUNT_LOGIN");
+
+        // Main menu screen
+        mainPanel.add(createMainMenuPanel(), "MAIN_MENU");
+
+        frame.add(mainPanel);
         frame.setVisible(true);
     }
 
-    private JPanel createLoginPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 1));
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameField = new JTextField();
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordField = new JPasswordField();
+    private JPanel createInitialScreen() {
+        JPanel panel = new JPanel(new GridLayout(3, 1));
 
         JButton loginButton = new JButton("Login");
         JButton createAccountButton = new JButton("Create Account");
 
-        loginButton.addActionListener(e -> login());
-        createAccountButton.addActionListener(e -> createAccount());
+        loginButton.addActionListener(e -> showAccountLoginScreen(true));
+        createAccountButton.addActionListener(e -> showAccountLoginScreen(false));
 
-        panel.add(usernameLabel);
-        panel.add(usernameField);
-        panel.add(passwordLabel);
-        panel.add(passwordField);
         panel.add(loginButton);
         panel.add(createAccountButton);
+
+        return panel;
+    }
+
+    private void showAccountLoginScreen(boolean isLogin) {
+        if (isLogin) {
+            // Show the login screen
+            cardLayout.show(mainPanel, "ACCOUNT_LOGIN");
+            ((JLabel) ((JPanel) mainPanel.getComponent(1)).getComponent(0)).setText("Login");
+        } else {
+            // Show the create account screen
+            cardLayout.show(mainPanel, "ACCOUNT_LOGIN");
+            ((JLabel) ((JPanel) mainPanel.getComponent(1)).getComponent(0)).setText("Create Account");
+        }
+    }
+
+    private JPanel createAccountLoginScreen() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Title label
+        JLabel titleLabel = new JLabel("Login");
+        panel.add(titleLabel);
+
+        // Username and Password fields
+        usernameField = new JTextField(20);
+        passwordField = new JPasswordField(20);
+
+        panel.add(new JLabel("Username:"));
+        panel.add(usernameField);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(new JLabel("Password:"));
+        panel.add(passwordField);
+        panel.add(Box.createVerticalStrut(10));
+
+        // Account Type (only for account creation)
+        JPanel accountTypePanel = new JPanel(new FlowLayout());
+        publicRadio = new JRadioButton("Public");
+        privateRadio = new JRadioButton("Private");
+        accountTypeGroup = new ButtonGroup();
+        accountTypeGroup.add(publicRadio);
+        accountTypeGroup.add(privateRadio);
+
+        accountTypePanel.add(publicRadio);
+        accountTypePanel.add(privateRadio);
+        panel.add(accountTypePanel);
+
+        // Submit button
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(e -> {
+            String username = usernameField.getText();
+            String password = new String(passwordField.getPassword());
+
+            if (titleLabel.getText().equals("Login")) {
+                login(username, password);
+            } else {
+                String accountType = publicRadio.isSelected() ? "public" : "private";
+                createAccount(username, password, accountType);
+            }
+        });
+        panel.add(submitButton);
 
         return panel;
     }
@@ -66,6 +126,7 @@ public class ClientGUI {
     private JPanel createMainMenuPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
+        // Main Menu
         JPanel buttonPanel = new JPanel(new GridLayout(4, 2));
         JButton addFriendButton = new JButton("Add Friend");
         JButton removeFriendButton = new JButton("Remove Friend");
@@ -130,11 +191,8 @@ public class ClientGUI {
         SwingUtilities.invokeLater(() -> messageArea.append(message + "\n"));
     }
 
-    private void login() {
+    private void login(String username, String password) {
         try {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-
             out.writeObject("LOGIN");
             out.writeObject(username);
             out.writeObject(password);
@@ -150,14 +208,12 @@ public class ClientGUI {
         }
     }
 
-    private void createAccount() {
+    private void createAccount(String username, String password, String accountType) {
         try {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-
             out.writeObject("CREATE_ACCOUNT");
             out.writeObject(username);
             out.writeObject(password);
+            out.writeObject(accountType);
 
             String response = (String) in.readObject();
             showMessage(response);
@@ -220,17 +276,15 @@ public class ClientGUI {
 
     private void logout() {
         sendAction("LOGOUT", null);
-        cardLayout.show(mainPanel, "LOGIN");
+        cardLayout.show(mainPanel, "INITIAL");
     }
 
     private void sendAction(String action, String data) {
         try {
             out.writeObject(action);
-            if (data != null) {
-                out.writeObject(data);
-            }
+            out.writeObject(data);
         } catch (IOException e) {
-            showMessage("Error sending action: " + action);
+            showMessage("Error sending action to server.");
         }
     }
 
