@@ -16,6 +16,8 @@ public class ClientGUI extends JFrame {
     private JButton addFriendButton, removeFriendButton, sendMessageButton, blockUserButton;
     private JButton deleteMessageButton, searchUserButton, viewUserButton, logoutButton;
 
+    private User loggedInUser = null; // Track the currently logged-in user
+
     public ClientGUI(UserDatabase userDatabase) {
         this.userDatabase = userDatabase;
         initGUI();
@@ -35,6 +37,7 @@ public class ClientGUI extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clearFields();  // Clear fields before showing login
                 cardLayout.show(mainPanel, "LOGIN");
             }
         });
@@ -42,6 +45,7 @@ public class ClientGUI extends JFrame {
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                clearFields();  // Clear fields before showing create account
                 cardLayout.show(mainPanel, "CREATE_ACCOUNT");
             }
         });
@@ -129,63 +133,28 @@ public class ClientGUI extends JFrame {
         addFriendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add friend action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "Add Friend functionality.");
-            }
-        });
-
-        removeFriendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Remove friend action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "Remove Friend functionality.");
-            }
-        });
-
-        sendMessageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Send message action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "Send Message functionality.");
-            }
-        });
-
-        blockUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Block user action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "Block User functionality.");
-            }
-        });
-
-        deleteMessageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Delete message action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "Delete Message functionality.");
-            }
-        });
-
-        searchUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Search user action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "Search User functionality.");
-            }
-        });
-
-        viewUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // View user action logic
-                JOptionPane.showMessageDialog(ClientGUI.this, "View User functionality.");
+                // Show the Add Friend screen
+                cardLayout.show(mainPanel, "ADD_FRIEND");
             }
         });
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cardLayout.show(mainPanel, "INITIAL");
+                int confirmLogout = JOptionPane.showConfirmDialog(
+                        ClientGUI.this,
+                        "Are you sure you want to logout?",
+                        "Confirm Logout",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (confirmLogout == JOptionPane.YES_OPTION) {
+                    loggedInUser = null; // Mark user as logged out
+                    clearFields();  // Clear fields before logging out
+                    cardLayout.show(mainPanel, "INITIAL");
+                    JOptionPane.showMessageDialog(ClientGUI.this, "You have been logged out.");
+                }
             }
         });
 
@@ -204,6 +173,75 @@ public class ClientGUI extends JFrame {
         mainPanel.add(createAccountPanel, "CREATE_ACCOUNT");
         mainPanel.add(mainActionsPanel, "MAIN_ACTIONS");
 
+        // Step 5: Add Friend Panel (Search and Add Friend)
+        JPanel addFriendPanel = new JPanel();
+        addFriendPanel.setLayout(new GridLayout(3, 2));
+
+        JTextField searchUsernameField = new JTextField();
+        JButton searchButton = new JButton("Search");
+        JLabel searchResultLabel = new JLabel(" ");
+        JButton addFriendButtonInSearch = new JButton("Add Friend");
+
+        addFriendPanel.add(new JLabel("Enter username to search:"));
+        addFriendPanel.add(searchUsernameField);
+        addFriendPanel.add(searchButton);
+        addFriendPanel.add(searchResultLabel);
+        addFriendPanel.add(addFriendButtonInSearch);
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String usernameToSearch = searchUsernameField.getText();
+
+                if (usernameToSearch.isEmpty()) {
+                    searchResultLabel.setText("Please enter a username.");
+                    return;
+                }
+
+                // Search for the user in the database
+                User foundUser = null;
+                for (User user : userDatabase.getUsers()) {
+                    if (user.getUsername().equals(usernameToSearch)) {
+                        foundUser = user;
+                        break;
+                    }
+                }
+
+                if (foundUser != null) {
+                    searchResultLabel.setText("User found: " + foundUser.getUsername());
+                    // Enable the Add Friend button
+                    addFriendButtonInSearch.setEnabled(true);
+                } else {
+                    searchResultLabel.setText("User not found.");
+                    addFriendButtonInSearch.setEnabled(false);
+                }
+            }
+        });
+
+        addFriendButtonInSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String usernameToSearch = searchUsernameField.getText();
+
+                for (User user : userDatabase.getUsers()) {
+                    if (user.getUsername().equals(usernameToSearch)) {
+                        // Add the user as a friend
+                        loggedInUser.addFriend(user);
+                        JOptionPane.showMessageDialog(ClientGUI.this, "You are now friends with " + user.getUsername());
+                        searchUsernameField.setText("");  // Clear only the search field after adding friend
+                        searchResultLabel.setText("");    // Clear the result label
+                        addFriendButtonInSearch.setEnabled(false); // Disable Add Friend button
+                        cardLayout.show(mainPanel, "MAIN_ACTIONS"); // Return to main actions menu
+                        return;
+                    }
+                }
+
+                JOptionPane.showMessageDialog(ClientGUI.this, "User not found.");
+            }
+        });
+
+        mainPanel.add(addFriendPanel, "ADD_FRIEND");
+
         // Set the initial view
         cardLayout.show(mainPanel, "INITIAL");
 
@@ -220,14 +258,14 @@ public class ClientGUI extends JFrame {
             try {
                 User newUser = new User(username, password, true); // Assuming public profile for account creation
                 if (userDatabase.addUser(newUser)) {
-                    userDatabase.everythingToFile(); // Save to file after account creation
-                    JOptionPane.showMessageDialog(this, "Account created successfully. Please log in.");
-                    cardLayout.show(mainPanel, "LOGIN");
+                    JOptionPane.showMessageDialog(this, "Account created successfully.");
+                    cardLayout.show(mainPanel, "LOGIN"); // Switch to login panel after account creation
                 } else {
-                    JOptionPane.showMessageDialog(this, "Username already exists.");
+                    JOptionPane.showMessageDialog(this, "Account creation failed.");
                 }
-            } catch (BadException e) {
-                JOptionPane.showMessageDialog(this, "Error creating account: " + e.getMessage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error creating account.");
             }
         }
     }
@@ -236,19 +274,24 @@ public class ClientGUI extends JFrame {
         synchronized (userDatabase) {
             for (User user : userDatabase.getUsers()) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                    // Log the user in
-                    if (Server.addLoggedInUser(user)) {
+                    if (loggedInUser == null) {
+                        loggedInUser = user;
                         JOptionPane.showMessageDialog(this, "Login successful.");
                         cardLayout.show(mainPanel, "MAIN_ACTIONS");
                         return;
                     } else {
-                        JOptionPane.showMessageDialog(this, "User is already logged in.");
+                        JOptionPane.showMessageDialog(this, "User already logged in.");
                         return;
                     }
                 }
             }
         }
-        JOptionPane.showMessageDialog(this, "Error: Invalid username or password.");
+        JOptionPane.showMessageDialog(this, "Invalid username or password.");
+    }
+
+    private void clearFields() {
+        usernameField.setText("");
+        passwordField.setText("");
     }
 
     public static void main(String[] args) {
