@@ -448,29 +448,40 @@ public class ClientGUI extends JFrame {
     }
 
     private JPanel createDeleteMessagePanel() {
-        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel label = new JLabel("Delete Message", SwingConstants.CENTER);
         panel.add(label);
 
-        JTextField messageIdField = new JTextField();
-        messageIdField.setBorder(BorderFactory.createTitledBorder("Message ID to Delete"));
-        panel.add(messageIdField);
+        JTextField recipientUsernameField = new JTextField();
+        recipientUsernameField.setBorder(BorderFactory.createTitledBorder("Recipient's Username"));
+        panel.add(recipientUsernameField);
+
+        JTextField messageContentField = new JTextField();
+        messageContentField.setBorder(BorderFactory.createTitledBorder("Message Content"));
+        panel.add(messageContentField);
 
         JPanel buttonPanel = new JPanel();
         JButton deleteButton = new JButton("Delete Message");
         deleteButton.addActionListener(e -> {
             try {
-                String messageId = messageIdField.getText();
+                String recipientUsername = recipientUsernameField.getText();
+                String messageContent = messageContentField.getText();
 
-                if (messageId.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Please enter the message ID to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                if (recipientUsername.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter the recipient's username.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (messageContent.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter the message content.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 // Send the delete message request to the server
                 out.writeObject("DELETE_MESSAGE");
-                out.writeObject(messageId); // The ID of the message to delete
+                out.writeObject(recipientUsername); // Send recipient username
+                out.writeObject(messageContent);   // Send message content
                 out.flush();
 
                 // Read the server's response
@@ -478,7 +489,8 @@ public class ClientGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
                 if (response.equals("Message deleted successfully")) {
-                    messageIdField.setText(""); // Clear input after success
+                    recipientUsernameField.setText(""); // Clear input after success
+                    messageContentField.setText("");
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
