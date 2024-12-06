@@ -203,7 +203,7 @@ public class ClientGUI extends JFrame {
         } else if (actionName.equals("BlockUser")) {
             panel.add(createBlockUserPanel(), BorderLayout.CENTER);
         } else if (actionName.equals("SendMessage")) {
-            panel.add(createBlockUserPanel(), BorderLayout.CENTER);
+            panel.add(createSendMessagePanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
