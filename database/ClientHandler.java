@@ -256,9 +256,9 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
 
-        out.writeObject("Enter the username of the recipient: ");
+//        out.writeObject("Enter the username of the recipient: ");
         String recipientUsername = (String) in.readObject();
-        out.writeObject("Enter your message: ");
+//        out.writeObject("Enter your message: ");
         String messageContent = (String) in.readObject();
 
         synchronized (userDatabase) {
