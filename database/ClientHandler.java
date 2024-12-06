@@ -62,22 +62,18 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
 
     public void authenticateUser() throws IOException, ClassNotFoundException {
         while (currentUser == null) {
-            out.writeObject("Please LOGIN or CREATE_ACCOUNT to continue.");
             String action = (String) in.readObject();
 
             if ("LOGIN".equalsIgnoreCase(action)) {
                 login();
-                if (currentUser != null) {
-//                    sendOptions();
-                }
             } else if ("CREATE_ACCOUNT".equalsIgnoreCase(action)) {
                 createAccount();
-//                sendOptions();
             } else {
                 out.writeObject("Error: Invalid action. Only LOGIN or CREATE_ACCOUNT allowed.");
             }
         }
     }
+
 
     public void handleAction(String action) throws IOException, ClassNotFoundException {
         switch (action.toUpperCase()) {
@@ -116,9 +112,9 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
     }
 
     public void login() throws IOException, ClassNotFoundException {
-        out.writeObject("Enter username: ");
+//        out.writeObject("Enter username: ");
         String username = (String) in.readObject();
-        out.writeObject("Enter password: ");
+//        out.writeObject("Enter password: ");
         String password = (String) in.readObject();
 
         synchronized (userDatabase) {
@@ -139,11 +135,11 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
     }
 
     public void createAccount() throws IOException, ClassNotFoundException {
-        out.writeObject("Enter new username: ");
+//        out.writeObject("Enter new username: ");
         String username = (String) in.readObject();
-        out.writeObject("Enter new password: ");
+//        out.writeObject("Enter new password: ");
         String password = (String) in.readObject();
-        out.writeObject("Is your profile public? (true/false): ");
+//        out.writeObject("Is your profile public? (true/false): ");
         boolean isPublic = Boolean.parseBoolean((String) in.readObject());
 
         System.out.println("Username: " + username + "  password: " + password + "  public: " + isPublic);
@@ -152,18 +148,16 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
                 User newUser = new User(username, password, isPublic);
                 if (userDatabase.addUser(newUser)) {
                     userDatabase.everythingToFile(); // Save to file after account creation
-                    out.writeObject("Account created successfully.");
-//                    sendOptions();
+                    out.writeObject("Account created successfully. Please log in.");
                 } else {
                     out.writeObject("Error: Username already exists.");
-
                 }
             } catch (BadException e) {
                 out.writeObject("Error creating account: " + e.getMessage());
-
             }
         }
     }
+
 
     public void addFriend() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
@@ -171,24 +165,40 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
 
-        out.writeObject("Enter the username of the friend to add: ");
+//        out.writeObject("Enter the username of the friend to add: ");
         String friendUsername = (String) in.readObject();
 
         synchronized (userDatabase) {
+            // Check if the user is adding themselves
+            if (currentUser.getUsername().equals(friendUsername)) {
+                out.writeObject("Error: You cannot add yourself as a friend.");
+                return;
+            }
+
+            // Check if the friend exists in the database
+            User friendToAdd = null;
             for (User user : userDatabase.getUsers()) {
                 if (user.getUsername().equals(friendUsername)) {
-                    if (currentUser.addFriend(user)) {
-                        userDatabase.everythingToFile(); // Save to file after modifying friends list
-                        out.writeObject("Friend added successfully.");
-                    } else {
-                        out.writeObject("User is already in your friend list.");
-                    }
-                    return;
+                    friendToAdd = user;
+                    break;
                 }
             }
+
+            if (friendToAdd == null) {
+                out.writeObject("Error: User not found.");
+                return;
+            }
+
+            // Attempt to add the friend
+            if (currentUser.addFriend(friendToAdd)) {
+                userDatabase.everythingToFile(); // Save changes
+                out.writeObject("Friend added successfully.");
+            } else {
+                out.writeObject("Error: User is already in your friend list.");
+            }
         }
-        out.writeObject("User not found.");
     }
+
 
     public void removeFriend() throws IOException, ClassNotFoundException {
         if (currentUser == null) {
