@@ -206,6 +206,10 @@ public class ClientGUI extends JFrame {
             panel.add(createSendMessagePanel(), BorderLayout.CENTER);
         } else if (actionName.equals("DeleteMessage")) {
             panel.add(createDeleteMessagePanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("SearchUser")) {
+            panel.add(createSearchUserPanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("ViewUser")) {
+            panel.add(createViewUserPanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
@@ -506,6 +510,85 @@ public class ClientGUI extends JFrame {
 
         return panel;
     }
+
+    private JPanel createSearchUserPanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+
+        JLabel label = new JLabel("Search User", SwingConstants.CENTER);
+        panel.add(label);
+
+        JTextField usernameField = new JTextField();
+        usernameField.setBorder(BorderFactory.createTitledBorder("Enter Username to Search"));
+        panel.add(usernameField);
+
+        JPanel buttonPanel = new JPanel();
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(e -> {
+            try {
+                String username = usernameField.getText();
+
+                if (username.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter a username to search.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Send the search request to the server
+                out.writeObject("SEARCH_USER");
+                out.writeObject(username); // Send the username to search
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
+        buttonPanel.add(searchButton);
+        buttonPanel.add(backButton);
+
+        panel.add(buttonPanel);
+
+        return panel;
+    }
+
+    private JPanel createViewUserPanel() {
+        JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
+
+        JLabel label = new JLabel("View Profile Info", SwingConstants.CENTER);
+        panel.add(label);
+
+        JPanel buttonPanel = new JPanel();
+        JButton viewButton = new JButton("View My Info");
+        viewButton.addActionListener(e -> {
+            try {
+                // Send the view user request to the server
+                out.writeObject("VIEW_USER");
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Your Information", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
+        buttonPanel.add(viewButton);
+        buttonPanel.add(backButton);
+
+        panel.add(buttonPanel);
+
+        return panel;
+    }
+
 
     public static void main(String[] args) {
         // Specify the server's IP address and port number
