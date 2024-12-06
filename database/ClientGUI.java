@@ -331,4 +331,14 @@ public class ClientGUI extends JFrame {
 
         return panel;
     }
+    public static void main(String[] args) {
+        // Connect to the server on localhost and port 12345
+        try {
+            Socket socket = new Socket("localhost", 4242);
+            new ClientGUI(socket); // Launch the GUI
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error connecting to server. Please try again.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
