@@ -198,6 +198,8 @@ public class ClientGUI extends JFrame {
 
         if (actionName.equals("AddFriend")) {
             panel.add(createAddFriendPanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("RemoveFriend")) {
+            panel.add(createRemoveFriendPanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
@@ -262,7 +264,7 @@ public class ClientGUI extends JFrame {
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error: Could not add friend.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error adding friend.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -276,12 +278,57 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    public static void main(String[] args) {
-        try {
-            Socket socket = new Socket("localhost", 4242);
-            new ClientGUI(socket);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private JPanel createRemoveFriendPanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+
+        JLabel label = new JLabel("Remove Friend", SwingConstants.CENTER);
+        panel.add(label);
+
+        JTextField friendUsernameField = new JTextField();
+        friendUsernameField.setBorder(BorderFactory.createTitledBorder("Friend's Username"));
+        panel.add(friendUsernameField);
+
+        JPanel buttonPanel = new JPanel();
+        JButton removeButton = new JButton("Remove Friend");
+        removeButton.addActionListener(e -> {
+            try {
+                String friendUsername = friendUsernameField.getText();
+                if (friendUsername.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter a friend's username.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (friendUsername.equals(currentUser)) {
+                    JOptionPane.showMessageDialog(this, "You cannot remove yourself as a friend.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Send the remove friend request to the server
+                out.writeObject("REMOVE_FRIEND"); // Current user
+                out.writeObject(friendUsername);  // The friend to be removed
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                if (response.equals("Friend removed successfully")) {
+                    friendUsernameField.setText(""); // Clear the field after removing
+                    cardLayout.show(mainPanel, "ActionMenu"); // Return to action menu
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error removing friend.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
+
+        buttonPanel.add(removeButton);
+        buttonPanel.add(backButton);
+        panel.add(buttonPanel);
+
+        return panel;
     }
 }
