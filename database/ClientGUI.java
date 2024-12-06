@@ -202,6 +202,8 @@ public class ClientGUI extends JFrame {
             panel.add(createRemoveFriendPanel(), BorderLayout.CENTER);
         } else if (actionName.equals("BlockUser")) {
             panel.add(createBlockUserPanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("SendMessage")) {
+            panel.add(createBlockUserPanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
@@ -382,6 +384,67 @@ public class ClientGUI extends JFrame {
 
         return panel;
     }
+
+    private JPanel createSendMessagePanel() {
+        JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
+
+        JLabel label = new JLabel("Send Message", SwingConstants.CENTER);
+        panel.add(label);
+
+        JTextField recipientUsernameField = new JTextField();
+        recipientUsernameField.setBorder(BorderFactory.createTitledBorder("Recipient's Username"));
+        panel.add(recipientUsernameField);
+
+        JTextArea messageTextArea = new JTextArea();
+        messageTextArea.setBorder(BorderFactory.createTitledBorder("Message"));
+        panel.add(new JScrollPane(messageTextArea));
+
+        JPanel buttonPanel = new JPanel();
+        JButton sendButton = new JButton("Send Message");
+        sendButton.addActionListener(e -> {
+            try {
+                String recipientUsername = recipientUsernameField.getText();
+                String message = messageTextArea.getText();
+
+                if (recipientUsername.isEmpty() || message.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter both recipient's username and a message.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (recipientUsername.equals(currentUser)) {
+                    JOptionPane.showMessageDialog(this, "You cannot send a message to yourself.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Send the send message request to the server
+                out.writeObject("SEND_MESSAGE");
+                out.writeObject(recipientUsername);  // The recipient's username
+                out.writeObject(message);  // The message
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                if (response.equals("Message sent successfully")) {
+                    recipientUsernameField.setText(""); // Clear input after success
+                    messageTextArea.setText(""); // Clear message area
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
+        buttonPanel.add(sendButton);
+        buttonPanel.add(backButton);
+
+        panel.add(buttonPanel);
+
+        return panel;
+    }
+
     public static void main(String[] args) {
         // Specify the server's IP address and port number
         String serverAddress = "localhost"; // or the IP address of your server
