@@ -284,9 +284,9 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
 
-        out.writeObject("Enter the username of the message recipient to delete: ");
+//        out.writeObject("Enter the username of the message recipient to delete: ");
         String recipientUsername = (String) in.readObject();
-        out.writeObject("Enter the message content to delete: ");
+//        out.writeObject("Enter the message content to delete: ");
         String messageContent = (String) in.readObject();
 
         synchronized (userDatabase) {
@@ -307,7 +307,7 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
     }
 
     public void searchUser() throws IOException, ClassNotFoundException {
-        out.writeObject("Enter the username to search for: ");
+//        out.writeObject("Enter the username to search for: ");
         String username = (String) in.readObject();
 
         synchronized (userDatabase) {

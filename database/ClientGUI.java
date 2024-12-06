@@ -204,6 +204,8 @@ public class ClientGUI extends JFrame {
             panel.add(createBlockUserPanel(), BorderLayout.CENTER);
         } else if (actionName.equals("SendMessage")) {
             panel.add(createSendMessagePanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("DeleteMessage")) {
+            panel.add(createDeleteMessagePanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
@@ -438,6 +440,54 @@ public class ClientGUI extends JFrame {
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
         buttonPanel.add(sendButton);
+        buttonPanel.add(backButton);
+
+        panel.add(buttonPanel);
+
+        return panel;
+    }
+
+    private JPanel createDeleteMessagePanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+
+        JLabel label = new JLabel("Delete Message", SwingConstants.CENTER);
+        panel.add(label);
+
+        JTextField messageIdField = new JTextField();
+        messageIdField.setBorder(BorderFactory.createTitledBorder("Message ID to Delete"));
+        panel.add(messageIdField);
+
+        JPanel buttonPanel = new JPanel();
+        JButton deleteButton = new JButton("Delete Message");
+        deleteButton.addActionListener(e -> {
+            try {
+                String messageId = messageIdField.getText();
+
+                if (messageId.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter the message ID to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Send the delete message request to the server
+                out.writeObject("DELETE_MESSAGE");
+                out.writeObject(messageId); // The ID of the message to delete
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                if (response.equals("Message deleted successfully")) {
+                    messageIdField.setText(""); // Clear input after success
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
+        buttonPanel.add(deleteButton);
         buttonPanel.add(backButton);
 
         panel.add(buttonPanel);
