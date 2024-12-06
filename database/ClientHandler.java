@@ -165,40 +165,40 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
 
-//        out.writeObject("Enter the username of the friend to add: ");
+        // Prompt for the friend's username
         String friendUsername = (String) in.readObject();
 
-        synchronized (userDatabase) {
-            // Check if the user is adding themselves
-            if (currentUser.getUsername().equals(friendUsername)) {
-                out.writeObject("Error: You cannot add yourself as a friend.");
-                return;
-            }
+        // Check if the friendUsername is the same as the current user's username
+        if (friendUsername.equals(currentUser.getUsername())) {
+            out.writeObject("You cannot add yourself as a friend.");
+            return;
+        }
 
-            // Check if the friend exists in the database
-            User friendToAdd = null;
+        synchronized (userDatabase) {
+            boolean userFound = false;
+
+            // Iterate through the users in the database
             for (User user : userDatabase.getUsers()) {
                 if (user.getUsername().equals(friendUsername)) {
-                    friendToAdd = user;
+                    userFound = true; // Found the user
+
+                    // Try adding the friend
+                    if (currentUser.addFriend(user)) {
+                        userDatabase.everythingToFile(); // Save after adding friend
+                        out.writeObject("Friend added successfully.");
+                    } else {
+                        out.writeObject("User is already in your friend list.");
+                    }
                     break;
                 }
             }
 
-            if (friendToAdd == null) {
-                out.writeObject("Error: User not found.");
-                return;
-            }
-
-            // Attempt to add the friend
-            if (currentUser.addFriend(friendToAdd)) {
-                userDatabase.everythingToFile(); // Save changes
-                out.writeObject("Friend added successfully.");
-            } else {
-                out.writeObject("Error: User is already in your friend list.");
+            // If no user was found, notify the client
+            if (!userFound) {
+                out.writeObject("User not found.");
             }
         }
     }
-
 
     public void removeFriend() throws IOException, ClassNotFoundException {
         if (currentUser == null) {

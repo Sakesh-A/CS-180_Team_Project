@@ -242,9 +242,13 @@ public class ClientGUI extends JFrame {
                     return;
                 }
 
+                if (friendUsername.equals(currentUser)) {
+                    JOptionPane.showMessageDialog(this, "You cannot add yourself as a friend.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 // Send the add friend request to the server
-                out.writeObject("ADD_FRIEND");
-                out.writeObject(currentUser);  // Current user
+                out.writeObject("ADD_FRIEND"); // Current user
                 out.writeObject(friendUsername);  // The friend to be added
                 out.flush();
 
