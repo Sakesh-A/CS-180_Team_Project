@@ -200,6 +200,8 @@ public class ClientGUI extends JFrame {
             panel.add(createAddFriendPanel(), BorderLayout.CENTER);
         } else if (actionName.equals("RemoveFriend")) {
             panel.add(createRemoveFriendPanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("BlockUser")) {
+            panel.add(createBlockUserPanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
@@ -259,20 +261,18 @@ public class ClientGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
                 if (response.equals("Friend added successfully")) {
-                    friendUsernameField.setText(""); // Clear the field after adding
-                    cardLayout.show(mainPanel, "ActionMenu"); // Return to action menu
+                    friendUsernameField.setText(""); // Clear input after success
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error adding friend.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
-
         buttonPanel.add(addButton);
         buttonPanel.add(backButton);
+
         panel.add(buttonPanel);
 
         return panel;
@@ -313,32 +313,89 @@ public class ClientGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
                 if (response.equals("Friend removed successfully")) {
-                    friendUsernameField.setText(""); // Clear the field after removing
-                    cardLayout.show(mainPanel, "ActionMenu"); // Return to action menu
+                    friendUsernameField.setText(""); // Clear input after success
                 }
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error removing friend.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
-
         buttonPanel.add(removeButton);
         buttonPanel.add(backButton);
+
+        panel.add(buttonPanel);
+
+        return panel;
+    }
+
+    // Add a Block User panel
+    private JPanel createBlockUserPanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+
+        JLabel label = new JLabel("Block User", SwingConstants.CENTER);
+        panel.add(label);
+
+        JTextField friendUsernameField = new JTextField();
+        friendUsernameField.setBorder(BorderFactory.createTitledBorder("Username to Block"));
+        panel.add(friendUsernameField);
+
+        JPanel buttonPanel = new JPanel();
+        JButton blockButton = new JButton("Block User");
+        blockButton.addActionListener(e -> {
+            try {
+                String friendUsername = friendUsernameField.getText();
+                if (friendUsername.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter a friend's username to block.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (friendUsername.equals(currentUser)) {
+                    JOptionPane.showMessageDialog(this, "You cannot block yourself.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Send the block request to the server
+                out.writeObject("BLOCK_USER");
+                out.writeObject(friendUsername);
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                if (response.equals("User blocked successfully")) {
+                    friendUsernameField.setText(""); // Clear input after success
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
+        buttonPanel.add(blockButton);
+        buttonPanel.add(backButton);
+
         panel.add(buttonPanel);
 
         return panel;
     }
     public static void main(String[] args) {
-        // Connect to the server on localhost and port 12345
+        // Specify the server's IP address and port number
+        String serverAddress = "localhost"; // or the IP address of your server
+        int port = 4242; // Use the appropriate port number
+
         try {
-            Socket socket = new Socket("localhost", 4242);
-            new ClientGUI(socket); // Launch the GUI
+            // Create a socket to connect to the server
+            Socket socket = new Socket(serverAddress, port);
+
+            // Create the ClientGUI and pass the socket
+            new ClientGUI(socket);
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error connecting to server. Please try again.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Could not connect to the server.", "Connection Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
