@@ -206,7 +206,7 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
 
-        out.writeObject("Enter the username of the friend to remove: ");
+//        out.writeObject("Enter the username of the friend to remove: ");
         String friendUsername = (String) in.readObject();
 
         synchronized (userDatabase) {
@@ -231,7 +231,7 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
 
-        out.writeObject("Enter the username of the user to block: ");
+//        out.writeObject("Enter the username of the user to block: ");
         String blockUsername = (String) in.readObject();
 
         synchronized (userDatabase) {
