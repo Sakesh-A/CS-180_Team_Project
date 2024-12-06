@@ -81,6 +81,10 @@ public class Client implements ClientInterface {
         }
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
+
     public static void main(String[] args) {
         String host = "localhost"; // Replace with server address if needed
         int port = 4242; // Replace with the server's port
