@@ -113,11 +113,10 @@ public class ClientGUI extends JFrame {
 
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response);
-
-                if (response.contains("Login successful")) {
+                usernameField.setText(""); // Reset fields
+                passwordField.setText("");
+                if (response.contains("Login successful.")) {
                     currentUser = usernameField.getText();
-                    usernameField.setText(""); // Reset fields
-                    passwordField.setText("");
                     cardLayout.show(mainPanel, "ActionMenu");
                 }
             } catch (IOException | ClassNotFoundException ex) {
@@ -166,11 +165,11 @@ public class ClientGUI extends JFrame {
                 // Read the server's response
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
-
+                usernameField.setText(""); // Clear inputs for the next user
+                passwordField.setText("");
                 // Navigate back to Main Menu on success
-                if (response.startsWith("Account created successfully")) {
-                    usernameField.setText(""); // Clear inputs for the next user
-                    passwordField.setText("");
+                if (response.startsWith("Account created successfully.")) {
+
                     publicCheckBox.setSelected(false);
                     cardLayout.show(mainPanel, "MainMenu");
                 }
@@ -184,6 +183,7 @@ public class ClientGUI extends JFrame {
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MainMenu"));
 
         buttonPanel.add(createButton);
+        buttonPanel.add(backButton);
         panel.add(buttonPanel);
 
         return panel;
@@ -259,7 +259,7 @@ public class ClientGUI extends JFrame {
             }
         });
 
-        buttonPanel.add(backButton);
+        //buttonPanel.add(backButton);
         buttonPanel.add(logoutButton);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -300,7 +300,7 @@ public class ClientGUI extends JFrame {
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
-                if (response.equals("Friend added successfully")) {
+                if (response.equals("Friend added successfully.")) {
                     friendUsernameField.setText(""); // Clear input after success
                 }
             } catch (IOException | ClassNotFoundException ex) {
@@ -356,7 +356,7 @@ public class ClientGUI extends JFrame {
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
-                if (response.equals("Friend removed successfully")) {
+                if (response.equals("Friend removed successfully.")) {
                     friendUsernameField.setText(""); // Clear input after success
                 }
             } catch (IOException | ClassNotFoundException ex) {
@@ -409,7 +409,7 @@ public class ClientGUI extends JFrame {
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
-                if (response.equals("User blocked successfully")) {
+                if (response.equals("User blocked successfully.")) {
                     friendUsernameField.setText(""); // Clear input after success
                 }
             } catch (IOException | ClassNotFoundException ex) {
@@ -468,7 +468,7 @@ public class ClientGUI extends JFrame {
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
-                if (response.equals("Message sent successfully")) {
+                if (response.equals("Message sent successfully.")) {
                     recipientUsernameField.setText(""); // Clear input after success
                     messageTextArea.setText(""); // Clear message area
                 }
@@ -528,7 +528,7 @@ public class ClientGUI extends JFrame {
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Info", JOptionPane.INFORMATION_MESSAGE);
 
-                if (response.equals("Message deleted successfully")) {
+                if (response.equals("Message deleted successfully.")) {
                     recipientUsernameField.setText(""); // Clear input after success
                     messageContentField.setText("");
                 }
@@ -576,7 +576,7 @@ public class ClientGUI extends JFrame {
                 // Read the server's response
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Search Result", JOptionPane.INFORMATION_MESSAGE);
-
+                usernameField.setText("");
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
@@ -615,38 +615,61 @@ public class ClientGUI extends JFrame {
             }
         });
 
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
         buttonPanel.add(viewButton);
+        buttonPanel.add(backButton);
+
         panel.add(buttonPanel);
 
         return panel;
     }
 
     private JPanel createMessagesPanel() {
-        JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
-        JLabel label = new JLabel("Viewing your messages", SwingConstants.CENTER);
+        JLabel label = new JLabel("Enter the user you wish to view messages between", SwingConstants.CENTER);
         panel.add(label);
+
+        JTextField usernameField = new JTextField();
+        usernameField.setBorder(BorderFactory.createTitledBorder("Enter Username here"));
+        panel.add(usernameField);
 
         JPanel buttonPanel = new JPanel();
         JButton viewButton = new JButton("View My Messages");
         viewButton.addActionListener(e -> {
             try {
+                String username = usernameField.getText();
+
+                if (username.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Please enter a username to search.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 // Send the view user request to the server
                 out.writeObject("VIEW_MESSAGES");
+                out.writeObject(username);
                 out.flush();
+
 
                 // Read the server's response
                 String response = (String) in.readObject();
                 JOptionPane.showMessageDialog(this, response, "Your Messages", JOptionPane.INFORMATION_MESSAGE);
+                usernameField.setText("");
 
             } catch (IOException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         });
 
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
         buttonPanel.add(viewButton);
+        buttonPanel.add(backButton);
+
+
 
         panel.add(buttonPanel);
+
 
         return panel;
 

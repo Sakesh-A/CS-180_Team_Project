@@ -330,13 +330,48 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             out.writeObject("You must log in first.");
             return;
         }
+        //username, password, public private, friends, blocked users
+        String ret = "";
+        ret += "Username : " + currentUser.getUsername() + "\n";
+        ret += "Password: " + currentUser.getPassword() + "\n";
+        if (currentUser.isPublic()) {
+            ret += "This account is public \n";
+        } else {
+            ret += "This account is private \n";
+        }
+        ret += "Friends: ";
+        if (currentUser.getFriends().size() == 0) {
+            ret += "You have no friends \n";
+        } else {
+            for (int i = 0; i < currentUser.getFriends().size(); i++) {
+                if (i < currentUser.getFriends().size() - 1) {
+                    ret += currentUser.getFriends().get(i).getUsername() + ", ";
+                } else {
+                    ret += currentUser.getFriends().get(i).getUsername() + "\n";
+                }
+            }
+        }
 
-        out.writeObject("Viewing your information: " + currentUser);
+        ret += "Blocked Users: ";
+        if (currentUser.getBlockedUsers().size() == 0) {
+            ret += "You have no users blocked \n";
+        } else {
+            for (int i = 0; i < currentUser.getBlockedUsers().size(); i++) {
+                if (i < currentUser.getBlockedUsers().size() - 1) {
+                    ret += currentUser.getBlockedUsers().get(i).getUsername() + ", ";
+                } else {
+                    ret += currentUser.getBlockedUsers().get(i).getUsername() + "\n";
+                }
+            }
+        }
+        out.writeObject(ret);
     }
-    public void viewMessages() throws IOException {
+    public void viewMessages() throws IOException, ClassNotFoundException {
+
         if (currentUser == null) {
             out.writeObject("You must log in first.");
         }
+        String user2 = (String)in.readObject();
         String ret = "";
         ArrayList<TextMessage> messages = currentUser.getMessages();
         if (messages.size() == 0) {
@@ -344,25 +379,29 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             return;
         }
         for (int i = 0; i < messages.size(); i++) {
-            ret += "Message : " + messages.get(i).getMessageContent();
-            String sender = "";
-            String receiver = "";
-            if (messages.get(i).getSender().getUsername().equals(currentUser.getUsername())) {
-                sender = "You";
-            } else {
-                sender = messages.get(i).getSender().getUsername();
+            if (messages.get(i).getSender().getUsername().equals(user2)
+                    || messages.get(i).getReceiver().getUsername().equals(user2)) {
+                ret += "Message : " + messages.get(i).getMessageContent();
+                String sender = "";
+                String receiver = "";
+                if (messages.get(i).getSender().getUsername().equals(currentUser.getUsername())) {
+                    sender = "You";
+                } else {
+                    sender = messages.get(i).getSender().getUsername();
+                }
+
+                if (messages.get(i).getReceiver().getUsername().equals(currentUser.getUsername())) {
+                    receiver = "You";
+                } else {
+                    receiver = messages.get(i).getReceiver().getUsername();
+                }
+                ret += "\n";
+                ret += "Message sent by: " + sender + "\n";
+                ret += "Message sent to: " + receiver + "\n";
+                ret += "-----------------------------------------------------------------";
+                ret += "\n";
             }
 
-            if (messages.get(i).getReceiver().getUsername().equals(currentUser.getUsername())) {
-                receiver = "You";
-            } else {
-                receiver = messages.get(i).getReceiver().getUsername();
-            }
-            ret += "\n";
-            ret += "Message sent by: " + sender + "\n";
-            ret += "Message sent to: " + receiver + "\n";
-            ret += "-----------------------------------------------------------------";
-            ret += "\n";
             //System.out.println(ret);
 
         }
