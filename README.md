@@ -28,7 +28,7 @@
            - Run it on IntelliJ to see the observed result.
              
    b. Manual Testing/Compiling
-      - We used JUNIT to write all of our test cases.+ Manual Testing/Compiling Instructions: Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
+      - Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, etc.) in the same directory.
       - Open a terminal or command prompt.
       - Navigate to the directory containing the .java files using the cd command.
       - Start the server in the terminal. The server will begin on the default port and wait for client connections.
@@ -36,13 +36,13 @@
       - Navigate to the same directory where the compiled classes are located.
       - Start the ClientGUI. The ClientGUI will attempt to connect to the server at localhost.
       - Then, the ClinetGUI will receive a popup on the screen, prompting them to either "Login" or "Create Account".
-      - No matter what option the user selected, they will be prompted to enter a username and a password, if the selected "Create Account", they will also be asked whether they want their account to be public or private.
-      - The "Create Account" option will ensure that both the username and password are valid, and once they are, will create an account using the user name and password, then prompt the user to Login.
-      - After Logging in, the user will see a screen with the buttons "Add Friend" "Remove Friend" "Block User" "Send Message" "Delete Message"  "Search User"  "View User" "View Messages" & "Logout".
+      - No matter what option the user selects, they will be prompted to enter a username and a password. If they select "Create Account," they will also be asked whether they want their account to be public or private.
+      - The "Create Account" option will ensure that both the username and password are valid, and once they are, it will create an account using the username and password, and then prompt the user to log in.
+      - After Logging in, the user will see a screen with the buttons "Add Friend," "Remove Friend," "Block User," "Send Message," "Delete Message," "Search User," "View User," "View Messages," and "Logout."
       - To perform any of these functions, the client has to click the button they want to perform. The user will then be prompted for more information.
-      - "Add Friend" adds a friend checking to make sure the user exists, "Remove Friend" removes a friend checking to make sure the user is a friend, "Block User" blocks a user checking to make sure the user exists, "Send Message" sends a message to a specific user checking a variety of conditions, "Delete Message" deletes a message that was sent to a certain user, "Search User" checks to make sure that a user exists, "View User" shows the clients personal information, and "Logout" disconnects from the server.
-      - Notes: 1. Ensure the server is started before running the client. 2. Use multiple terminals or command prompt windows to simulate multiple clients connecting to the server. 3. All information related to a user (username, password, friends, blocked users) gets stored in UserList.txt. 4. Messages that are sent and received in a separate file for each user. The files are named "username".txt.
-       
+      - "Add Friend" adds a friend checking to make sure the user exists, "Remove Friend" removes a friend checking to make sure the user is a friend, "Block User" blocks a user checking to make sure the user exists, "Send Message" sends a message to a specific user checking a variety of conditions, "Delete Message" deletes a message that was sent to a certain user, "Search User" checks to make sure that a user exists, "View Profile" shows the clients personal information, "View Messages" shows the whole conversation between you and another user, and "Logout" disconnects from the server and closes the GUI.
+      - Every page/panel has a back button that you navigate to the page/panel you came from.
+      - Notes: 1. Ensure the server is started before running the client. 2. Use multiple terminals or command prompt windows to simulate multiple clients connecting to the server. 3. All information related to a user (username, password, friends, blocked users) gets stored in UserList.txt. 4. Messages that are sent and received in a separate file for each user. The files are named "username".txt.     
 2. Zachary O'Connell Submitted Vocareum Workspace
 3. Classes/Interfaces/Exceptions
     a. Classes 
