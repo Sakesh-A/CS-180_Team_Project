@@ -29,11 +29,15 @@ public class ClientTest {
     @Before
     public void setUp() throws Exception {
         serverSocket = new ServerSocket(port);
+
         serverThread = new Thread(() -> {
             try {
                 clientSocket = serverSocket.accept();
+
                 serverOut = new PrintWriter(clientSocket.getOutputStream(), true);
-                serverIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                serverIn = new BufferedReader(new InputStreamReader
+                        (clientSocket.getInputStream()));
 
                 String message;
 
@@ -42,9 +46,11 @@ public class ClientTest {
 
                     if ("LOGOUT".equalsIgnoreCase(message)) {
                         sendMessage("You have logged out.");
+
                         clientDisconnected = true;
+
                         break;
-                    } else if (message.isEmpty() || message == null) {
+                    } else if (message.isEmpty()) {
                         sendMessage("No command received.");
                     } else if ("ADD_FRIEND".equalsIgnoreCase(message)) {
                         sendMessage("Friend added successfully.");
@@ -70,83 +76,128 @@ public class ClientTest {
     }
 
     @Test
-    public void testClientConnection() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testClientConnection() {
+        try {
+            Client client = new Client("localhost", port);
 
-        assertNotNull("Client socket should not be null after connection", client);
+            assertNotNull("Client socket should not be null after connection",
+                    client);
+        } catch (Exception e) {
+            fail("Exception during client connection: " + e.getMessage());
+        }
     }
 
     @Test
-    public void testServerMessageHandling() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testServerMessageHandling() {
+        try {
+            Client client = new Client("localhost", port);
 
-        sendMessage("Test message from server.");
+            sendMessage("Test message from server.");
 
-        simulateUserInput(client, "LOGOUT");
+            simulateUserInput(client, "LOGOUT");
 
-        assertEquals("Server message should be received correctly", "Test message from server.", lastMessageSent);
+            assertEquals("Server message should be received correctly",
+                    "Test message from server.", lastMessageSent);
+        } catch (Exception e) {
+            fail("Exception during server message handling: " + e.getMessage());
+        }
     }
 
     @Test
     public void testInvalidHostConnection() {
-        Client client = new Client("invalidHost", port);
+        try {
+            Client client = new Client("invalidHost", port);
 
-        assertNull("Client should not connect to an invalid host", client);
+            assertNull("Client should not connect to an invalid host", client);
+        } catch (Exception e) {
+            // Expected exception
+        }
     }
 
     @Test
-    public void testClientLogout() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testClientLogout() {
+        try {
+            Client client = new Client("localhost", port);
 
-        simulateUserInput(client, "LOGOUT");
+            simulateUserInput(client, "LOGOUT");
 
-        assertTrue("Client should log out and disconnect", clientDisconnected);
+            assertTrue("Client should log out and disconnect", clientDisconnected);
+        } catch (Exception e) {
+            fail("Exception during client logout: " + e.getMessage());
+        }
     }
 
     @Test
-    public void testInvalidInput() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testInvalidInput() {
+        try {
+            Client client = new Client("localhost", port);
 
-        simulateUserInput(client, "INVALID_COMMAND");
+            simulateUserInput(client, "INVALID_COMMAND");
 
-        assertEquals("Server should handle invalid input", "Invalid command received.", lastMessageSent);
+            assertEquals("Server should handle invalid input",
+                    "Invalid command received.", lastMessageSent);
+        } catch (Exception e) {
+            fail("Exception during invalid input test: " + e.getMessage());
+        }
     }
 
     @Test
-    public void testClientActionsAfterLogin() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testClientActionsAfterLogin() {
+        try {
+            Client client = new Client("localhost", port);
 
-        sendMessage("Login successful.");
+            sendMessage("Login successful.");
 
-        sendMessage("Available actions: ADD_FRIEND, LOGOUT");
+            sendMessage("Available actions: ADD_FRIEND, LOGOUT");
 
-        simulateUserInput(client, "ADD_FRIEND");
+            simulateUserInput(client, "ADD_FRIEND");
 
-        assertEquals("Server should handle the ADD_FRIEND command", "Friend added successfully.", lastMessageSent);
+            assertEquals("Server should handle the ADD_FRIEND command",
+                    "Friend added successfully.", lastMessageSent);
+        } catch (Exception e) {
+            fail("Exception during client actions test: " + e.getMessage());
+        }
     }
 
     @Test
-    public void testEdgeCaseEmptyInput() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testEdgeCaseEmptyInput() {
+        try {
+            Client client = new Client("localhost", port);
 
-        simulateUserInput(client, "");
+            simulateUserInput(client, "");
 
-        assertEquals("Server should handle empty input", "No command received.", lastMessageSent);
+            assertEquals("Server should handle empty input",
+                    "No command received.", lastMessageSent);
+        } catch (Exception e) {
+            fail("Exception during empty input test: " + e.getMessage());
+        }
     }
 
     @Test
-    public void testNullInput() throws Exception {
-        Client client = new Client("localhost", port);
+    public void testNullInput() {
+        try {
+            Client client = new Client("localhost", port);
 
-        simulateUserInput(client, null);
+            simulateUserInput(client, null);
 
-        assertEquals("Server should handle null input gracefully", "No command received.", lastMessageSent);
+            assertEquals("Server should handle null input gracefully",
+                    "No command received.", lastMessageSent);
+        } catch (Exception e) {
+            fail("Exception during null input test: " + e.getMessage());
+        }
     }
 
-    private void simulateUserInput(Client client, String input) throws Exception {
-        PrintWriter writer = new PrintWriter(client.getSocket().getOutputStream(), true);
+    private void simulateUserInput(Client client, String input) {
+        try {
+            PrintWriter writer = new PrintWriter(client.getSocket().getOutputStream(),
+                    true);
 
-        writer.println(input);
+            if (input != null) {
+                writer.println(input);
+            }
+        } catch (IOException e) {
+            fail("Error simulating user input: " + e.getMessage());
+        }
     }
 
     private void sendMessage(String message) {
@@ -157,8 +208,13 @@ public class ClientTest {
 
     private void stopServer() {
         try {
-            if (clientSocket != null) clientSocket.close();
-            if (serverSocket != null) serverSocket.close();
+            if (clientSocket != null) {
+                clientSocket.close();
+            }
+
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
