@@ -1,8 +1,12 @@
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.*;
 import java.net.Socket;
+
+
+
 
 
 /**
@@ -12,14 +16,7 @@ import java.net.Socket;
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
  * @version Nov 17, 2024
-<<<<<<< HEAD
- *//*
-*/
-/*
-
-=======
  */
->>>>>>> 1196fac88dfe927354f59a407a954eac81f5befe
 
 public class ClientHandlerTest {
     // Fields
@@ -77,14 +74,6 @@ public class ClientHandlerTest {
             fail("Exception during testClientLogin: " + e.getMessage());
         }
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-} // End of class
-*//*
-
-=======
-=======
->>>>>>> 1196fac88dfe927354f59a407a954eac81f5befe
 
     @Test
     public void testCreateAccount() {
@@ -368,10 +357,4 @@ public class ClientHandlerTest {
             return null;
         }
     }
-<<<<<<< HEAD
 } // End of class
->>>>>>> 901ec0f65712bdf558e97193d527edc16b60f34b
-*/
-=======
-} // End of class
->>>>>>> 1196fac88dfe927354f59a407a954eac81f5befe
