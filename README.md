@@ -24,7 +24,8 @@
            - We test every method that doesn't utilize NetworkIO in the ClientTest class.
            - Run it on IntelliJ to see the observed result.
       - ClientGUITest
-           - 
+           - We test to make sure every user input works as expected in the ClientGUI class.
+           - Run it on IntelliJ to see the observed result.
              
    b. Manual Testing/Compiling
       - We used JUNIT to write all of our test cases.+ Manual Testing/Compiling Instructions: Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
