@@ -34,13 +34,13 @@
       - Start the server in the terminal. The server will begin on the default port and wait for client connections.
       - Open a new terminal or command prompt.
       - Navigate to the same directory where the compiled classes are located.
-      - Start the client. The client will attempt to connect to the server at localhost.
-      - Then, the client will receive options to either "CREATE_ACCOUNT" or "LOGIN". The client has to type the chosen option next to "Your input:"
-      - The related message will be printed on the terminal if there are any errors with creating the account or logging in. Then you will be given the opportunity to act again by typing "CREATE_ACCOUNT" or "LOGIN".
-      - If the client choose to create an account, you have to perform the "LOGIN" before you get access to the rest of the actions available.
-      - After Logging in, all actions will be printed to the terminal one time: "ADD_FRIEND" "REMOVE_FRIEND" "BLOCK_USER" "SEND_MESSAGE" "DELETE_MESSAGE"  "SEARCH_USER"  "VIEW_USER"  "LOGOUT".
-      - To perform any of these functions, the client has to type them next to "Your input:", and the user will be prompted for more information.
-      - "ADD_FRIEND" adds a friend, "REMOVE_FRIEND" removes a friend, "BLOCK_USER" blocks a user, "SEND_MESSAGE" sends a message to a specific user, "DELETE_MESSAGE" deletes a message that was sent to a certain user, "SEARCH_USER" prints out the username if the username the client enters exists, "VIEW_USER" shows the clients personal information, and "LOGOUT" disconnects from the server.
+      - Start the ClientGUI. The ClientGUI will attempt to connect to the server at localhost.
+      - Then, the ClinetGUI will receive a popup on the screen, prompting them to either "Login" or "Create Account".
+      - No matter what option the user selected, they will be prompted to enter a username and a password, if the selected "Create Account", they will also be asked whether they want their account to be public or private.
+      - The "Create Account" option will ensure that both the username and password are valid, and once they are, will create an account using the user name and password, then prompt the user to Login.
+      - After Logging in, the user will see a screen with the buttons "Add Friend" "Remove Friend" "Block User" "Send Message" "Delete Message"  "Search User"  "View User" "View Messages" & "Logout".
+      - To perform any of these functions, the client has to click the button they want to perform. The user will then be prompted for more information.
+      - "Add Friend" adds a friend checking to make sure the user exists, "Remove Friend" removes a friend checking to make sure the user is a friend, "Block User" blocks a user checking to make sure the user exists, "Send Message" sends a message to a specific user checking a variety of conditions, "Delete Message" deletes a message that was sent to a certain user, "Search User" checks to make sure that a user exists, "View User" shows the clients personal information, and "Logout" disconnects from the server.
       - Notes: 1. Ensure the server is started before running the client. 2. Use multiple terminals or command prompt windows to simulate multiple clients connecting to the server. 3. All information related to a user (username, password, friends, blocked users) gets stored in UserList.txt. 4. Messages that are sent and received in a separate file for each user. The files are named "username".txt.
        
 2. Zachary O'Connell Submitted Vocareum Workspace
