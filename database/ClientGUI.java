@@ -318,13 +318,11 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-<<<<<<< HEAD
+
 
 
     private JPanel createRemoveFriendPanel() {
-=======
-    public JPanel createRemoveFriendPanel() {
->>>>>>> 901ec0f65712bdf558e97193d527edc16b60f34b
+
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Remove Friend", SwingConstants.CENTER);
