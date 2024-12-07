@@ -5,6 +5,17 @@ import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Team Project -- ClientGUI
+ *
+ * Creates a GUI that has the ability to allow a user to login or create an account.
+ * Also allows a user to add friends, remove friends, block users, send/receive messages,
+ * and search for a user.
+ *
+ * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
+ * @version Nov 3, 2024
+ */
+
 public class ClientGUI extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
