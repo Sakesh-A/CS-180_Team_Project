@@ -44,7 +44,7 @@ public class ClientGUI extends JFrame {
         setVisible(true);
     }
 
-    private JPanel createMainMenuPanel() {
+    public JPanel createMainMenuPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel welcomeLabel = new JLabel("Welcome to Messaging App", SwingConstants.CENTER);
@@ -61,7 +61,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createLoginPanel() {
+    public JPanel createLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel loginLabel = new JLabel("Login", SwingConstants.CENTER);
@@ -107,7 +107,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createAccountPanel() {
+    public JPanel createAccountPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 1, 10, 10));
 
         JLabel createAccountLabel = new JLabel("Create Account", SwingConstants.CENTER);
@@ -162,7 +162,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createActionPanel() {
+    public JPanel createActionPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
 
         String[] actions = {"AddFriend", "RemoveFriend", "BlockUser", "SendMessage", "DeleteMessage", "SearchUser", "ViewUser"};
@@ -185,13 +185,13 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JButton createActionButton(String label, String actionPanel) {
+    public JButton createActionButton(String label, String actionPanel) {
         JButton button = new JButton(label);
         button.addActionListener(e -> cardLayout.show(mainPanel, actionPanel));
         return button;
     }
 
-    private JPanel createActionPlaceholder(String actionName) {
+    public JPanel createActionPlaceholder(String actionName) {
         JPanel panel = new JPanel(new BorderLayout());
         JLabel label = new JLabel(actionName + " Page", SwingConstants.CENTER);
         panel.add(label, BorderLayout.CENTER);
@@ -234,7 +234,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createAddFriendPanel() {
+    public JPanel createAddFriendPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Add Friend", SwingConstants.CENTER);
@@ -286,7 +286,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createRemoveFriendPanel() {
+    public JPanel createRemoveFriendPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Remove Friend", SwingConstants.CENTER);
@@ -339,7 +339,7 @@ public class ClientGUI extends JFrame {
     }
 
     // Add a Block User panel
-    private JPanel createBlockUserPanel() {
+    public JPanel createBlockUserPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Block User", SwingConstants.CENTER);
@@ -391,7 +391,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createSendMessagePanel() {
+    public JPanel createSendMessagePanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel label = new JLabel("Send Message", SwingConstants.CENTER);
@@ -451,7 +451,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createDeleteMessagePanel() {
+    public JPanel createDeleteMessagePanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel label = new JLabel("Delete Message", SwingConstants.CENTER);
@@ -511,7 +511,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createSearchUserPanel() {
+    public JPanel createSearchUserPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Search User", SwingConstants.CENTER);
@@ -556,7 +556,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createViewUserPanel() {
+    public JPanel createViewUserPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
 
         JLabel label = new JLabel("View Profile Info", SwingConstants.CENTER);
