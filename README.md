@@ -23,6 +23,8 @@
       - ClientHandlerTest:
            - We test every method that doesn't utilize NetworkIO in the ClientTest class.
            - Run it on IntelliJ to see the observed result.
+      - ClientGUITest
+           - 
              
    b. Manual Testing/Compiling
       - We used JUNIT to write all of our test cases.+ Manual Testing/Compiling Instructions: Place all the required .java files (e.g., Server.java, Client.java, ClientHandler.java, User.java, UserDatabase.java, and any other dependencies like TextMessage or PhotoMessage) in the same directory.
@@ -64,6 +66,9 @@
      - Client:
        The Client class establishes a connection to the server, enabling communication through object streams for sending and receiving messages. It manages user interactions through the console for now, allowing users to perform actions like login, account creation, and various commands sent to the server. The client handles the server by providing real-time feedback to users and ensuring graceful disconnection when the session ends.
 
+       - ClientGUI:
+         The ClientGUI class is a Java Swing-based interface that enables client-server communication for various user actions, such as blocking users, sending messages, deleting messages, searching for users, and viewing profile information. The interface is organized into multiple panels, each corresponding to a specific action, and uses CardLayout for easy navigation between them. Communication with the server is handled through socket connections and object streams to send requests and receive responses. Each action includes input validation, and the system provides feedback through dialog boxes to guide the user. Error handling is also integrated to ensure smooth operation and provide informative responses in case of issues.
+         
    b. Interfaces
      - UserInterface:
        The UserInterface outlines the operations for user management, including methods for accessing and modifying user details, friendships, and messaging capabilities. It provides a clear contract for implementing user-related functionality, enabling flexibility and consistent interactions across different user implementations.
