@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Team Project -- ClientHandler
@@ -104,6 +105,9 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
             case "VIEW_USER":
                 viewUser();
 //                sendOptions();
+                break;
+            case "VIEW_MESSAGES":
+                viewMessages();
                 break;
             default:
                 out.writeObject("Invalid action.");
@@ -328,6 +332,41 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
         }
 
         out.writeObject("Viewing your information: " + currentUser);
+    }
+    public void viewMessages() throws IOException {
+        if (currentUser == null) {
+            out.writeObject("You must log in first.");
+        }
+        String ret = "";
+        ArrayList<TextMessage> messages = currentUser.getMessages();
+        if (messages.size() == 0) {
+            out.writeObject("You have no messages");
+            return;
+        }
+        for (int i = 0; i < messages.size(); i++) {
+            ret += "Message : " + messages.get(i).getMessageContent();
+            String sender = "";
+            String receiver = "";
+            if (messages.get(i).getSender().getUsername().equals(currentUser.getUsername())) {
+                sender = "You";
+            } else {
+                sender = messages.get(i).getSender().getUsername();
+            }
+
+            if (messages.get(i).getReceiver().getUsername().equals(currentUser.getUsername())) {
+                receiver = "You";
+            } else {
+                receiver = messages.get(i).getReceiver().getUsername();
+            }
+            ret += "\n";
+            ret += "Message sent by: " + sender + "\n";
+            ret += "Message sent to: " + receiver + "\n";
+            ret += "-----------------------------------------------------------------";
+            ret += "\n";
+            //System.out.println(ret);
+
+        }
+        out.writeObject(ret);
     }
 
     public void logout() throws IOException {

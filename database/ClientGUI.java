@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
@@ -27,13 +29,14 @@ public class ClientGUI extends JFrame {
         mainPanel = new JPanel(cardLayout);
 
         // Add all panels to the main panel
+
         mainPanel.add(createMainMenuPanel(), "MainMenu");
         mainPanel.add(createLoginPanel(), "Login");
         mainPanel.add(createAccountPanel(), "CreateAccount");
         mainPanel.add(createActionPanel(), "ActionMenu");
 
         // Placeholder panels for individual actions
-        String[] actions = {"AddFriend", "RemoveFriend", "BlockUser", "SendMessage", "DeleteMessage", "SearchUser", "ViewUser"};
+        String[] actions = {"AddFriend", "RemoveFriend", "BlockUser", "SendMessage", "DeleteMessage", "SearchUser", "ViewUser", "ViewMessages"};
         for (String action : actions) {
             mainPanel.add(createActionPlaceholder(action), action);
         }
@@ -44,10 +47,35 @@ public class ClientGUI extends JFrame {
         setVisible(true);
     }
 
-    private JPanel createMainMenuPanel() {
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public void setIn(ObjectInputStream in) {
+        this.in = in;
+    }
+
+    public void setOut(ObjectOutputStream out) {
+        this.out = out;
+    }
+
+    public InputStream getIn() {
+        return in;
+    }
+
+    public CardLayout getCardLayout() {
+        return cardLayout;
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public JPanel createMainMenuPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel welcomeLabel = new JLabel("Welcome to Messaging App", SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 20));
         panel.add(welcomeLabel);
 
         JButton loginButton = new JButton("Login");
@@ -61,7 +89,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createLoginPanel() {
+    public JPanel createLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel loginLabel = new JLabel("Login", SwingConstants.CENTER);
@@ -107,7 +135,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createAccountPanel() {
+    public JPanel createAccountPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 1, 10, 10));
 
         JLabel createAccountLabel = new JLabel("Create Account", SwingConstants.CENTER);
@@ -156,16 +184,16 @@ public class ClientGUI extends JFrame {
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "MainMenu"));
 
         buttonPanel.add(createButton);
-        buttonPanel.add(backButton);
         panel.add(buttonPanel);
 
         return panel;
     }
 
     private JPanel createActionPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
 
-        String[] actions = {"AddFriend", "RemoveFriend", "BlockUser", "SendMessage", "DeleteMessage", "SearchUser", "ViewUser"};
+
+        String[] actions = {"AddFriend", "RemoveFriend", "BlockUser", "SendMessage", "DeleteMessage", "SearchUser", "ViewUser", "ViewMessages"};
         for (String action : actions) {
             panel.add(createActionButton(action.replaceAll("([a-z])([A-Z])", "$1 $2"), action));
         }
@@ -175,7 +203,8 @@ public class ClientGUI extends JFrame {
             try {
                 out.writeObject("LOGOUT");
                 currentUser = null;
-                cardLayout.show(mainPanel, "MainMenu");
+                //cardLayout.show(mainPanel, "MainMenu");
+                System.exit(0);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -185,13 +214,13 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JButton createActionButton(String label, String actionPanel) {
+    public JButton createActionButton(String label, String actionPanel) {
         JButton button = new JButton(label);
         button.addActionListener(e -> cardLayout.show(mainPanel, actionPanel));
         return button;
     }
 
-    private JPanel createActionPlaceholder(String actionName) {
+    public JPanel createActionPlaceholder(String actionName) {
         JPanel panel = new JPanel(new BorderLayout());
         JLabel label = new JLabel(actionName + " Page", SwingConstants.CENTER);
         panel.add(label, BorderLayout.CENTER);
@@ -210,6 +239,8 @@ public class ClientGUI extends JFrame {
             panel.add(createSearchUserPanel(), BorderLayout.CENTER);
         } else if (actionName.equals("ViewUser")) {
             panel.add(createViewUserPanel(), BorderLayout.CENTER);
+        } else if (actionName.equals("ViewMessages")) {
+            panel.add(createMessagesPanel(), BorderLayout.CENTER);
         }
 
         JPanel buttonPanel = new JPanel();
@@ -221,7 +252,8 @@ public class ClientGUI extends JFrame {
             try {
                 out.writeObject("LOGOUT");
                 currentUser = null;
-                cardLayout.show(mainPanel, "MainMenu");
+                System.exit(0);
+                //cardLayout.show(mainPanel, "MainMenu");
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -234,7 +266,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createAddFriendPanel() {
+    public JPanel createAddFriendPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Add Friend", SwingConstants.CENTER);
@@ -286,7 +318,13 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
+<<<<<<< HEAD
+
+
     private JPanel createRemoveFriendPanel() {
+=======
+    public JPanel createRemoveFriendPanel() {
+>>>>>>> 901ec0f65712bdf558e97193d527edc16b60f34b
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Remove Friend", SwingConstants.CENTER);
@@ -339,7 +377,7 @@ public class ClientGUI extends JFrame {
     }
 
     // Add a Block User panel
-    private JPanel createBlockUserPanel() {
+    public JPanel createBlockUserPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Block User", SwingConstants.CENTER);
@@ -391,7 +429,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createSendMessagePanel() {
+    public JPanel createSendMessagePanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel label = new JLabel("Send Message", SwingConstants.CENTER);
@@ -451,7 +489,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createDeleteMessagePanel() {
+    public JPanel createDeleteMessagePanel() {
         JPanel panel = new JPanel(new GridLayout(4, 1, 10, 10));
 
         JLabel label = new JLabel("Delete Message", SwingConstants.CENTER);
@@ -511,7 +549,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createSearchUserPanel() {
+    public JPanel createSearchUserPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Search User", SwingConstants.CENTER);
@@ -556,7 +594,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createViewUserPanel() {
+    public JPanel createViewUserPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
 
         JLabel label = new JLabel("View Profile Info", SwingConstants.CENTER);
@@ -579,14 +617,42 @@ public class ClientGUI extends JFrame {
             }
         });
 
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
         buttonPanel.add(viewButton);
-        buttonPanel.add(backButton);
+        panel.add(buttonPanel);
+
+        return panel;
+    }
+
+    private JPanel createMessagesPanel() {
+        JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
+
+        JLabel label = new JLabel("Viewing your messages", SwingConstants.CENTER);
+        panel.add(label);
+
+        JPanel buttonPanel = new JPanel();
+        JButton viewButton = new JButton("View My Messages");
+        viewButton.addActionListener(e -> {
+            try {
+                // Send the view user request to the server
+                out.writeObject("VIEW_MESSAGES");
+                out.flush();
+
+                // Read the server's response
+                String response = (String) in.readObject();
+                JOptionPane.showMessageDialog(this, response, "Your Messages", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        buttonPanel.add(viewButton);
 
         panel.add(buttonPanel);
 
         return panel;
+
+
     }
 
 
