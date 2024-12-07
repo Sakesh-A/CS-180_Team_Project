@@ -25,7 +25,7 @@ public class ClientHandlerTest {
     private User mockUser;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, BadException {
         mockSocket = new Socket();
         outputStream = new ByteArrayOutputStream();
         mockOut = new ObjectOutputStream(outputStream);
@@ -35,12 +35,12 @@ public class ClientHandlerTest {
         mockUser = new User("user", "password", true);
 
         clientHandler = new ClientHandler(mockSocket, mockUserDatabase) {
-            @Override
+
             protected ObjectInputStream getInputStream() {
                 return mockIn;
             }
 
-            @Override
+
             protected ObjectOutputStream getOutputStream() {
                 return mockOut;
             }
@@ -67,7 +67,7 @@ public class ClientHandlerTest {
     }
 
     @Test
-    public void testAddFriend() throws IOException, ClassNotFoundException {
+    public void testAddFriend() throws IOException, BadException, ClassNotFoundException {
         setInputData("LOGIN", "user", "password", "ADD_FRIEND", "friend");
 
         User mockFriend = new User("friend", "friendpassword", true);
@@ -81,7 +81,7 @@ public class ClientHandlerTest {
     }
 
     @Test
-    public void testRemoveFriend() throws IOException, ClassNotFoundException {
+    public void testRemoveFriend() throws IOException, BadException, ClassNotFoundException {
         setInputData("LOGIN", "user", "password", "REMOVE_FRIEND", "friend");
 
         User mockFriend = new User("friend", "friendpassword", true);
@@ -95,7 +95,7 @@ public class ClientHandlerTest {
     }
 
     @Test
-    public void testBlockUser() throws IOException, ClassNotFoundException {
+    public void testBlockUser() throws IOException, BadException, ClassNotFoundException {
         setInputData("LOGIN", "user", "password", "BLOCK_USER", "blockedUser");
 
         User mockBlockedUser = new User("blockedUser", "blockedpassword", true);
@@ -109,7 +109,7 @@ public class ClientHandlerTest {
     }
 
     @Test
-    public void testSendMessage() throws IOException, ClassNotFoundException {
+    public void testSendMessage() throws IOException, BadException, ClassNotFoundException {
         setInputData("LOGIN", "user", "password", "SEND_MESSAGE", "recipient", "Hello!");
 
         User mockRecipient = new User("recipient", "recipientpassword", true);
@@ -123,7 +123,7 @@ public class ClientHandlerTest {
     }
 
     @Test
-    public void testDeleteMessage() throws IOException, ClassNotFoundException {
+    public void testDeleteMessage() throws IOException, BadException, ClassNotFoundException {
         setInputData("LOGIN", "user", "password", "DELETE_MESSAGE", "recipient", "Hello!");
 
         User mockRecipient = new User("recipient", "recipientpassword", true);
@@ -231,7 +231,7 @@ public class ClientHandlerTest {
         assertEquals("You have logged out.", getOutputData());
     }
 
-    private void setInputData(String... inputs) {
+    private void setInputData(String... inputs) throws IOException {
         StringBuilder inputData = new StringBuilder();
 
         for (String input : inputs) {

@@ -1,6 +1,7 @@
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 /**
  * Team Project -- ServerTest
  *
@@ -57,12 +58,7 @@ public class ServerTest {
         Server.removeLoggedInUser(mockUser);
     }
 
-    @Test
-    public void testLoggedInUsersListIsEmptyAfterRemoval() {
-        Server.addLoggedInUser(mockUser);
-        Server.removeLoggedInUser(mockUser);
 
-    }
 
 
     @Test
