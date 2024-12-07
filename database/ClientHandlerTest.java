@@ -1,11 +1,9 @@
-/*
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.*;
 import java.net.Socket;
 
-*/
 /**
  * Team Project -- ClientHandlerTest
  *
@@ -13,8 +11,7 @@ import java.net.Socket;
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
  * @version Nov 17, 2024
- *//*
-
+ */
 
 public class ClientHandlerTest {
     // Fields
@@ -28,28 +25,6 @@ public class ClientHandlerTest {
     private User mockUser;
 
     @Before
-<<<<<<< HEAD
-    public void setUp() throws IOException, BadException {
-        mockSocket = new Socket();
-        outputStream = new ByteArrayOutputStream();
-        mockOut = new ObjectOutputStream(outputStream);
-        inputStream = new ByteArrayInputStream(new byte[0]);
-        mockIn = new ObjectInputStream(inputStream);
-        mockUserDatabase = new UserDatabase();
-        mockUser = new User("user", "password", true);
-
-        clientHandler = new ClientHandler(mockSocket, mockUserDatabase) {
-
-            protected ObjectInputStream getInputStream() {
-                return mockIn;
-            }
-
-
-            protected ObjectOutputStream getOutputStream() {
-                return mockOut;
-            }
-        };
-=======
     public void setUp() {
         try {
             mockSocket = new Socket();
@@ -78,7 +53,6 @@ public class ClientHandlerTest {
         } catch (IOException | BadException e) {
             fail("Setup failed due to exception: " + e.getMessage());
         }
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
     }
 
     @Test
@@ -95,10 +69,6 @@ public class ClientHandlerTest {
             fail("Exception during testClientLogin: " + e.getMessage());
         }
     }
-<<<<<<< HEAD
-} // End of class
-*/
-=======
 
     @Test
     public void testCreateAccount() {
@@ -114,14 +84,9 @@ public class ClientHandlerTest {
     }
 
     @Test
-<<<<<<< HEAD
-    public void testAddFriend() throws IOException, BadException, ClassNotFoundException {
-        setInputData("LOGIN", "user", "password", "ADD_FRIEND", "friend");
-=======
     public void testAddFriend() {
         try {
             setInputData("LOGIN", "user", "password", "ADD_FRIEND", "friend");
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
 
             User mockFriend = new User("friend", "friendpassword",
                     true);
@@ -139,14 +104,9 @@ public class ClientHandlerTest {
     }
 
     @Test
-<<<<<<< HEAD
-    public void testRemoveFriend() throws IOException, BadException, ClassNotFoundException {
-        setInputData("LOGIN", "user", "password", "REMOVE_FRIEND", "friend");
-=======
     public void testRemoveFriend() {
         try {
             setInputData("LOGIN", "user", "password", "REMOVE_FRIEND", "friend");
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
 
             User mockFriend = new User("friend", "friendpassword",
                     true);
@@ -166,14 +126,9 @@ public class ClientHandlerTest {
     }
 
     @Test
-<<<<<<< HEAD
-    public void testBlockUser() throws IOException, BadException, ClassNotFoundException {
-        setInputData("LOGIN", "user", "password", "BLOCK_USER", "blockedUser");
-=======
     public void testBlockUser() {
         try {
             setInputData("LOGIN", "user", "password", "BLOCK_USER", "blockedUser");
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
 
             User mockBlockedUser = new User("blockedUser",
                     "blockedpassword", true);
@@ -191,15 +146,10 @@ public class ClientHandlerTest {
     }
 
     @Test
-<<<<<<< HEAD
-    public void testSendMessage() throws IOException, BadException, ClassNotFoundException {
-        setInputData("LOGIN", "user", "password", "SEND_MESSAGE", "recipient", "Hello!");
-=======
     public void testSendMessage() {
         try {
             setInputData("LOGIN", "user", "password", "SEND_MESSAGE", "recipient",
                     "Hello!");
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
 
             User mockRecipient = new User("recipient",
                     "recipientpassword", true);
@@ -217,15 +167,10 @@ public class ClientHandlerTest {
     }
 
     @Test
-<<<<<<< HEAD
-    public void testDeleteMessage() throws IOException, BadException, ClassNotFoundException {
-        setInputData("LOGIN", "user", "password", "DELETE_MESSAGE", "recipient", "Hello!");
-=======
     public void testDeleteMessage() {
         try {
             setInputData("LOGIN", "user", "password", "DELETE_MESSAGE", "recipient",
                     "Hello!");
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
 
             User mockRecipient = new User("recipient",
                     "recipientpassword", true);
@@ -296,7 +241,7 @@ public class ClientHandlerTest {
 
             assertEquals("Invalid action.", getOutputData());
         } catch (Exception e) {
-            fail("Exception during testInvalidActionHandling: " + e.getMessage());
+            fail("Exception during testHandleInvalidAction: " + e.getMessage());
         }
     }
 
@@ -380,14 +325,9 @@ public class ClientHandlerTest {
         }
     }
 
-<<<<<<< HEAD
-    private void setInputData(String... inputs) throws IOException {
-        StringBuilder inputData = new StringBuilder();
-=======
     private void setInputData(String... inputs) {
         try {
             StringBuilder inputData = new StringBuilder();
->>>>>>> b5842c0d746462a46b889f1ac70343e6f589c055
 
             for (String input : inputs) {
                 inputData.append(input).append("\n");
@@ -413,4 +353,3 @@ public class ClientHandlerTest {
         }
     }
 } // End of class
->>>>>>> 901ec0f65712bdf558e97193d527edc16b60f34b
