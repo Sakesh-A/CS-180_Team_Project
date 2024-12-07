@@ -332,7 +332,7 @@ public class ClientGUI extends JFrame {
 
 
 
-    private JPanel createRemoveFriendPanel() {
+    public JPanel createRemoveFriendPanel() {
 
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
