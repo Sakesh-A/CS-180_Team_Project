@@ -67,7 +67,7 @@
      - Client:
        The Client class establishes a connection to the server, enabling communication through object streams for sending and receiving messages. It manages user interactions through the console for now, allowing users to perform actions like login, account creation, and various commands sent to the server. The client handles the server by providing real-time feedback to users and ensuring graceful disconnection when the session ends.
 
-       - ClientGUI:
+     - ClientGUI:
          The ClientGUI class is a Java Swing-based interface that enables client-server communication for various user actions, such as blocking users, sending messages, deleting messages, searching for users, and viewing profile information. The interface is organized into multiple panels, each corresponding to a specific action, and uses CardLayout for easy navigation between them. Communication with the server is handled through socket connections and object streams to send requests and receive responses. Each action includes input validation, and the system provides feedback through dialog boxes to guide the user. Error handling is also integrated to ensure smooth operation and provide informative responses in case of issues.
          
    b. Interfaces
@@ -82,8 +82,10 @@
 
      - ServerInterface:
        The ServerInterface provides shared constants and static methods for managing server-side functionality, including a user database, a list of logged-in users, and synchronization for thread-safe operations. It offers methods to add or remove logged-in users, ensuring no duplicate logins and safe modifications to the shared user list.
+       
      - ClientHandlerInterface:
        The ClientHandlerInterface defines methods for handling various client-related actions in a server, such as user authentication, account creation, and managing interactions like adding friends or sending messages. It ensures a structured approach to implementing client operations while handling potential exceptions during input/output and class deserialization.
+       
      - ClientInterface:
        The ClientInterface defines a single method, handleCommunication, to manage interactions between the client and the server.
        
