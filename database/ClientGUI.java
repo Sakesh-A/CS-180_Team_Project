@@ -16,7 +16,7 @@ import java.net.Socket;
  * @version Nov 3, 2024
  */
 
-public class ClientGUI extends JFrame {
+public class ClientGUI extends JFrame implements ClientGUIInterface{
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private ObjectOutputStream out;
@@ -200,7 +200,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createActionPanel() {
+    public JPanel createActionPanel() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 10, 10));
 
 
@@ -636,7 +636,7 @@ public class ClientGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createMessagesPanel() {
+    public JPanel createMessagesPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
         JLabel label = new JLabel("Enter the user you wish to view messages between", SwingConstants.CENTER);
