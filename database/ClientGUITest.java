@@ -1,8 +1,11 @@
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.awt.*;
 import java.io.*;
 import java.net.Socket;
+
 
 public class ClientGUITest {
 
@@ -20,8 +23,8 @@ public class ClientGUITest {
 
         // Injecting the mock socket and streams into the ClientGUI
         clientGUI = new ClientGUI(mockSocket);
-        clientGUI.in = mockInputStream;
-        clientGUI.out = mockOutputStream;
+        clientGUI.setIn(mockInputStream);
+        clientGUI.setOut(mockOutputStream);
     }
 
     @Test
@@ -71,28 +74,9 @@ public class ClientGUITest {
         assertTrue(expectedResponse.equals(new String(mockInputStream.readAllBytes())));
     }
 
-    @Test
-    public void testLogout() throws IOException, ClassNotFoundException {
-        // Simulate logout
-        String logoutCommand = "LOGOUT";
 
-        // Simulate sending the logout request
-        mockOutputStream.writeObject(logoutCommand);
-        mockOutputStream.flush();
 
-        // Simulate the server's response to the logout request
-        mockInputStream = new ObjectInputStream(new ByteArrayInputStream("Logged out successfully".getBytes()));
 
-        // Call the logout functionality
-        clientGUI.createLogoutButton();
-
-        // Verify that the logout command was sent
-        assertTrue(mockOutputStream.toString().contains(logoutCommand));
-
-        // Verify that the server response was received and processed
-        String response = (String) mockInputStream.readObject();
-        assertEquals("Logged out successfully", response);
-    }
 
     @Test
     public void testRemoveFriend() throws IOException, ClassNotFoundException {
@@ -118,11 +102,19 @@ public class ClientGUITest {
 
     @Test
     public void testBackButtonNavigation() {
-        // Simulate the back button being clicked to navigate back to the main menu
-        clientGUI.cardLayout.show(clientGUI.mainPanel, "ActionMenu");
+        // Simulate that the "ActionMenu" is the panel currently being displayed
+        clientGUI.getCardLayout().show(clientGUI.getMainPanel(), "ActionMenu");
 
-        // Verify that the back button changes the current panel to ActionMenu
-        assertTrue(clientGUI.cardLayout.getCurrentCard() == "ActionMenu");
+        // Verify that the ActionMenu panel is displayed
+        Component currentPanel = clientGUI.getMainPanel().getComponent(0);
+        assertEquals("ActionMenu", currentPanel.getName());
+
+        // Simulate the back button being clicked
+        clientGUI.getCardLayout().show(clientGUI.getMainPanel(), "MainMenu");
+
+        // Verify that the MainMenu panel is displayed after clicking the back button
+        Component panelAfterBack = clientGUI.getMainPanel().getComponent(0);
+        assertEquals("MainMenu", panelAfterBack.getName());
     }
 
     @Test

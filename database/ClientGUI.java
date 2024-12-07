@@ -44,6 +44,30 @@ public class ClientGUI extends JFrame {
         setVisible(true);
     }
 
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public void setIn(ObjectInputStream in) {
+        this.in = in;
+    }
+
+    public void setOut(ObjectOutputStream out) {
+        this.out = out;
+    }
+
+    public InputStream getIn() {
+        return in;
+    }
+
+    public CardLayout getCardLayout() {
+        return cardLayout;
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
     public JPanel createMainMenuPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
 
