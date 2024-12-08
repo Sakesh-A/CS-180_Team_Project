@@ -11,9 +11,6 @@
       - UserDatabaseTest:
            - We test every method in the UserDatabase class.
            - Run it on IntelliJ to see the observed result.
-      - PhotoMessageTest:
-           - We test every method in the PhotoMessage class.
-           - Run it on IntelliJ to see the observed result.
       - ServerTest:
            - We test every method that doesn't utilize NetworkIO in the ServerTest class.
            - Run it on IntelliJ to see the observed result.
@@ -55,8 +52,6 @@
      - TextMessage:
        The TextMessage class represents a text message exchange between users, including the sender's username, receiver's username, and the message content itself. It utilizes a string array to store these details, providing methods to retrieve each piece of information, including the sender and receiver usernames and the message content. The class overrides the equals method to ensure accurate comparison of TextMessage instances based on their sender, receiver, and message content, while the toString method formats the message for display. This class is designed to work with User and UserDatabase.
        
-     - PhotoMessage:
-        It is very similar to TextMessage, but it is still in progress.
        
      - Server:
        The Server class is responsible for facilitating client connections and user authentication. It maintains a thread-safe list of currently logged-in users and delegates client-specific operations to the ClientHandler class. The server continuously looks for incoming client connections on a specified port and starts a new thread to handle each client session.
@@ -88,6 +83,9 @@
        
      - ClientInterface:
        The ClientInterface defines a single method, handleCommunication, to manage interactions between the client and the server.
+
+     - ClientGUIInterface
+       The ClientGUIInterface defines methods for creating and managing various panels and components in a client application's graphical user interface. It ensures a modular design by standardizing functions for tasks like building account panels, main menus, and action placeholders. The interface also supports user interactions with features like adding or removing friends, blocking users, and managing messages. Additionally, it provides methods for searching and viewing user profiles, as well as creating dynamic buttons and placeholders for actions. This structure promotes consistency, reusability, and adaptability in GUI development.
        
    c. Exceptions
      - BadException:
