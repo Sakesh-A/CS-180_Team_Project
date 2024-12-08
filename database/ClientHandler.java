@@ -6,9 +6,8 @@ import java.util.ArrayList;
 
 /**
  * Team Project -- ClientHandler
- *
+ * <p>
  * A helper class for the server to handle the client. All client interactions are done here
- *
  *
  * @author Mahith Narreddy, Daniel Zhang, Sakesh Andhavarapu, Zachary O'Connell, Seth Jeevanandham
  * @version Nov 17, 2024
@@ -273,7 +272,7 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
                         out.writeObject("Message sent successfully.");
                     } else {
                         out.writeObject("Failed to send message."
-                                       + "Check your permissions or ensure the user has not blocked you.");
+                                + "Check your permissions or ensure the user has not blocked you.");
                     }
                     return;
                 }
@@ -366,12 +365,13 @@ class ClientHandler extends Thread implements ClientHandlerInterface {
         }
         out.writeObject(ret);
     }
+
     public void viewMessages() throws IOException, ClassNotFoundException {
 
         if (currentUser == null) {
             out.writeObject("You must log in first.");
         }
-        String user2 = (String)in.readObject();
+        String user2 = (String) in.readObject();
         String ret = "";
         ArrayList<TextMessage> messages = currentUser.getMessages();
         if (messages.size() == 0) {
