@@ -7,7 +7,7 @@ import java.net.Socket;
 
 /**
  * Team Project -- ClientGUI
- *
+ * <p>
  * Creates a GUI that has the ability to allow a user to login or create an account.
  * Also allows a user to add friends, remove friends, block users, send/receive messages,
  * and search for a user.
@@ -16,7 +16,7 @@ import java.net.Socket;
  * @version Nov 3, 2024
  */
 
-public class ClientGUI extends JFrame implements ClientGUIInterface{
+public class ClientGUI extends JFrame implements ClientGUIInterface {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private ObjectOutputStream out;
@@ -328,8 +328,6 @@ public class ClientGUI extends JFrame implements ClientGUIInterface{
 
         return panel;
     }
-
-
 
 
     public JPanel createRemoveFriendPanel() {
@@ -676,7 +674,6 @@ public class ClientGUI extends JFrame implements ClientGUIInterface{
         backButton.addActionListener(e -> cardLayout.show(mainPanel, "ActionMenu"));
         buttonPanel.add(viewButton);
         buttonPanel.add(backButton);
-
 
 
         panel.add(buttonPanel);
